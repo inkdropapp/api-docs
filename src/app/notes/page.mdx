@@ -545,7 +545,7 @@ The note model contains all the information about your notes, such as their titl
 
     </CodeGroup>
 
-    ```json {{ title: 'Response' }}
+    ```js {{ title: 'Response' }}
     {
       query: {
         index: 'index_notes',
@@ -571,6 +571,159 @@ The note model contains all the information about your notes, such as their titl
           createdAt: 1461563995746,
           bookId: 'book:tjnPbJakw',
           status: 'none',
+          numOfTasks: 0,
+          numOfCheckedTasks: 0,
+          title: 'title...',
+          body: 'body...',
+          _id: 'note:4eeb997c',
+          _rev: '8-d18201be3336c70979c6a375b497b3a7'
+        },
+        ...
+      ]
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## List notes with a specific tag
+
+<Row>
+  <Col>
+
+    Retrieves notes associated with the given tag ID.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="tagId" type="string" required>
+        A tag ID to find.
+      </Property>
+      <Property name="options" type="object">
+        List options. See [:all](#list-all-notes) for details.
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns a query result.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const num = await db.notes.findWithTag('tag:4eeb997c')
+    ```
+
+    </CodeGroup>
+
+    ```js {{ title: 'Response' }}
+    {
+      query: {
+        index: 'index_notes',
+        startkey: [ 't', 'u', 'tag:4eeb997c', 1, 0, 0 ],
+        endkey: [ 't', 'u', 'tag:4eeb997c', 2, {}, {} ]
+        descending: false,
+        limit: 20
+      },
+      totalRows: 9357,
+      cursor: {
+        index: 'index_notes',
+        startkey: [ 't', 'u', 'tag:4eeb997c', 1, 0, 0 ],
+        endkey: [ 't', 'u', 'tag:4eeb997c', 2, {}, {} ]
+        descending: false,
+        limit: 20,
+        skip: 20
+      },
+      includeDocs: true,
+      docs: [
+        {
+          doctype: 'markdown',
+          updatedAt: 1461564004766,
+          createdAt: 1461563995746,
+          bookId: 'book:tjnPbJakw',
+          status: 'none',
+          numOfTasks: 0,
+          numOfCheckedTasks: 0,
+          title: 'title...',
+          body: 'body...',
+          _id: 'note:4eeb997c',
+          _rev: '8-d18201be3336c70979c6a375b497b3a7'
+        },
+        ...
+      ]
+    }
+    ```
+
+  </Col>
+</Row>
+
+
+---
+
+## List notes with a specific status
+
+<Row>
+  <Col>
+
+    Retrieves notes with the given note status.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="status" type="string" required>
+        A note status, which can be `'none'`, `'active'`, `'onHold'`, `'completed'` or `'dropped'`.
+      </Property>
+      <Property name="options" type="object">
+        List options. See [:all](#list-all-notes) for details.
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns a query result.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const num = await db.notes.findWithStatus('active')
+    ```
+
+    </CodeGroup>
+
+    ```js {{ title: 'Response' }}
+    {
+      query: {
+        index: 'index_notes',
+        startkey: [ 's', 'u', 'active', 1, 0, 0 ],
+        endkey: [ 's', 'u', 'active', 2, {}, {} ]
+        descending: false,
+        limit: 20
+      },
+      totalRows: 9357,
+      cursor: {
+        index: 'index_notes',
+        startkey: [ 's', 'u', 'active', 1, 0, 0 ],
+        endkey: [ 's', 'u', 'active', 2, {}, {} ]
+        descending: false,
+        limit: 20,
+        skip: 20
+      },
+      includeDocs: true,
+      docs: [
+        {
+          doctype: 'markdown',
+          updatedAt: 1461564004766,
+          createdAt: 1461563995746,
+          bookId: 'book:tjnPbJakw',
+          status: 'active',
           numOfTasks: 0,
           numOfCheckedTasks: 0,
           title: 'title...',
