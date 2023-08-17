@@ -201,6 +201,7 @@ export const navigation = [
   {
     title: 'Resources',
     links: [
+      { title: 'Notes', href: '/notes' },
       { title: 'Contacts', href: '/contacts' },
       { title: 'Conversations', href: '/conversations' },
       { title: 'Messages', href: '/messages' },

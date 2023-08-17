@@ -1,0 +1,588 @@
+export const metadata = {
+  title: 'Notes',
+  description:
+    'On this page, we’ll dive into the endpoints you can use to manage contacts programmatically.',
+}
+
+# Notes
+
+As the name suggests, notes are a core part of Inkdrop — A note contains an individual note data.{{ className: 'lead' }}
+
+## The note model
+
+The note model contains all the information about your notes, such as their title, content written in Markdown format, associated notebook and tags, creation and modification timestamps, and any other metadata.
+
+<Row>
+  <Col>
+
+    ### Properties
+
+    <Properties>
+      <Property name="_id" type="string">
+        The unique document ID which should start with `note:` and the remains are randomly generated string.
+      </Property>
+      <Property name="_rev" type="string">
+        This is a CouchDB specific field. The current MVCC-token/revision of this document (mandatory and immutable).
+      </Property>
+      <Property name="body" type="string">
+        The content of the note represented with Markdown.
+      </Property>
+      <Property name="bookId" type="string">
+        The associated notebook ID.
+      </Property>
+      <Property name="createdAt" type="number">
+        The date time when the note was created, represented with Unix timestamps in milliseconds.
+      </Property>
+      <Property name="doctype" type="string">
+        The format type of the body field. It currently can take `markdown` only, reserved for the future.
+      </Property>
+      <Property name="migratedBy" type="string">
+        The type of the data migration.
+      </Property>
+      <Property name="numOfCheckedTasks" type="number">
+        The number of checked tasks, extracted from body.
+      </Property>
+      <Property name="numOfTasks" type="number">
+        The number of tasks, extracted from body.
+      </Property>
+      <Property name="pinned" type="boolean">
+        Whether the note is pinned to top.
+      </Property>
+      <Property name="share" type="string">
+        The sharing mode of the note. **One of:** `"private"` or `"public"`
+      </Property>
+      <Property name="status" type="string">
+        The status of the note. **One of:** `"none"` or `"active"` or `"onHold"` or `"completed"` or `"dropped"`
+      </Property>
+      <Property name="tags" type="string[]">
+        The list of tag IDs.
+      </Property>
+      <Property name="title" type="string">
+        The note title.
+      </Property>
+      <Property name="updatedAt" type="number">
+        The date time when the note was last updated, represented with Unix timestamps in milliseconds.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    ```json {{ title: 'The note object' }}
+    {
+      "_id": "note:BkgOZZUJzf",
+      "_rev": "38-636e505958d24f9c21614d95ea03b5a1",
+      "title": "Hello, world",
+      "doctype": "markdown",
+      "updatedAt": 1513330812556,
+      "createdAt": 1513214207639,
+      "tags": [
+        "tag:a28ca207"
+      ],
+      "status": "none",
+      "share": "private",
+      "body": "markdown note body",
+      "bookId": "book:first",
+      "numOfTasks": 0,
+      "numOfCheckedTasks": 0,
+      "pinned": false
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Retrieve a note
+
+<Row>
+  <Col>
+
+    Retrieve a note with the given ID.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="docId" type="string" required>
+      The note ID
+      </Property>
+      <Property name="options" type="object">
+      Options. See [PouchDB's documentation](https://pouchdb.com/api.html#fetch_document) for available options.
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns a note if a valid note ID was provided.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const note = await db.notes.get('note:BKzzd8iGK')
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "doctype": "markdown",
+      "bookId": "book:tjnPbJakw",
+      "createdAt": 1589165355584,
+      "updatedAt": 1592532006000,
+      "status": "active",
+      "share": "private",
+      "numOfTasks": 0,
+      "numOfCheckedTasks": 0,
+      "pinned": true,
+      "title": "hello",
+      "body": "example note",
+      "tags": ["tag:HyBgJ94gx", "tag:h11OMPbSs"],
+      "_id": "note:BKzzd8iGK",
+      "_rev": "19-d882f96ee27f7b9f71f6183b0cab9193"
+    }
+    ```
+
+
+  </Col>
+</Row>
+
+
+---
+
+## List all notes
+
+<Row>
+  <Col>
+
+    Retrieve a list of your notes.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="options" type="object">
+      Object with following keys:
+
+      <Properties sub>
+        <Property name="sort" type="string">
+          An array of an object indicating the field and order.
+          Inkdrop supports sorting notes with only one field.
+          Supported fields are: `'title'`, `'updatedAt'` and `'createdAt'`.
+          For example: `[ { updatedAt: 'asc' } ]`, `[ { title: 'desc' } ]`.
+        </Property>
+        <Property name="limit" type="number">
+          A number to limit how many notes to fetch. Default: `20`
+        </Property>
+        <Property name="skip" type="number">
+          A number of notes to skip at the start of a collection. Default: `0`
+        </Property>
+        <Property name="includeDocs" type="boolean">
+          Whether the return values include doc contents. Default: `true`
+        </Property>
+      </Properties>
+
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns a note if a valid note ID was provided.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const list = await db.notes.all({ limit: 20 })
+    ```
+
+    </CodeGroup>
+
+    ```js {{ title: 'Response' }}
+    {
+      query: {
+        index: 'index_notes',
+        startkey: ['n', 'u', 0, 0],
+        endkey: ['n', 'u', {}, {}],
+        descending: false,
+        limit: 20
+      },
+      totalRows: 9357,
+      cursor: {
+        index: 'index_notes',
+        startkey: ['n', 'u', 0, 0],
+        endkey: ['n', 'u', {}, {}],
+        descending: false,
+        limit: 20,
+        skip: 20
+      },
+      includeDocs: true,
+      docs: [
+        {
+          doctype: 'markdown',
+          updatedAt: 1461564004766,
+          createdAt: 1461563995746,
+          bookId: 'book:32b385767dc2',
+          status: 'none',
+          numOfTasks: 0,
+          numOfCheckedTasks: 0,
+          title: 'title...',
+          body: 'body...',
+          _id: 'note:4eeb997c',
+          _rev: '8-d18201be3336c70979c6a375b497b3a7'
+        },
+        ...
+      ]
+    }
+    ```
+
+
+  </Col>
+</Row>
+
+---
+
+## Create a note ID
+
+<Row>
+  <Col>
+
+    Creates new note ID which is String
+
+    ### Parameters
+
+    No parameters
+
+    ### Returns
+
+    Returns a new note ID.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const noteId = await db.notes.createId()
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    "note:8eea9f7c"
+    ```
+
+  </Col>
+</Row>
+
+## Validate a note ID
+
+<Row>
+  <Col>
+
+    Tests if the given `docId` is a valid note ID
+
+    ### Parameters
+
+    <Properties>
+      <Property name="docId" type="string" required>
+      A document ID to validate
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns `true` if valid
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const isValid = await db.notes.validateDocId('note:8eea9f7c')
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    true
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Create or update a note
+
+<Row>
+  <Col>
+
+    Creates or updates the given note.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="note" type="object" required>
+      A Note data to store
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    It throws an `InvalidDataError` if the given doc was invalid.
+    Returns a new revision ID.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const result = await db.notes.put({
+      "_id": "note:BKzzd8iGK",
+      "doctype": "markdown",
+      "bookId": "book:tjnPbJakw",
+      "createdAt": 1589165355584,
+      "updatedAt": 1592532006000,
+      "status": "active",
+      "share": "private",
+      "numOfTasks": 0,
+      "numOfCheckedTasks": 0,
+      "pinned": true,
+      "title": "hello",
+      "body": "example note",
+      "tags": ["tag:HyBgJ94gx", "tag:h11OMPbSs"]
+    })
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "ok": true,
+      "id": "note:BKzzd8iGK",
+      "rev": "1-a6157a5ea545c99b00ff904eef05fd9f"
+    }
+    ```
+
+  </Col>
+</Row>
+
+
+---
+
+## Remove a note
+
+<Row>
+  <Col>
+
+    Deletes a note with the given note ID.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="docId" type="string" required>
+      A note ID to delete.
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns a new revision ID.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const result = await db.notes.remove("note:BKzzd8iGK")
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "ok": true,
+      "id": "note:BKzzd8iGK",
+      "rev": "2-9af304be281790604d1d8a4b0f4c9adb"
+    }
+    ```
+
+  </Col>
+</Row>
+
+
+---
+
+## Remove multiple notes
+
+<Row>
+  <Col>
+
+    Deletes multiple notes with the given note IDs.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="docIds" type="string[]" required>
+      An Array of note IDs to delete.
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns an array of new revision IDs.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const result = await db.notes.removeBatch(["note:BKzzd8iGK", "note:8eea9f7c"])
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    [
+      {
+        "ok": true,
+        "id": "note:BKzzd8iGK",
+        "rev": "2-9af304be281790604d1d8a4b0f4c9adb"
+      },
+      {
+        "ok": true,
+        "id": "note:8eea9f7c",
+        "rev": "3-faf004b42827906a4dadbabb0fbc9aff"
+      }
+    ]
+    ```
+
+  </Col>
+</Row>
+
+
+---
+
+## Count number of notes
+
+<Row>
+  <Col>
+
+    Counts a number of notes in the database.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="docIds" type="string[]" required>
+      An Array of note IDs to delete.
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns a number of notes stored in the database.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const num = await db.notes.countAll()
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    21
+    ```
+
+  </Col>
+</Row>
+
+
+---
+
+## List notes within a specific notebook
+
+<Row>
+  <Col>
+
+    Retrieves notes associated with given notebook ID.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="bookId" type="string" required>
+        A notebook ID to find.
+      </Property>
+      <Property name="options" type="object">
+        List options. See [:all](#list-all-notes) for details.
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns a query result.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const num = await db.notes.findInBook('book:tjnPbJakw')
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      query: {
+        index: 'index_notes',
+        startkey: [ 'b', 'u', 'book:tjnPbJakw', 1, 0, 0 ],
+        endkey: [ 'b', 'u', 'book:tjnPbJakw', 2, {}, {} ]
+        descending: false,
+        limit: 20
+      },
+      totalRows: 9357,
+      cursor: {
+        index: 'index_notes',
+        startkey: [ 'b', 'u', 'book:tjnPbJakw', 1, 0, 0 ],
+        endkey: [ 'b', 'u', 'book:tjnPbJakw', 2, {}, {} ]
+        descending: false,
+        limit: 20,
+        skip: 20
+      },
+      includeDocs: true,
+      docs: [
+        {
+          doctype: 'markdown',
+          updatedAt: 1461564004766,
+          createdAt: 1461563995746,
+          bookId: 'book:tjnPbJakw',
+          status: 'none',
+          numOfTasks: 0,
+          numOfCheckedTasks: 0,
+          title: 'title...',
+          body: 'body...',
+          _id: 'note:4eeb997c',
+          _rev: '8-d18201be3336c70979c6a375b497b3a7'
+        },
+        ...
+      ]
+    }
+    ```
+
+  </Col>
+</Row>
+

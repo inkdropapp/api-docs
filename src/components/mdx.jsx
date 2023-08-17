@@ -72,12 +72,17 @@ export function Col({ children, sticky = false }) {
   )
 }
 
-export function Properties({ children }) {
+export function Properties({ children, sub }) {
   return (
     <div className="my-6">
       <ul
         role="list"
-        className="m-0 max-w-[calc(theme(maxWidth.lg)-theme(spacing.8))] list-none divide-y divide-zinc-900/5 p-0 dark:divide-white/5"
+        className={
+          'm-0 max-w-[calc(theme(maxWidth.lg)-theme(spacing.8))] list-none divide-y divide-zinc-900/5 p-0 dark:divide-white/5 ' +
+          (sub
+            ? 'rounded-2xl border border-zinc-900/5 p-3 dark:border-white/5'
+            : '')
+        }
       >
         {children}
       </ul>
@@ -85,7 +90,7 @@ export function Properties({ children }) {
   )
 }
 
-export function Property({ name, type, children }) {
+export function Property({ name, type, required, children }) {
   return (
     <li className="m-0 px-0 py-4 first:pt-0 last:pb-0">
       <dl className="m-0 flex flex-wrap items-center gap-x-3 gap-y-2">
@@ -97,6 +102,9 @@ export function Property({ name, type, children }) {
         <dd className="font-mono text-xs text-zinc-400 dark:text-zinc-500">
           {type}
         </dd>
+        {required && (
+          <dd className="text-xs text-pink-400 dark:text-pink-600">Required</dd>
+        )}
         <dt className="sr-only">Description</dt>
         <dd className="w-full flex-none [&>:first-child]:mt-0 [&>:last-child]:mb-0">
           {children}
