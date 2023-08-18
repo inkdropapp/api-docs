@@ -202,6 +202,7 @@ export const navigation = [
     title: 'Resources',
     links: [
       { title: 'Notes', href: '/notes' },
+      { title: 'Notebooks', href: '/books' },
       { title: 'Local HTTP Server', href: '/local-http-server' },
       { title: 'Contacts', href: '/contacts' },
       { title: 'Conversations', href: '/conversations' },

@@ -1,7 +1,7 @@
 export const metadata = {
   title: 'Notes',
   description:
-    'On this page, we’ll dive into the endpoints you can use to manage contacts programmatically.',
+    'This page describes the note model and the note class, which provide the core functionality for handling notes.',
 }
 
 # Notes
@@ -276,7 +276,7 @@ The note model contains all the information about your notes, such as their titl
 
     ### Returns
 
-    Returns a note if a valid note ID was provided.
+    Returns a list of notes.
   </Col>
   <Col sticky>
 
@@ -570,11 +570,7 @@ The note model contains all the information about your notes, such as their titl
 
     ### Parameters
 
-    <Properties>
-      <Property name="docIds" type="string[]" required>
-      An Array of note IDs to delete.
-      </Property>
-    </Properties>
+    No parameters.
 
     ### Returns
 

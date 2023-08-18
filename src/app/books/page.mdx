@@ -1,0 +1,474 @@
+export const metadata = {
+  title: 'Notebook',
+  description:
+    'This page describes the notebook model, which provides the core functionality for handling notebooks in Inkdrop.',
+}
+
+# Notebooks
+
+As with notes, notebooks are a fundamental unit in Inkdrop. A notebook contains data regarding a collection of notes.{{ className: 'lead' }}
+
+## The notebook model
+
+The notebook model contains information about your notebook collections, such as their name, the number of notes they contain, associated parent notebook, creation and modification timestamps, and other related metadata.
+
+<Row>
+  <Col>
+
+    ### Properties
+
+    <Properties>
+      <Property name="_id" type="string">
+        The unique notebook ID which should start with `book:` and the remains are randomly generated string.
+      </Property>
+      <Property name="_rev" type="string">
+        This is a CouchDB specific field. The current MVCC-token/revision of this document (mandatory and immutable).
+      </Property>
+      <Property name="count" type="number">
+        It indicates the number of notes in the notebook.
+      </Property>
+      <Property name="createdAt" type="number">
+        The date time when the notebook was created, represented with Unix timestamps in milliseconds.
+      </Property>
+      <Property name="name" type="string">
+        The notebook name.
+      </Property>
+      <Property name="parentBookId" type="nullable string">
+        The ID of the parent notebook.
+      </Property>
+      <Property name="updatedAt" type="number">
+        The date time when the notebook was last updated, represented with Unix timestamps in milliseconds.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    ```json {{ title: 'The notebook object' }}
+    {
+      "_id": "book:Bk5Ivk0T",
+      "_rev": "1-ba9bc6e7e45264bb3d6a8f3c266e9df0",
+      "updatedAt": 1475373619554,
+      "createdAt": 1475373619554,
+      "name": "Ideas",
+      "count": 8,
+      "parentBookId": "book:ak5I0k0a"
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## The notebook class
+
+<Row>
+  <Col>
+
+    The `Book` class is a wrapper class of the notebook, providing various methods for its operations such as loading, validation, saving, and serialization.
+
+    ### Methods
+
+    <Properties>
+      <Property name="static loadWithId(bookId: string)">
+        Loads a notebook by its ID from the local database and returns a new instance of the `Book`.
+      </Property>
+      <Property name="constructor(initialValues: Partial<Book>)">
+        Initializes a new `Book` instance with the given initial values. If no values are provided, it assigns default values.
+      </Property>
+      <Property name="validate()">
+        Validates the current notebook instance based on the predefined validation rules. If valid, returns an empty array. If not, returns the list of validation errors.
+      </Property>
+      <Property name="save()">
+        Validates and then saves the notebook to the local database. Throws an error if the validation fails or if there's a problem with the saving process.
+      </Property>
+      <Property name="toObject()">
+        Converts the notebook instance into a plain JavaScript object.
+      </Property>
+      <Property name="toJson()">
+        Serializes the notebook instance into a JSON string.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+    ```js {{ title: 'Import the class' }}
+    const { Book } = require('inkdrop').models
+    ```
+
+    ```js {{ title: 'Load a notebook from the database' }}
+    const book = await Book.loadWithId('book:9dc6a7a7')
+    ```
+
+    ```js {{ title: 'Create a new notebook' }}
+    const book = new Book({
+      name: 'My Notebook'
+    })
+    ```
+
+    ```js {{ title: 'Change its name' }}
+    book.name = 'Updated Notebook'
+    ```
+
+    ```js {{ title: 'Save the changes' }}
+    await book.save()
+    ```
+
+    ```js {{ title: 'Convert the notebook into a plain object' }}
+    const object = book.toObject()
+    ```
+
+    ```js {{ title: 'Convert the notebook into JSON' }}
+    const json = book.toJson()
+    ```
+  </Col>
+</Row>
+
+
+---
+
+## Retrieve a notebook {{ label: 'get(docId, options)' }}
+
+<Row>
+  <Col>
+
+    Retrieve a notebook with the given ID.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="docId" type="string" required>
+      The notebook ID
+      </Property>
+      <Property name="options" type="object">
+      Options. See [PouchDB's documentation](https://pouchdb.com/api.html#fetch_document) for available options.
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns a notebook if a valid note ID was provided.
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const book = await db.books.get('book:Bk5Ivk0T')
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "_id": "book:Bk5Ivk0T",
+      "_rev": "1-ba9bc6e7e45264bb3d6a8f3c266e9df0",
+      "updatedAt": 1475373619554,
+      "createdAt": 1475373619554,
+      "name": "Ideas",
+      "count": 8,
+      "parentBookId": "book:ak5I0k0a"
+    }
+    ```
+  </Col>
+</Row>
+
+---
+
+## List all notebooks {{ label: 'all()' }}
+
+<Row>
+  <Col>
+
+    Retrieve a list of your notebooks.
+
+    ### Parameters
+
+    No parameters
+
+    ### Returns
+
+    Returns a list of notebooks.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const list = await db.books.all()
+    ```
+
+    </CodeGroup>
+
+    ```js {{ title: 'Response' }}
+    [
+      {
+        updatedAt: 1475549348850,
+        createdAt: 1475549348850,
+        count: 0,
+        name: 'Inbox',
+        parentBookId: null,
+        _id: 'book:SkTsOceR',
+        _rev: '2-aa25f8bfe83cfcd6910fbb78c8e45eeb'
+      },
+      ...
+    ]
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Create a notebook ID {{ label: 'createId(): string' }}
+
+<Row>
+  <Col>
+
+    Creates new notebook ID which is String
+
+    ### Parameters
+
+    No parameters
+
+    ### Returns
+
+    Returns a new notebook ID.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const bookId = await db.books.createId()
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    "book:ak0s1ce6"
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Validate a notebook ID {{ label: 'validateDocId(): boolean' }}
+
+<Row>
+  <Col>
+
+    Tests if the given `docId` is a valid notebook ID
+
+    ### Parameters
+
+    <Properties>
+      <Property name="docId" type="string" required>
+      A document ID to validate
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns `true` if valid
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const isValid = await db.notes.validateDocId('book:ak0s1ce6')
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    true
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Create or update a notebook {{ label: 'put(doc)' }}
+
+<Row>
+  <Col>
+    Create a new notebook or update an existing note.
+    If the note already exists, you must specify its revision `_rev`, otherwise a conflict will occur.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="doc" type="object" required>
+      A Book data to store
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    It throws an `InvalidDataError` if the given doc was invalid.
+    The response contains the `id` of the document, the new `rev`, and an `ok` to reassure you that everything is okay.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const result = await db.books.put({
+      _id: 'book:9IoGtoCuv',
+      updatedAt: 1475549348850,
+      createdAt: 1475549348850,
+      name: 'New Notebook',
+      count: 0,
+      parentBookId: null
+    })
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "ok": true,
+      "id": "book:9IoGtoCuv",
+      "rev": "1-A6157A5EA545C99B00FF904EEF05FD9F"
+    }
+    ```
+
+  </Col>
+</Row>
+
+
+---
+
+## Remove a notebook {{ label: 'remove(docId)' }}
+
+<Row>
+  <Col>
+
+    Deletes a note with the given notebook ID.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="docId" type="string" required>
+      A notebook ID to delete.
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    The response contains the `id` of the document, the new `rev`, and an `ok` to reassure you that everything is okay.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const result = await db.books.remove("book:9IoGtoCuv")
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "ok": true,
+      "id": "book:9IoGtoCuv",
+      "rev": "2-9af304be281790604d1d8a4b0f4c9adb"
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Count number of notebooks {{ label: 'countAll()' }}
+
+<Row>
+  <Col>
+
+    Counts a number of notebooks in the database.
+
+    ### Parameters
+
+    No parameters.
+
+    ### Returns
+
+    Returns a number of notebooks stored in the database.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const num = await db.books.countAll()
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    5
+    ```
+
+  </Col>
+</Row>
+
+
+---
+
+## Lookup a notebook by name {{ label: 'findWithName(name)' }}
+
+<Row>
+  <Col>
+
+    Retrieves a notebook with the given name.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="bookId" type="string" required>
+        A notebook name to find.
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns a notebook if found otherwise `undefined`.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const num = await db.books.findWithName('Inbox')
+    ```
+
+    </CodeGroup>
+
+    ```js {{ title: 'Response' }}
+    {
+      updatedAt: 1475549348850,
+      createdAt: 1475549348850,
+      count: 0,
+      name: 'Inbox',
+      parentBookId: null,
+      _id: 'book:SkTsOceR',
+      _rev: '2-aa25f8bfe83cfcd6910fbb78c8e45eeb'
+    }
+    ```
+
+  </Col>
+</Row>
