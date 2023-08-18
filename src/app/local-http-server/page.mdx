@@ -1,0 +1,671 @@
+export const metadata = {
+  title: 'Local HTTP Server',
+  description:
+    'The Inkdrop client app can open a simple HTTP server so that you can access the data from an external program easily, which gives you a flexible ability to import/export your notes.',
+}
+
+# Local HTTP Server
+
+The Inkdrop client app can open a simple HTTP server so that you can access the data from an external program easily, which gives you a flexible ability to import/export your notes.
+
+
+---
+
+## Get the server information {{ tag: 'GET', label: '/' }}
+
+<Row>
+  <Col>
+
+    Accessing the root of a HTTP server returns meta information about the app.
+
+    ### Parameters
+
+    No parameters
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/">
+
+    ```bash {{ title: 'cURL' }}
+    curl -G https://localhost:19840/ \
+      -H "Authorization: Basic {token}"
+    ```
+
+    </CodeGroup>
+
+  </Col>
+</Row>
+
+---
+
+## List of all notes {{ tag: 'GET', label: '/notes' }}
+
+<Row>
+  <Col>
+
+    Returns a list of all the [Notes](/notes) in the local database.
+
+    ### Query parameters
+
+    <Properties>
+      <Property name="keyword" type="string">
+        The search keyword to filter notes. You can use the same qualifiers for searching notes.
+      </Property>
+      <Property name="limit" type="number">
+        Limit the number of the returned documents to the specified number.
+      </Property>
+      <Property name="skip" type="number">
+        Skip this number of documents before starting to return the results. Default is `0`.
+      </Property>
+      <Property name="sort" type="string">
+        Sort the documents by the specified field. One of: `'updatedAt'`, `'createdAt'`, `'title'`.
+      </Property>
+      <Property name="descending" type="boolean">
+        Reverse the order of the output documents.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/notes">
+
+    ```bash {{ title: 'cURL' }}
+    curl "https://localhost:19840/notes/?limit=1" \
+      -H "Authorization: Basic {token}"
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    [
+      {
+        "doctype": "markdown",
+        "bookId": "book:tjnPbJakw",
+        "createdAt": 1589165355584,
+        "updatedAt": 1592532006000,
+        "status": "active",
+        "share": "private",
+        "numOfTasks": 0,
+        "numOfCheckedTasks": 0,
+        "pinned": true,
+        "title": "hello",
+        "body": "example note",
+        "tags": ["tag:HyBgJ94gx", "tag:h11OMPbSs"],
+        "_id": "note:BKzzd8iGK",
+        "_rev": "19-d882f96ee27f7b9f71f6183b0cab9193"
+      }
+    ]
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Create a new note {{ tag: 'POST', label: '/notes' }}
+
+<Row>
+  <Col>
+
+    The POST method creates a new [Note](/notes) document, or creates a new revision of the existing document.
+    The document ID `_id` is optional and will be automatically generated.
+
+    ### Response JSON Object
+
+    <Properties>
+      <Property name="id" type="string">
+        Document ID
+      </Property>
+      <Property name="ok" type="boolean">
+        Operation status
+      </Property>
+      <Property name="rev" type="string">
+        Revision MVCC token
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="POST" label="/notes">
+
+    ```bash {{ title: 'cURL' }}
+    curl -X POST "https://localhost:19840/notes/" \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Basic {token}" \
+      -d '{
+        "doctype": "markdown",
+        "bookId": "book:tjnPbJakw",
+        "status": "active",
+        "share": "private",
+        "title": "hello",
+        "body": "example note",
+        "tags": ["tag:HyBgJ94gx", "tag:h11OMPbSs"]
+      }'
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "ok": true,
+      "id": "note:BKzzd8iGK",
+      "rev": "1-d882f96ee27f7b9f71f6183b0cab9193"
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## List of all notebooks {{ tag: 'GET', label: '/books' }}
+
+<Row>
+  <Col>
+
+    Returns a list of all the [Books](/books) in the local database.
+
+    ### Query parameters
+
+    <Properties>
+      <Property name="limit" type="number">
+        Limit the number of the returned documents to the specified number.
+      </Property>
+      <Property name="skip" type="number">
+        Skip this number of documents before starting to return the results. Default is `0`.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/books">
+
+    ```bash {{ title: 'cURL' }}
+    curl "https://localhost:19840/books" \
+      -H "Authorization: Basic {token}"
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    [
+      {
+        "parentBookId": "book:Bk5Ivk0T",
+        "updatedAt": 1598593031080,
+        "createdAt": 1598593007103,
+        "name": "Desktop app",
+        "_id": "book:0cFae6lCc",
+        "_rev": "2-7f29bee428d16b6f5a05ece8abf7f571"
+      },
+      ...
+    ]
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Create a new notebook {{ tag: 'POST', label: '/books' }}
+
+<Row>
+  <Col>
+
+    The POST method creates a new [Book](/books) document, or creates a new revision of the existing document.
+    The document ID `_id` is optional and will be automatically generated.
+
+    ### Response JSON Object
+
+    <Properties>
+      <Property name="id" type="string">
+        Document ID
+      </Property>
+      <Property name="ok" type="boolean">
+        Operation status
+      </Property>
+      <Property name="rev" type="string">
+        Revision MVCC token
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="POST" label="/books">
+
+    ```bash {{ title: 'cURL' }}
+    curl "https://localhost:19840/books" \
+      -X POST \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Basic {token}" \
+      -d '{ "name": "New notebook" }'
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "ok": true,
+      "id": "book:Bk5Ivk0T",
+      "rev": "1-7f29bee428d16b6f5a05ece8abf7f571"
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## List of all tags {{ tag: 'GET', label: '/tags' }}
+
+<Row>
+  <Col>
+
+    Returns a list of all the [Tags](/reference/data-models#a-nameresource-tagtaga) in the local database.
+
+    ### Query parameters
+
+    <Properties>
+      <Property name="limit" type="number">
+        Limit the number of the returned documents to the specified number.
+      </Property>
+      <Property name="skip" type="number">
+        Skip this number of documents before starting to return the results. Default is `0`.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/tags">
+
+    ```bash {{ title: 'cURL' }}
+    curl "https://localhost:19840/tags" \
+      -H "Authorization: Basic {token}"
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    [
+      {
+        "count": 4,
+        "color": "orange",
+        "createdAt": 1489212448648,
+        "updatedAt": 1607068381327,
+        "name": "Lifehack",
+        "_id": "tag:h11OMPbSs",
+        "_rev": "3-bceb5835af6be6ae277762a877b884d1"
+      },
+      ...
+    ]
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Create a new tag {{ tag: 'POST', label: '/tags' }}
+
+<Row>
+  <Col>
+
+    The POST method creates a new [Tag](/tags) document, or creates a new revision of the existing document.
+    The document ID `_id` is optional and will be automatically generated.
+
+    ### Response JSON Object
+
+    <Properties>
+      <Property name="id" type="string">
+        Document ID
+      </Property>
+      <Property name="ok" type="boolean">
+        Operation status
+      </Property>
+      <Property name="rev" type="string">
+        Revision MVCC token
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="POST" label="/tags">
+
+    ```bash {{ title: 'cURL' }}
+    curl "https://localhost:19840/tags" \
+      -X POST \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Basic {token}" \
+      -d '{ "color": "red", "name": "Important" }'
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "ok": true,
+      "id": "tag:HyBgJ94gx",
+      "rev": "1-e5ad1c150a30e1ad5a781755466b19a1"
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## List of all files {{ tag: 'GET', label: '/files' }}
+
+<Row>
+  <Col>
+
+    Returns a list of all the [Files](/files) in the local database.
+
+    ### Query parameters
+
+    <Properties>
+      <Property name="limit" type="number">
+        Limit the number of the returned documents to the specified number.
+      </Property>
+      <Property name="skip" type="number">
+        Skip this number of documents before starting to return the results. Default is `0`.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/files">
+
+    ```bash {{ title: 'cURL' }}
+    curl "https://localhost:19840/files?limit=1" \
+      -H "Authorization: Basic {token}"
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    [
+      {
+        "name": "dog.png",
+        "createdAt": 1613887605720,
+        "contentType": "image/png",
+        "contentLength": 10389,
+        "publicIn": [],
+        "_attachments": {
+          "index": {
+            "digest": "md5-if+yj7slT2E8u2JG7ee3yw==",
+            "content_type": "image/png",
+            "revpos": 5,
+            "data": "iVBORw0K...AElFTkSuQmCC"
+          }
+        },
+        "_id": "file:-dKJeWShi",
+        "_rev": "5-541c58ffdbec966840709683c658c7dc"
+      }
+    ]
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Create a new file {{ tag: 'POST', label: '/files' }}
+
+<Row>
+  <Col>
+
+    The POST method creates a new [File](/files) document, or creates a new revision of the existing document.
+    The document ID `_id` is optional and will be automatically generated.
+
+    ### Response JSON Object
+
+    <Properties>
+      <Property name="id" type="string">
+        Document ID
+      </Property>
+      <Property name="ok" type="boolean">
+        Operation status
+      </Property>
+      <Property name="rev" type="string">
+        Revision MVCC token
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="POST" label="/files">
+
+    ```bash {{ title: 'cURL' }}
+    curl "https://localhost:19840/files" \
+      -X POST \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Basic {token}" \
+      -d '{
+        "name": "dog.png",
+        "contentType": "image/png",
+        "contentLength": 10389,
+        "publicIn": [],
+        "_attachments": {
+          "index": {
+            "content_type": "image/png",
+            "data": "iVBORw0K...AElFTkSuQmCC"
+          }
+        }
+      }'
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "ok": true,
+      "id": "file:HyBgJ94gx",
+      "rev": "1-e5ad1c150a30e1ad5a781755466b19a1"
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Fetch a document by ID {{ tag: 'GET', label: '/{docid}' }}
+
+<Row>
+  <Col>
+
+    Returns document by the specified `docid` of Note, Book, Tag, or File.
+
+    ### Query parameters
+
+    All parameters are optional.
+
+    <Properties>
+      <Property name="rev" type="string">
+        Fetch specific revision of a document. Defaults to the latest revision.
+      </Property>
+      <Property name="attachments" type="boolean">
+        Include attachment data. It should be `true` if you fetch a content of the file document.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/{docid}">
+
+    ```bash {{ title: 'cURL' }}
+    curl "https://localhost:19840/note:BKzzd8iGK" \
+      -H "Authorization: Basic {token}"
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "doctype": "markdown",
+      "bookId": "book:tjnPbJakw",
+      "createdAt": 1589165355584,
+      "updatedAt": 1592532006000,
+      "status": "active",
+      "share": "private",
+      "numOfTasks": 0,
+      "numOfCheckedTasks": 0,
+      "pinned": true,
+      "title": "hello",
+      "body": "example note",
+      "tags": ["tag:HyBgJ94gx", "tag:h11OMPbSs"],
+      "_id": "note:BKzzd8iGK",
+      "_rev": "19-d882f96ee27f7b9f71f6183b0cab9193"
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Delete a document by ID {{ tag: 'DELETE', label: '/{docid}' }}
+
+<Row>
+  <Col>
+
+    Deletes document by the specified `docid` of Note, Book, Tag, or File.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="DELETE" label="/{docid}">
+
+    ```bash {{ title: 'cURL' }}
+    curl "https://localhost:19840/note:BKzzd8iGK" \
+      -X DELETE \
+      -H "Authorization: Basic {token}"
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "ok": true,
+      "id": "note:BKzzd8iGK",
+      "rev": "2-e5ad1c150a30e1ad5a781755466b19a1"
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Get changes made to documents {{ tag: 'GET', label: '/_changes' }}
+
+<Row>
+  <Col>
+
+    Returns a list of changes made to documents in the database, in the order they were made.
+
+    ### Query parameters
+
+    <Properties>
+      <Property name="descending" type="boolean">
+        Reverse the order of the output documents.
+      </Property>
+      <Property name="since" type="number">
+        Start the results from the change immediately after the given sequence number.
+      </Property>
+      <Property name="limit" type="number">
+        Limit the number of results to this number.
+      </Property>
+      <Property name="include_docs" type="boolean" default="true">
+        Include the associated document with each change.
+      </Property>
+      <Property name="conflicts" type="boolean">
+        Include conflicts.
+      </Property>
+      <Property name="attachments" type="boolean">
+        Include attachments.
+      </Property>
+    </Properties>
+
+    ### Note
+
+    `seq` and `last_seq` correspond to the overall sequence number of the entire database, and it’s what is passed in when using `since`. It is the primary key for the changes feed, and is also used as a checkpointer by the replication algorithm. The `live` option is not supported.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/_changes">
+
+    ```bash {{ title: 'cURL' }}
+    curl "https://localhost:19840/_changes?limit=1&since=306" \
+      -H "Authorization: Basic {token}"
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "results": [
+        {
+          "id": "note:BkS41x0T",
+          "changes": [
+            {
+              "rev": "2-4cd3d27dbda7cbd98cf8474970353460"
+            }
+          ],
+          "doc": {
+            "doctype": "markdown",
+            "updatedAt": 1475375009783,
+            "createdAt": 1475374892611,
+            "bookId": "book:Bk5Ivk0T:HJu6tyRT",
+            "status": "none",
+            "migratedBy": "migrateAddingNumOfTasks",
+            "numOfTasks": 0,
+            "numOfCheckedTasks": 0,
+            "title": "code diff",
+            "body": "```\nhello\n```",
+            "tags": [],
+            "_id": "note:BkS41x0T",
+            "_rev": "2-4cd3d27dbda7cbd98cf8474970353460"
+          },
+          "seq": 307
+        }
+      ],
+      "last_seq": 307
+    }
+    ```
+
+    ```json {{ title: 'Deleted Doc Response' }}
+    {
+      "results": [
+        {
+          "id": "note:coPJ4TB7u",
+          "changes": [
+            {
+              "rev": "3-2396b4e8542389a6c464826fba8b9ef2"
+            }
+          ],
+          "doc": {
+            "_id": "note:coPJ4TB7u",
+            "_rev": "3-2396b4e8542389a6c464826fba8b9ef2",
+            "_deleted": true
+          },
+          "deleted": true,
+          "seq": 200
+        }
+      ],
+      "last_seq": 200
+    }
+    ```
+  </Col>
+</Row>
