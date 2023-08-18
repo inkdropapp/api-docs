@@ -148,7 +148,7 @@ The notebook model contains information about your notebook collections, such as
 
     ### Returns
 
-    Returns a notebook if a valid note ID was provided.
+    Returns a notebook if a valid notebook ID was provided.
   </Col>
   <Col sticky>
     <CodeGroup title="Request">
@@ -282,7 +282,7 @@ The notebook model contains information about your notebook collections, such as
 
     ```js
     const db = inkdrop.main.dataStore.getLocalDB()
-    const isValid = await db.notes.validateDocId('book:ak0s1ce6')
+    const isValid = await db.books.validateDocId('book:ak0s1ce6')
     ```
 
     </CodeGroup>
@@ -301,7 +301,7 @@ The notebook model contains information about your notebook collections, such as
 <Row>
   <Col>
     Create a new notebook or update an existing note.
-    If the note already exists, you must specify its revision `_rev`, otherwise a conflict will occur.
+    If the notebook already exists, you must specify its revision `_rev`, otherwise a conflict will occur.
 
     ### Parameters
 
@@ -354,7 +354,7 @@ The notebook model contains information about your notebook collections, such as
 <Row>
   <Col>
 
-    Deletes a note with the given notebook ID.
+    Deletes a notebook with the given notebook ID.
 
     ### Parameters
 
@@ -438,7 +438,7 @@ The notebook model contains information about your notebook collections, such as
     ### Parameters
 
     <Properties>
-      <Property name="bookId" type="string" required>
+      <Property name="name" type="string" required>
         A notebook name to find.
       </Property>
     </Properties>
@@ -453,7 +453,7 @@ The notebook model contains information about your notebook collections, such as
 
     ```js
     const db = inkdrop.main.dataStore.getLocalDB()
-    const num = await db.books.findWithName('Inbox')
+    const book = await db.books.findWithName('Inbox')
     ```
 
     </CodeGroup>
