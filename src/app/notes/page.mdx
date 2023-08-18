@@ -94,7 +94,94 @@ The note model contains all the information about your notes, such as their titl
 
 ---
 
-## Retrieve a note
+## The note class
+
+<Row>
+  <Col>
+
+    The `Note` class is a wrapper class that provides methods and functionalities related to handling notes.
+
+    ### Methods
+
+    <Properties>
+      <Property name="static async loadWithId(noteId: string)">
+      A static asynchronous method that retrieves a note from the database using a specified note ID and returns an instance of the `Note` class initialized with that note.
+      </Property>
+
+      <Property name="constructor(initialValues: Partial<Note> = {})">
+      Constructs a new instance of the `Note` class. It sets the initial values of the note object based on the provided `initialValues` or uses default values.
+      </Property>
+
+      <Property name="getUpdatedAt()">
+      Returns the `updatedAt` property of the note as a JavaScript `Date` object.
+      </Property>
+
+      <Property name="getCreatedAt()">
+      Returns the `createdAt` property of the note as a JavaScript `Date` object.
+      </Property>
+
+      <Property name="isNoteShared()">
+      Determines if the note is shared. Returns `true` if the note is not private; otherwise, it returns `false`.
+      </Property>
+
+      <Property name="validate()">
+      Validates the note's properties using the `validateNote` function. Returns a list of validation errors or an empty list if the note is valid.
+      </Property>
+
+      <Property name="async save()">
+      An asynchronous method that first validates the note, then ensures the related notebook and tags exist. If all validations pass, it saves the note to the database.
+      </Property>
+
+      <Property name="toObject()">
+      Converts the `Note` instance into a plain JavaScript object of type `Note`.
+      </Property>
+
+      <Property name="toJson()">
+      Serializes the `Note` instance into a JSON string representation.
+      </Property>
+
+    </Properties>
+  </Col>
+  <Col sticky>
+
+    ```js {{ title: 'Import the class' }}
+    const { Note } = require('inkdrop').models
+    ```
+
+    ```js {{ title: 'Load a note from the database' }}
+    const note = await Note.loadWithId('note:BKzzd8iGK')
+    ```
+
+    ```js {{ title: 'Change its title' }}
+    note.title = 'New title'
+    ```
+
+    ```js {{ title: 'Save the change' }}
+    await note.save()
+    ```
+
+    ```js {{ title: 'Create a new note' }}
+    const note = new Note({
+      title: 'Hello',
+      body: 'World'
+    })
+    ```
+
+    ```js {{ title: 'Convert into a plain object' }}
+    const object = note.toObject()
+    ```
+
+    ```js {{ title: 'Convert into JSON' }}
+    const json = note.toJson()
+    ```
+
+  </Col>
+</Row>
+
+
+---
+
+## Retrieve a note {{ label: 'get(docId, options)' }}
 
 <Row>
   <Col>
@@ -153,7 +240,7 @@ The note model contains all the information about your notes, such as their titl
 
 ---
 
-## List all notes
+## List all notes {{ label: 'all(options)' }}
 
 <Row>
   <Col>
@@ -246,7 +333,7 @@ The note model contains all the information about your notes, such as their titl
 
 ---
 
-## Create a note ID
+## Create a note ID {{ label: 'createId(): string' }}
 
 <Row>
   <Col>
@@ -279,7 +366,7 @@ The note model contains all the information about your notes, such as their titl
   </Col>
 </Row>
 
-## Validate a note ID
+## Validate a note ID {{ label: 'validateDocId(): boolean' }}
 
 <Row>
   <Col>
@@ -318,17 +405,18 @@ The note model contains all the information about your notes, such as their titl
 
 ---
 
-## Create or update a note
+## Create or update a note {{ label: 'put(doc)' }}
 
 <Row>
   <Col>
 
-    Creates or updates the given note.
+    Create a new note or update an existing note.
+    If the note already exists, you must specify its revision `_rev`, otherwise a conflict will occur.
 
     ### Parameters
 
     <Properties>
-      <Property name="note" type="object" required>
+      <Property name="doc" type="object" required>
       A Note data to store
       </Property>
     </Properties>
@@ -336,7 +424,8 @@ The note model contains all the information about your notes, such as their titl
     ### Returns
 
     It throws an `InvalidDataError` if the given doc was invalid.
-    Returns a new revision ID.
+    The response contains the `id` of the document, the new `rev`, and an `ok` to reassure you that everything is okay.
+
   </Col>
   <Col sticky>
 
@@ -377,7 +466,7 @@ The note model contains all the information about your notes, such as their titl
 
 ---
 
-## Remove a note
+## Remove a note {{ label: 'remove(docId)' }}
 
 <Row>
   <Col>
@@ -394,7 +483,7 @@ The note model contains all the information about your notes, such as their titl
 
     ### Returns
 
-    Returns a new revision ID.
+    The response contains the `id` of the document, the new `rev`, and an `ok` to reassure you that everything is okay.
   </Col>
   <Col sticky>
 
@@ -421,7 +510,7 @@ The note model contains all the information about your notes, such as their titl
 
 ---
 
-## Remove multiple notes
+## Remove a batch of notes {{ label: 'removeBatch(docIds)' }}
 
 <Row>
   <Col>
@@ -472,7 +561,7 @@ The note model contains all the information about your notes, such as their titl
 
 ---
 
-## Count number of notes
+## Count number of notes {{ label: 'countAll()' }}
 
 <Row>
   <Col>
@@ -512,7 +601,7 @@ The note model contains all the information about your notes, such as their titl
 
 ---
 
-## List notes within a specific notebook
+## List notes within a specific notebook {{ label: 'findInBook(bookId, options)' }}
 
 <Row>
   <Col>
@@ -588,7 +677,7 @@ The note model contains all the information about your notes, such as their titl
 
 ---
 
-## List notes with a specific tag
+## List notes with a specific tag {{ label: 'findWithTag(tagId, options)' }}
 
 <Row>
   <Col>
@@ -665,7 +754,7 @@ The note model contains all the information about your notes, such as their titl
 
 ---
 
-## List notes with a specific status
+## List notes with a specific status {{ label: 'findWithStatus(statue, options)' }}
 
 <Row>
   <Col>
