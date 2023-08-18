@@ -199,16 +199,14 @@ export const navigation = [
     ],
   },
   {
-    title: 'Resources',
+    title: 'Data Access',
     links: [
       { title: 'Notes', href: '/notes' },
       { title: 'Notebooks', href: '/books' },
+      { title: 'Tags', href: '/tags' },
+      { title: 'Files', href: '/files' },
+      { title: 'Utilities', href: '/utils' },
       { title: 'Local HTTP Server', href: '/local-http-server' },
-      { title: 'Contacts', href: '/contacts' },
-      { title: 'Conversations', href: '/conversations' },
-      { title: 'Messages', href: '/messages' },
-      { title: 'Groups', href: '/groups' },
-      { title: 'Attachments', href: '/attachments' },
     ],
   },
 ]
