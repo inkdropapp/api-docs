@@ -214,12 +214,6 @@ export const navigation = [
         title: 'Create a blog using Astro',
         href: '/create-a-blog-using-astro',
       },
-
-      { title: 'SDKs', href: '/sdks' },
-      { title: 'Authentication', href: '/authentication' },
-      { title: 'Pagination', href: '/pagination' },
-      { title: 'Errors', href: '/errors' },
-      { title: 'Webhooks', href: '/webhooks' },
     ],
   },
   {
