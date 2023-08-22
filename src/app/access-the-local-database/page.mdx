@@ -1,0 +1,100 @@
+export const metadata = {
+  title: 'Accessing the Local Database',
+  description:
+    'Learn how to access the local database from plugins and external programs.',
+}
+
+# Accessing the local database
+
+There are two databases in local and on remote and they sync via HTTP(S).
+The Inkdrop client app is built on top of a [PouchDB](https://pouchdb.com/) for storing data in local and syncing with the remote database. For many parts of the application, the database is the source of truth. {{ className: 'lead' }}
+
+Data is written to the local database first, then synced with the remote database, and changes to the database trigger [Actions, Stores](/manual/flux-architecture) and components to refresh their contents. The illustration below shows this flow of data:
+
+![Data flow](/images/accessing-the-local-database_data-flow.png)
+
+## Accessing the data from plugins (Recommended)
+
+There is a class called `InkdropDatabase` which wraps PouchDB and provides a bunch of useful methods that help you access the local database for managing notes, notebooks, tags and images.
+
+For example, below code gets data directly from the local database:
+
+```js
+const db = inkdrop.main.dataStore.getLocalDB()
+
+// Get a note data by note ID
+const note = await db.notes.get('note:F8xUp-23G')
+
+// Get all notebooks
+const books = await db.books.all()
+
+// Get notes in a notebook
+const notesInBook = await db.notes.findInBook(books[0]._id)
+
+// Search notes with keywords
+const result = await db.utils.search('Foobar')
+const { docs } = result
+console.log('Search result:', docs)
+```
+
+<Note>
+<strong>NOTE</strong>: Returned objects from the database represent <a href="https://github.com/electron/remote#remote-objects">Remote Objects</a>. They can be converted into plain objects by calling [`structuredClone(remoteObj)`](https://developer.mozilla.org/en-US/docs/Web/API/structuredClone).
+</Note>
+
+## Accessing via HTTP (Advanced)
+
+![Local REST API endpoint](/images/accessing-the-local-database_local-rest-api-endpoint.png)
+
+The Inkdrop client app can open a simple HTTP server so that you can access the data from an external program easily, which gives you a flexible ability to import/export your notes.
+
+You can configure the HTTP server settings by editing `config.cson` in [the user data directory](/manual/basic-usage/#user-data-directory).
+
+Quit Inkdrop, then edit it like so:
+
+```yaml
+'*':
+  core:
+    server:
+      enabled: true
+      port: 19840
+      bindAddress: '127.0.0.1'
+      auth:
+        username: 'foo'
+        password: 'bar'
+```
+
+Now, launch the app.
+
+### Configurations
+
+- `core.server.enabled` - Specify `true` to enable the HTTP server. Default is `false`.
+- `core.server.port` - Defines the port number to listen. Default is `19840`.
+- `core.server.bindAddress` - Defines the IP address to listen. Default is `127.0.0.1`.
+- `core.server.auth.{username,password}` - Defines Basic auth credentials.
+
+### API reference
+
+See [the local HTTP server reference](/local-http-server) for more details.
+
+## Accessing the PouchDB instance (Advanced, not recommended)
+
+There is a global variables named [`inkdrop`](/reference/environment) which allows you to access the internal objects of Inkdrop.
+It has [`main`](/reference/inkdrop-application) property, which is a reference to the inkdrop instance in the main process.
+To access the local PouchDB instance in the main process:
+
+```js
+async function getDatabaseInfo() {
+  const db = inkdrop.main.dataStore.localPouch
+  const info = await db.info()
+  console.log(info.db_name)
+}
+```
+
+In this code, `localPouch` is the instance of PouchDB.
+_Be careful, you could break your database_ by accessing it with PouchDB since its API does not protect you from breaking it.
+Use it only if the data access API does not provide what you would do.
+
+<Note>
+<strong>NOTE</strong>: Returned objects from the database represent <a href="https://github.com/electron/remote#remote-objects">Remote Objects</a>.
+</Note>
+

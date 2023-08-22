@@ -12,8 +12,8 @@ import { UsersIcon } from '@/components/icons/UsersIcon'
 
 const resources = [
   {
-    href: '/contacts',
-    name: 'Contacts',
+    href: '/notes',
+    name: 'Notes',
     description:
       'Learn about the contact model and how to create, retrieve, update, delete, and list contacts.',
     icon: UserIcon,
@@ -26,8 +26,8 @@ const resources = [
     },
   },
   {
-    href: '/conversations',
-    name: 'Conversations',
+    href: '/books',
+    name: 'Notebooks',
     description:
       'Learn about the conversation model and how to create, retrieve, update, delete, and list conversations.',
     icon: ChatBubbleIcon,
@@ -40,8 +40,8 @@ const resources = [
     },
   },
   {
-    href: '/messages',
-    name: 'Messages',
+    href: '/tags',
+    name: 'Tags',
     description:
       'Learn about the message model and how to create, retrieve, update, delete, and list messages.',
     icon: EnvelopeIcon,
@@ -54,8 +54,30 @@ const resources = [
     },
   },
   {
-    href: '/groups',
-    name: 'Groups',
+    href: '/files',
+    name: 'Files',
+    description:
+      'Learn about the group model and how to create, retrieve, update, delete, and list groups.',
+    icon: UsersIcon,
+    pattern: {
+      y: 22,
+      squares: [[0, 1]],
+    },
+  },
+  {
+    href: '/utils',
+    name: 'Utilities',
+    description:
+      'Learn about the group model and how to create, retrieve, update, delete, and list groups.',
+    icon: UsersIcon,
+    pattern: {
+      y: 22,
+      squares: [[0, 1]],
+    },
+  },
+  {
+    href: '/local-http-server',
+    name: 'Local HTTP server',
     description:
       'Learn about the group model and how to create, retrieve, update, delete, and list groups.',
     icon: UsersIcon,
@@ -147,7 +169,7 @@ export function Resources() {
   return (
     <div className="my-16 xl:max-w-none">
       <Heading level={2} id="resources">
-        Resources
+        Data Access
       </Heading>
       <div className="not-prose mt-4 grid grid-cols-1 gap-8 border-t border-zinc-900/5 pt-10 dark:border-white/5 sm:grid-cols-2 xl:grid-cols-4">
         {resources.map((resource) => (

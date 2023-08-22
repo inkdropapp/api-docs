@@ -1,0 +1,54 @@
+export const metadata = {
+  title: 'Getting & Modifying the App State',
+  description:
+    'Inkdrop uses Redux, an implementation of Facebook\'s Flux Application Architecture to coordinate the movement of data through the application. Flux is extremely well suited for applications that support third-party extension because it emphasizes loose coupling and well defined interfaces between components. It enforces: Uni-directional data flow, Loose coupling between components.'
+}
+
+# Getting & modifying the app state
+
+Inkdrop uses [Redux](https://redux.js.org/), an implementation of Facebook's [Flux Application Architecture](https://facebook.github.io/flux/) to coordinate the movement of data through the application. {{ className: 'lead' }}
+
+Flux is extremely well suited for applications that support third-party extension because it emphasizes loose coupling and well defined interfaces between components.
+It enforces:
+
+- Uni-directional data flow
+- Loose coupling between components
+
+For more information about the Flux pattern, check out [this diagram](https://facebook.github.io/flux/docs/overview.html#structure-and-data-flow).
+
+You can access the app state via `inkdrop.store.getState()`.
+
+## Actions
+
+You can dispatch the internal actions like so:
+
+```js
+import { actions } from 'inkdrop'
+
+inkdrop.store.dispatch(actions.books.update())
+```
+
+See [a list of available actions](/actions) in reference.
+
+## States
+
+To get the current app state, for example, you can get [editingNote](/reference/state-editing-note) like so:
+
+```js
+const { editingNote } = inkdrop.store.getState()
+```
+
+Or, to connect this state with your React component:
+
+```js
+import { useSelector } from 'react-redux'
+
+const selector = ({ editingNote }) => editingNote
+
+const MyComponent = props => {
+  const editingNote = useSelector(selector)
+  // render
+}
+```
+
+See [a list of available states](/states) in reference.

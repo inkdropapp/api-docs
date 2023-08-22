@@ -191,6 +191,30 @@ export const navigation = [
     links: [
       { title: 'Introduction', href: '/' },
       { title: 'Quickstart', href: '/quickstart' },
+      { title: 'The init file', href: '/the-init-file' },
+      { title: 'Style tweaks', href: '/style-tweaks' },
+      { title: 'Creating a theme', href: '/creating-a-theme' },
+      { title: 'Plugin: Word count', href: '/plugin-word-count' },
+      {
+        title: 'Getting & modifying the app state',
+        href: '/flux-architecture',
+      },
+      {
+        title: 'Access the local database',
+        href: '/access-the-local-database',
+      },
+      { title: 'Customize the editor', href: '/customize-the-editor' },
+      { title: 'Extend the UI', href: '/extend-the-ui' },
+      { title: 'Create a note template', href: '/create-a-note-template' },
+      {
+        title: 'Add styles for text annotations',
+        href: '/text-annotations',
+      },
+      {
+        title: 'Create a blog using Astro',
+        href: '/create-a-blog-using-astro',
+      },
+
       { title: 'SDKs', href: '/sdks' },
       { title: 'Authentication', href: '/authentication' },
       { title: 'Pagination', href: '/pagination' },
