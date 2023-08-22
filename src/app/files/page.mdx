@@ -94,10 +94,19 @@ Files capture all the essential details about the image attachments, such as con
     ### Methods
 
     <Properties>
-      <Property name="static loadWithId(fileId: string)">
+      <Property name="static loadWithId(docid: string)">
         Loads a file by its ID from the local database and returns a new instance of the `File`.
       </Property>
-      <Property name="constructor(initialValues: Partial<File>)">
+      <Property name="static createFromFile(file: Readonly<File>)">
+        Creates a new file attachment from the provided file and returns a new instance of the `File`.
+      </Property>
+      <Property name="static createFromNativeImage(nativeImage: Record<string, any>, filename?: string)">
+        Creates a new file attachment from the provided native image and returns a new instance of the `File`.
+      </Property>
+      <Property name="static createFromFilePath(filePath: string)">
+        Creates a new file attachment from the provided file path and returns a new instance of the `File`.
+      </Property>
+      <Property name="constructor(initialValues: Partial<IDFile> = {})">
         Initializes a new `File` instance with the given initial values. If no values are provided, it assigns default values.
       </Property>
       <Property name="validate()">
@@ -106,11 +115,29 @@ Files capture all the essential details about the image attachments, such as con
       <Property name="save()">
         Validates and then saves the file to the local database. Throws an error if the validation fails or if there's a problem with the saving process.
       </Property>
+      <Property name="setFile(file: Readonly<File>)">
+        Sets the file content of the current instance with the provided file.
+      </Property>
+      <Property name="setPNGBuffer(buffer: Buffer)">
+        Sets the file content of the current instance with the provided PNG buffer.
+      </Property>
+      <Property name="getAsBase64()">
+        Retrieves the file attachment's data as a base64 string.
+      </Property>
+      <Property name="getAsBuffer()">
+        Retrieves the file attachment's data as a buffer.
+      </Property>
+      <Property name="saveFileSync(dirToSave: string)">
+        Synchronously saves the file to the provided directory and returns the saved file's name.
+      </Property>
       <Property name="toObject()">
         Converts the file instance into a plain JavaScript object.
       </Property>
       <Property name="toJson()">
         Serializes the file instance into a JSON string.
+      </Property>
+      <Property name="toMarkdown()">
+        Converts the file instance into a markdown image link format.
       </Property>
     </Properties>
 
@@ -128,6 +155,10 @@ Files capture all the essential details about the image attachments, such as con
     const file = new File({
       name: 'My file'
     })
+    ```
+
+    ```js {{ title: 'Load from a file' }}
+    const file = file.createFromFilePath('/path/to/file.png')
     ```
 
     ```js {{ title: 'Change its name' }}
@@ -178,20 +209,31 @@ Files capture all the essential details about the image attachments, such as con
 
     ```js
     const db = inkdrop.main.dataStore.getLocalDB()
-    const file = await db.files.get('file:tBELDUITs')
+    const file = await db.files.get('file:bhi701rgp', { attachments: true })
     ```
 
     </CodeGroup>
 
     ```json {{ title: 'Response' }}
     {
-      "_id": "file:tBELDUITs",
-      "_rev": "5-caf95ffd831665119f6d4f01113cdab4",
-      "count": 3,
-      "color": "green",
-      "createdAt": 1482130519215,
-      "updatedAt": 1493014639273,
-      "name": "Admin"
+      "createdAt": 1561687797115,
+      "name": "nora_small.gif",
+      "contentType": "image/gif",
+      "contentLength": 1219,
+      "md5digest": "019926e3f92769731547ca2ffc655bb7",
+      "publicIn": [
+        "note:Aa70pM075"
+      ],
+      "_attachments": {
+        "index": {
+          "content_type": "image/gif",
+          "digest": "md5-AZkm4/knaXMVR8ov/GVbtw==",
+          "revpos": 4,
+          "data": "R0lGODlhUAA2APcA...subdij1+KWZBAQEAOw=="
+        }
+      },
+      "_id": "file:bhi701rgp",
+      "_rev": "4-21e2bcd1d6540d73b76104fe8d3a759f"
     }
     ```
   </Col>
@@ -228,13 +270,20 @@ Files capture all the essential details about the image attachments, such as con
     ```js {{ title: 'Response' }}
     [
       {
-        "_id": "file:tBELDUITs",
-        "_rev": "5-caf95ffd831665119f6d4f01113cdab4",
-        "count": 3,
-        "color": "green",
-        "createdAt": 1482130519215,
-        "updatedAt": 1493014639273,
-        "name": "Admin"
+        createdAt: 1537774057842,
+        name: 'IMG_1004 copy.JPG',
+        contentType: 'image/jpeg',
+        contentLength: 40020,
+        md5digest: '9e00f2a9242499ccd3c47dbfa802d548',
+        revpos: 1,
+        _attachments: {
+          index: {
+            digest: 'md5-ngDyqSQkmczTxH2/qALVSA==',
+            content_type: 'image/jpeg',
+            revpos: 1,
+            data: '...(base64)...'
+          }
+        }
       },
       ...
     ]
@@ -348,11 +397,20 @@ Files capture all the essential details about the image attachments, such as con
     const db = inkdrop.main.dataStore.getLocalDB()
     const result = await db.files.put({
       _id: 'file:9IoGtoCuv',
-      updatedAt: 1475549348850,
-      createdAt: 1475549348850,
-      name: 'New file',
-      color: 'green',
-      count: 0
+      "createdAt": 1561687797115,
+      "name": "nora_small.gif",
+      "contentType": "image/gif",
+      "contentLength": 1219,
+      "md5digest": "019926e3f92769731547ca2ffc655bb7",
+      "publicIn": [],
+      "_attachments": {
+        "index": {
+          "content_type": "image/gif",
+          "digest": "md5-AZkm4/knaXMVR8ov/GVbtw==",
+          "revpos": 4,
+          "data": "R0lGODlhUAA2APcA...subdij1+KWZBAQEAOw=="
+        }
+      }
     })
     ```
 
@@ -449,49 +507,3 @@ Files capture all the essential details about the image attachments, such as con
 </Row>
 
 
----
-
-## Lookup a file by name {{ label: 'findWithName(name)' }}
-
-<Row>
-  <Col>
-
-    Retrieves a file with the given name.
-
-    ### Parameters
-
-    <Properties>
-      <Property name="name" type="string" required>
-        A file name to find.
-      </Property>
-    </Properties>
-
-    ### Returns
-
-    Returns a file if found otherwise `undefined`.
-  </Col>
-  <Col sticky>
-
-    <CodeGroup title="Request">
-
-    ```js
-    const db = inkdrop.main.dataStore.getLocalDB()
-    const file = await db.files.findWithName('Videography')
-    ```
-
-    </CodeGroup>
-
-    ```js {{ title: 'Response' }}
-    {
-      "name": "Videography",
-      "color": "red",
-      "updatedAt": 1662946230118,
-      "createdAt": 1662946219086,
-      "count": 0,
-      "_id": "file:ZiQET3lID",
-      "_rev": "2-23c30db926215b718dae860556277fd5"
-    }
-    ```
-
-  </Col>
-</Row>
