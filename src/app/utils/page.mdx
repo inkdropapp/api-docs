@@ -1,0 +1,541 @@
+export const metadata = {
+  title: 'Utils',
+  description:
+    'Provides convenient methods for managing documents in the local database.',
+}
+
+# Utils
+
+Provides convenient methods for managing documents in the local database.
+
+---
+
+## Search for notes {{ label: 'search(keyword, options)' }}
+
+<Row>
+  <Col>
+
+    Retrieves notes which match given keyword.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="keyword" type="string" required>
+      The search keyword. The syntax is described [here](/manual/searching-notes).
+      </Property>
+      <Property name="options" type="object">
+      Options include sorting, limiting, and skipping notes.
+
+        <Properties sub>
+          <Property name="sort" type="object">
+            An array indicating the field and order. Example: `[ { updatedAt: 'asc' } ]`, `[ { title: 'desc' } ]`. Only one field supported.
+          </Property>
+          <Property name="limit" type="number">
+            Number of notes to fetch. Default is `20`.
+          </Property>
+          <Property name="skip" type="number">
+            Number of notes to skip. Default is `0`.
+          </Property>
+        </Properties>
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns a query result with matching notes.
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const results = await db.utils.search('foobar', { sort: [ { updatedAt: 'asc' } ], limit: 20 })
+    ```
+
+    </CodeGroup>
+
+    ```js {{ title: 'Response' }}
+    {
+      "query": {
+        "index": "fts",
+        "conditions": [
+          {
+            "type": "keyword",
+            "term": "foobar",
+            "phrase": false,
+            "exclude": false
+          }
+        ]
+      },
+      "cursor": {
+        "index": "fts",
+        "conditions": [
+          {
+            "type": "keyword",
+            "term": "hoge",
+            "phrase": false,
+            "exclude": false
+          }
+        ],
+        "limit": 20,
+        "skip": 20
+      },
+      "includeDocs": true,
+      "docs": [
+        {
+          "doctype": "markdown",
+          "updatedAt": 1461564004766,
+          "createdAt": 1461563995746,
+          "bookId": "book:32b385767dc2",
+          "status": "none",
+          "numOfTasks": 0,
+          "numOfCheckedTasks": 0,
+          "title": "title...",
+          "body": "body...",
+          "_id": "note:4eeb997c",
+          "_rev": "8-d18201be3336c70979c6a375b497b3a7"
+        },
+        ...
+      ]
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Count notes with a tag {{ label: 'countNotesWithTag(tagId)' }}
+
+<Row>
+  <Col>
+
+    Counts number of notes which are associated with specified tag ID.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="tagId" type="string" required>
+      The tag ID.
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns the number of notes associated with the specified tag ID.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const count = await db.utils.countNotesWithTag('tag:exampleTagId')
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    45
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Delete a tag {{ label: 'deleteTag(tagId)' }}
+
+<Row>
+  <Col>
+
+    Delete a tag with the specified ID and remove it from associated notes.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="tagId" type="string" required>
+      The tag ID to delete.
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    A Promise that will reject if the tag cannot be deleted.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    await db.utils.deleteTag('tag:tBELDUITs')
+    ```
+
+    </CodeGroup>
+
+  </Col>
+</Row>
+
+---
+
+## Move a note to a notebook {{ label: 'moveNoteToBook(noteId, moveToBookId)' }}
+
+<Row>
+  <Col>
+
+    Move a note to a designated notebook.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="noteId" type="string" required>
+      The note ID you wish to move.
+      </Property>
+      <Property name="moveToBookId" type="string" required>
+      The destination notebook ID where the note will be moved to.
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise). Rejects if there's a failure in moving the note.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    await db.utils.moveNoteToBook('note:BKzzd8iGK', 'book:4eeb997c')
+    ```
+
+    </CodeGroup>
+
+  </Col>
+</Row>
+
+---
+
+## Move multiple notes to a notebook {{ label: 'moveNoteToBookBatch(noteIds, moveToBookId)' }}
+
+<Row>
+  <Col>
+
+    Move a batch of notes to a designated notebook.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="noteIds" type="array" required>
+      An array of note IDs you wish to move.
+      </Property>
+      <Property name="moveToBookId" type="string" required>
+      The destination notebook ID where the notes will be moved to.
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise). Rejects if there's a failure in moving the notes.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    await db.utils.moveNoteToBookBatch(["note:BKzzd8iGK", "note:8eea9f7c"], 'book:4eeb997c')
+    ```
+
+    </CodeGroup>
+
+  </Col>
+</Row>
+
+---
+
+## Duplicate a note {{ label: 'duplicateNote(noteId)' }}
+
+<Row>
+  <Col>
+
+    Duplicate a note with the provided note ID. The duplicated note will have newly assigned values for `_id`, `createdAt`, `updatedAt`, and `_rev`.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="noteId" type="string" required>
+      The ID of the note you wish to duplicate.
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will resolve with the duplicated note details.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    await db.utils.duplicateNote("note:BKzzd8iGK")
+    ```
+
+    </CodeGroup>
+
+  </Col>
+</Row>
+
+---
+
+## Duplicate multiple notes {{ label: 'duplicateNoteBatch(noteIds)' }}
+
+<Row>
+  <Col>
+
+    Duplicate a batch of notes. Each duplicated note will have newly assigned values for `_id`, `createdAt`, `updatedAt`, and `_rev`.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="noteIds" type="array" required>
+      An array of note IDs you wish to duplicate.
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) which will resolve with the details of the duplicated notes.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    await db.utils.duplicateNoteBatch(["note:BKzzd8iGK", "note:8eea9f7c"])
+    ```
+
+    </CodeGroup>
+
+  </Col>
+</Row>
+
+---
+
+## Trash or delete multiple notes {{ label: 'moveNotesToTrashOrDelete(noteIds)' }}
+
+<Row>
+  <Col>
+
+    Move the given notes to trash or if they are already in the trash, delete them permanently.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="noteIds" type="array" required>
+      An array of note IDs to either move to trash or delete permanently.
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise). Rejects if it fails to perform any of the operations.
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    await db.utils.moveNotesToTrashOrDelete(["note:BKzzd8iGK", "note:8eea9f7c"])
+    ```
+
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Empty Trash {{ label: 'emptyTrash()' }}
+
+<Row>
+  <Col>
+
+    Delete notes in trash permanently.
+
+    ### Returns
+
+    Returns a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) which rejects if failed to empty trash.
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Request">
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    await db.utils.emptyTrash()
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Set Tags Batch {{ label: 'setTagsBatch(noteIds, tags)' }}
+
+<Row>
+  <Col>
+
+    Sets given tags to notes with specified IDs.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="noteIds" type="array" required>
+      A list of IDs of notes to be set.
+      </Property>
+      <Property name="tags" type="array of string" required>
+      A list of tag IDs to set.
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns an Array of updated [Note](/notes)s.
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Request">
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    await db.utils.setTagsBatch(["note:BKzzd8iGK", "note:8eea9f7c"], ["tag:tBELDUITs"])
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Set Status Batch {{ label: 'setStatusBatch(noteIds, status)' }}
+
+<Row>
+  <Col>
+
+    Sets specified note status to notes with given IDs.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="noteIds" type="array" required>
+      A list of IDs of notes to be set.
+      </Property>
+      <Property name="status" type="string" required>
+      A note status which can be `'none'`, `'active'`, `'onHold'`, `'completed'` or `'dropped'`.
+      </Property>
+    </Properties>
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Request">
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    await db.utils.setStatusBatch(["note:BKzzd8iGK", "note:8eea9f7c"], "completed")
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Move Book {{ label: 'moveBook(bookId, newParentBookId)' }}
+
+<Row>
+  <Col>
+
+    Sets a notebook with specified ID as a child of a notebook.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="bookId" type="string" required>
+      A notebook ID to move.
+      </Property>
+      <Property name="newParentBookId" type="string or null">
+      A notebook ID of new parent notebook. Specifying `null` moves the notebook to the root.
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns the updated [Book](/books).
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Request">
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    await db.utils.moveBook("book:tjnPbJakw", "book:Bk5Ivk0T")
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Delete Book {{ label: 'deleteBook(bookId)' }}
+
+<Row>
+  <Col>
+
+    Deletes a notebook with given ID and moves notes associated with it into trash.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="bookId" type="string" required>
+      A notebook ID to delete.
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Request">
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    await db.utils.deleteBook("book:tjnPbJakw")
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Get Buffer From File {{ label: 'getBufferFromFile(fileId)' }}
+
+<Row>
+  <Col>
+
+    Loads an image file as [Buffer](https://nodejs.org/api/buffer.html#buffer_buffer).
+
+    ### Parameters
+
+    <Properties>
+      <Property name="fileId" type="string" required>
+      A file ID to load.
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns a content of the image file.
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Request">
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    await db.utils.getBufferFromFile("file:5c2c2b2c")
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
