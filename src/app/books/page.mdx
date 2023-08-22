@@ -356,6 +356,10 @@ The notebook model contains information about your notebook collections, such as
 
     Deletes a notebook with the given notebook ID.
 
+    <Warning>
+      This method does not delete notes in the notebook. Use [`db.utils.deleteBook(bookId)`](/utils#delete-a-notebook)
+    </Warning>
+
     ### Parameters
 
     <Properties>

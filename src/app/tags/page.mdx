@@ -359,6 +359,10 @@ The tag model contains all the information about your tags, such as their name, 
 
     Deletes a tag with the given tag ID.
 
+    <Warning>
+      This method does not de-associate the tag from notes. Use [`db.utils.deleteTag(tagId)`](/utils#delete-a-tag)
+    </Warning>
+
     ### Parameters
 
     <Properties>
