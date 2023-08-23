@@ -21,7 +21,7 @@ const resources = [
     href: '/notes',
     name: 'Notes',
     description:
-      'Learn about the contact model and how to create, retrieve, update, delete, and list contacts.',
+      'Learn about the note model and the note class, which provide the core functionality for handling notes.',
     icon: NoteIcon,
     pattern: {
       y: 16,
@@ -35,7 +35,7 @@ const resources = [
     href: '/books',
     name: 'Notebooks',
     description:
-      'Learn about the conversation model and how to create, retrieve, update, delete, and list conversations.',
+      'Notebooks are how notes are organized in Inkdrop and are commonly used to separate notes by category, project, or purpose.',
     icon: NotebookIcon,
     pattern: {
       y: -6,
@@ -49,7 +49,7 @@ const resources = [
     href: '/tags',
     name: 'Tags',
     description:
-      'Learn about the message model and how to create, retrieve, update, delete, and list messages.',
+      "Tags let you add keywords to notes, making them easier to find and browse when you've got a lot of them.",
     icon: TagIcon,
     pattern: {
       y: 32,
@@ -63,7 +63,7 @@ const resources = [
     href: '/files',
     name: 'Files',
     description:
-      'Learn about the group model and how to create, retrieve, update, delete, and list groups.',
+      'Files in Inkdrop are primarily used as image attachments that can be inserted into notes.',
     icon: ImageFileIcon,
     pattern: {
       y: 22,
@@ -74,24 +74,24 @@ const resources = [
     href: '/utils',
     name: 'Utilities',
     description:
-      'Learn about the group model and how to create, retrieve, update, delete, and list groups.',
+      'Provides convenient methods for managing documents in the local database.',
     icon: UtilsIcon,
     pattern: {
       y: 22,
       squares: [[0, 1]],
     },
   },
-  {
-    href: '/local-http-server',
-    name: 'Local HTTP server',
-    description:
-      'Learn about the group model and how to create, retrieve, update, delete, and list groups.',
-    icon: DatabaseIcon,
-    pattern: {
-      y: 22,
-      squares: [[0, 1]],
-    },
-  },
+  // {
+  //   href: '/local-http-server',
+  //   name: 'Local HTTP server',
+  //   description:
+  //     'The Inkdrop client app can open a simple HTTP server so that you can access the data from an external program easily.',
+  //   icon: DatabaseIcon,
+  //   pattern: {
+  //     y: 22,
+  //     squares: [[0, 1]],
+  //   },
+  // },
 ]
 
 function ResourceIcon({ icon: Icon }) {
@@ -171,10 +171,10 @@ function Resource({ resource }) {
   )
 }
 
-export function Resources() {
+export function Resources(props) {
   return (
     <div className="my-16 xl:max-w-none">
-      <Heading level={2} id="data-access">
+      <Heading level={props.level || 2} id="data-access">
         Data Access
       </Heading>
       <div className="not-prose mt-4 grid grid-cols-1 gap-8 border-t border-zinc-900/5 pt-10 dark:border-white/5 sm:grid-cols-2 xl:grid-cols-4">

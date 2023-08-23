@@ -37,7 +37,7 @@ You can define a [custom command](/reference/command-registry) via [the init fil
 Let's make a command that creates new note based on your template.
 
 In this example, you define a command named `custom:new-journal`.
-Create `init.js` in [your data directory](/manual/basic-usage#user-data-directory) and write some JavaScript like the following:
+Create `init.js` in [your data directory](https://docs.inkdrop.app/manual/basic-usage#user-data-directory) and write some JavaScript like the following:
 
 ```js
 inkdrop.commands.add(document.body, 'custom:new-journal', async () => {

@@ -1,7 +1,7 @@
 export function DatabaseIcon(props) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true" {...props}>
-      <g transform="scale(0.9)" transformOrigin="12 12">
+      <g transform="scale(0.8)" transformOrigin="12 12">
         <path d="M21 3.5v12c0 1.657-3.806 3-8.5 3S4 17.158 4 15.5v-12z"></path>
         <path d="M12.5 3.5H4v12c0 1.656 3.805 3 8.5 3z"></path>
         <path

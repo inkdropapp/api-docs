@@ -190,7 +190,6 @@ export const navigation = [
     title: 'Guides',
     links: [
       { title: 'Introduction', href: '/' },
-      { title: 'Quickstart', href: '/quickstart' },
       { title: 'The init file', href: '/the-init-file' },
       { title: 'Style tweaks', href: '/style-tweaks' },
       { title: 'Creating a theme', href: '/creating-a-theme' },

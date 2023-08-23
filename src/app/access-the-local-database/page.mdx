@@ -1,3 +1,5 @@
+import { Resources } from '../../components/Resources'
+
 export const metadata = {
   title: 'Accessing the Local Database',
   description:
@@ -41,13 +43,15 @@ console.log('Search result:', docs)
 <strong>NOTE</strong>: Returned objects from the database represent <a href="https://github.com/electron/remote#remote-objects">Remote Objects</a>. They can be converted into plain objects by calling [`structuredClone(remoteObj)`](https://developer.mozilla.org/en-US/docs/Web/API/structuredClone).
 </Note>
 
+<Resources level={3} />
+
 ## Accessing via HTTP (Advanced)
 
 ![Local REST API endpoint](/images/accessing-the-local-database_local-rest-api-endpoint.png)
 
 The Inkdrop client app can open a simple HTTP server so that you can access the data from an external program easily, which gives you a flexible ability to import/export your notes.
 
-You can configure the HTTP server settings by editing `config.cson` in [the user data directory](/manual/basic-usage/#user-data-directory).
+You can configure the HTTP server settings by editing `config.cson` in [the user data directory](https://docs.inkdrop.app/manual/basic-usage#user-data-directory).
 
 Quit Inkdrop, then edit it like so:
 
