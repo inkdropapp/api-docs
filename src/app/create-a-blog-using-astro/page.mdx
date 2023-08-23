@@ -240,17 +240,23 @@ As long as live-export runs, it immediately reflects on the blog as you make cha
 It supports images as well.
 Let's insert an image file into the note something like:
 
-<pre>
-  \-\-\-
-  public: true
-  \-\-\-
+<div class="not-prose my-6 overflow-hidden rounded-2xl bg-zinc-900 shadow-md dark:ring-1 dark:ring-white/10">
+  <div class="group dark:bg-white/2.5">
+    <div class="relative">
+      <pre class='overflow-x-auto p-4 text-xs text-white'>
+      \-\-\-
+      public: true
+      \-\-\-
 
-  \!\[rocket\](3Z5LUBZk5-rocket.png)
+      \!\[rocket\](3Z5LUBZk5-rocket.png)
 
-  \`\`\`
-  ffmpeg -i masthead-bg.mp4 -c:v libvpx-vp9 -crf 30 -b:v 0 -b:a 128k -c:a libopus masthead-bg.webm
-  \`\`\`
-</pre>
+      \`\`\`
+      ffmpeg -i masthead-bg.mp4 -c:v libvpx-vp9 -crf 30 -b:v 0 -b:a 128k -c:a libopus masthead-bg.webm
+      \`\`\`
+      </pre>
+    </div>
+  </div>
+</div>
 
 ![post with image](/images/integrating-with-an-astro-site_post-with-image.png)
 
