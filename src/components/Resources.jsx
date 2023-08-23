@@ -7,8 +7,14 @@ import { GridPattern } from '@/components/GridPattern'
 import { Heading } from '@/components/Heading'
 import { ChatBubbleIcon } from '@/components/icons/ChatBubbleIcon'
 import { EnvelopeIcon } from '@/components/icons/EnvelopeIcon'
+import { NoteIcon } from '@/components/icons/NoteIcon'
+import { NotebookIcon } from '@/components/icons/NotebookIcon'
 import { UserIcon } from '@/components/icons/UserIcon'
 import { UsersIcon } from '@/components/icons/UsersIcon'
+import { TagIcon } from '@/components/icons/TagIcon'
+import { ImageFileIcon } from '@/components/icons/FileIcon'
+import { UtilsIcon } from '@/components/icons/UtilsIcon'
+import { DatabaseIcon } from '@/components/icons/DatabaseIcon'
 
 const resources = [
   {
@@ -16,7 +22,7 @@ const resources = [
     name: 'Notes',
     description:
       'Learn about the contact model and how to create, retrieve, update, delete, and list contacts.',
-    icon: UserIcon,
+    icon: NoteIcon,
     pattern: {
       y: 16,
       squares: [
@@ -30,7 +36,7 @@ const resources = [
     name: 'Notebooks',
     description:
       'Learn about the conversation model and how to create, retrieve, update, delete, and list conversations.',
-    icon: ChatBubbleIcon,
+    icon: NotebookIcon,
     pattern: {
       y: -6,
       squares: [
@@ -44,7 +50,7 @@ const resources = [
     name: 'Tags',
     description:
       'Learn about the message model and how to create, retrieve, update, delete, and list messages.',
-    icon: EnvelopeIcon,
+    icon: TagIcon,
     pattern: {
       y: 32,
       squares: [
@@ -58,7 +64,7 @@ const resources = [
     name: 'Files',
     description:
       'Learn about the group model and how to create, retrieve, update, delete, and list groups.',
-    icon: UsersIcon,
+    icon: ImageFileIcon,
     pattern: {
       y: 22,
       squares: [[0, 1]],
@@ -69,7 +75,7 @@ const resources = [
     name: 'Utilities',
     description:
       'Learn about the group model and how to create, retrieve, update, delete, and list groups.',
-    icon: UsersIcon,
+    icon: UtilsIcon,
     pattern: {
       y: 22,
       squares: [[0, 1]],
@@ -80,7 +86,7 @@ const resources = [
     name: 'Local HTTP server',
     description:
       'Learn about the group model and how to create, retrieve, update, delete, and list groups.',
-    icon: UsersIcon,
+    icon: DatabaseIcon,
     pattern: {
       y: 22,
       squares: [[0, 1]],
@@ -168,7 +174,7 @@ function Resource({ resource }) {
 export function Resources() {
   return (
     <div className="my-16 xl:max-w-none">
-      <Heading level={2} id="resources">
+      <Heading level={2} id="data-access">
         Data Access
       </Heading>
       <div className="not-prose mt-4 grid grid-cols-1 gap-8 border-t border-zinc-900/5 pt-10 dark:border-white/5 sm:grid-cols-2 xl:grid-cols-4">
