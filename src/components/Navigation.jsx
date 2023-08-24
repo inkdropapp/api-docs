@@ -226,6 +226,10 @@ export const navigation = [
       { title: 'Local HTTP Server', href: '/local-http-server' },
     ],
   },
+  {
+    title: 'Core Modules',
+    links: [{ title: 'Command Registry', href: '/command-registry' }],
+  },
 ]
 
 export function Navigation(props) {
