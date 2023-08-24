@@ -1,0 +1,53 @@
+export const metadata = {
+  title: 'books',
+  description: 'An app state of notebooks in Inkdrop. This section explains how to fetch and manipulate the `books` state.',
+}
+
+# books
+
+An [app state](/guides/flux-architecture) of notebooks in Inkdrop.
+You can obtain the `books` state and integrate it with React components.{{ className: 'lead' }}
+
+
+---
+
+## Data Structure
+
+<Row>
+  <Col>
+    <Properties>
+      <Property name="all" type="Book[]">
+        An array of [Book][book]s.
+      </Property>
+      <Property name="hash" type="{ [bookId]: Book }">
+        A map where the keys are `bookId` and values are [Book][book].
+      </Property>
+      <Property name="tree" type="BookTree">
+        An array of [Book][book]s with a tree structure. A Book that has child notebooks recursively has a `children` property. The `children` property follows the same structure as `tree`: an array of [Book][book]s.
+      </Property>
+      <Property name="lastUpdatedAt" type="number">
+        The last datetime when the state was changed.
+      </Property>
+    </Properties>
+  </Col>
+  <Col sticky>
+    Get the `books` state manually:
+
+    ```js
+    const { books } = inkdrop.store.getState()
+    ```
+
+    Connect the state with your React component:
+
+    ```js
+    import { useSelector } from 'react-redux'
+    const selector = ({ books }) => books
+    const MyComponent = props => {
+      const books = useSelector(selector)
+      // render
+    }
+    ```
+  </Col>
+</Row>
+
+[book]: /data-access/books
