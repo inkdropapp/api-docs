@@ -231,7 +231,10 @@ export const navigation = [
   },
   {
     title: 'Core Modules',
-    links: [{ title: 'Command Registry', href: '/modules/command-registry' }],
+    links: [
+      { title: 'Command Registry', href: '/modules/command-registry' },
+      { title: 'Markdown Renderer', href: '/modules/markdown-renderer' },
+    ],
   },
   {
     title: 'App States',
