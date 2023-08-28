@@ -18,7 +18,7 @@ import { DatabaseIcon } from '@/components/icons/DatabaseIcon'
 
 const resources = [
   {
-    href: '/notes',
+    href: '/data-access/notes',
     name: 'Notes',
     description:
       'Learn about the note model and the note class, which provide the core functionality for handling notes.',
@@ -32,7 +32,7 @@ const resources = [
     },
   },
   {
-    href: '/books',
+    href: '/data-access/books',
     name: 'Notebooks',
     description:
       'Notebooks are how notes are organized in Inkdrop and are commonly used to separate notes by category, project, or purpose.',
@@ -46,7 +46,7 @@ const resources = [
     },
   },
   {
-    href: '/tags',
+    href: '/data-access/tags',
     name: 'Tags',
     description:
       "Tags let you add keywords to notes, making them easier to find and browse when you've got a lot of them.",
@@ -60,7 +60,7 @@ const resources = [
     },
   },
   {
-    href: '/files',
+    href: '/data-access/files',
     name: 'Files',
     description:
       'Files in Inkdrop are primarily used as image attachments that can be inserted into notes.',
@@ -71,7 +71,7 @@ const resources = [
     },
   },
   {
-    href: '/utils',
+    href: '/data-access/utils',
     name: 'Utilities',
     description:
       'Provides convenient methods for managing documents in the local database.',
@@ -81,17 +81,17 @@ const resources = [
       squares: [[0, 1]],
     },
   },
-  // {
-  //   href: '/local-http-server',
-  //   name: 'Local HTTP server',
-  //   description:
-  //     'The Inkdrop client app can open a simple HTTP server so that you can access the data from an external program easily.',
-  //   icon: DatabaseIcon,
-  //   pattern: {
-  //     y: 22,
-  //     squares: [[0, 1]],
-  //   },
-  // },
+  {
+    href: '/data-access/local-http-server',
+    name: 'Local HTTP server',
+    description:
+      'The Inkdrop client app can open a simple HTTP server so that you can access the data from an external program easily.',
+    icon: DatabaseIcon,
+    pattern: {
+      y: 22,
+      squares: [[0, 1]],
+    },
+  },
 ]
 
 function ResourceIcon({ icon: Icon }) {
