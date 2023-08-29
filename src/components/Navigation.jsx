@@ -240,6 +240,7 @@ export const navigation = [
     title: 'App States',
     links: [
       { title: 'Notebooks', href: '/states/books' },
+      { title: 'db', href: '/states/db' },
       { title: 'Preview', href: '/states/preview' },
     ],
   },

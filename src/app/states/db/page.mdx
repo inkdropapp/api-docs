@@ -1,0 +1,51 @@
+export const metadata = {
+  title: 'db',
+  description: 'An app state of database synchronization. in Inkdrop. This section explains how to fetch and manipulate the `notes` state.',
+}
+
+# books
+
+An [app state](/manual/flux-architecture) of database synchronization.
+You can obtain the `notes` state and integrate it with React components.{{ className: 'lead' }}
+
+
+---
+
+## Data Structure
+
+<Row>
+  <Col>
+    <Properties>
+      <Property name="isSyncing" type="?boolean">
+        true if the database is syncing.
+      </Property>
+      <Property name="lastSyncTime" type="?number">
+        The last datetime when the database finished syncing. 
+        `undefined` if it has not ever been synced yet since the app launched.
+      </Property>
+      <Property name="lastSyncError" type="Error | null">
+        The last error ocurred while syncing.
+      </Property>
+    </Properties>
+  </Col>
+  <Col sticky>
+    Get the `notes` state manually:
+
+    ```js
+    const { db } = inkdrop.store.getState()
+    ```
+
+    Connect the state with your React component:
+
+    ```js
+    import { useSelector } from 'react-redux'
+    const selector = ({ db }) => db
+    const MyComponent = props => {
+      const db = useSelector(selector)
+      // render
+    }
+    ```
+  </Col>
+</Row>
+
+[db]: /data-access/db
