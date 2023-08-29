@@ -27,6 +27,9 @@ export function Layout({ children, allSections = {} }) {
                 <div className="ml-2 inline-block font-semibold">
                   Developers
                 </div>
+                <sup className="pl-1 text-xs text-orange-600 dark:text-yellow-400">
+                  beta
+                </sup>
               </Link>
             </div>
             <Header />

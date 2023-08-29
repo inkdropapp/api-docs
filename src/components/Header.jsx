@@ -64,6 +64,9 @@ export const Header = forwardRef(function Header({ className }, ref) {
         <Link href="/" aria-label="Home" className="flex">
           <Logo className="h-6" />
           <div className="ml-2 inline-block font-semibold">Developers</div>
+          <sup className="pl-1 text-xs text-orange-600 dark:text-yellow-400">
+            beta
+          </sup>
         </Link>
       </div>
       <div className="flex items-center gap-5">
