@@ -1,0 +1,44 @@
+export const metadata = {
+  title: 'editingNote',
+  description: 'An app state of editingNote in Inkdrop. This section explains how to fetch the `editingNote` state.',
+}
+
+# editingNote
+
+An [app state](/guides/flux-architecture) of editingNote in Inkdrop.
+You can obtain the `books` state and integrate it with React components.{{ className: 'lead' }}
+
+
+---
+
+## Data Structure
+
+<Row>
+  <Col>
+    <Properties>
+      <Property name="all" type="Book[]">
+        The state represents [Note][note] data while a note opened, otherwise it's `null` or `undefined`.
+      </Property>
+    </Properties>
+  </Col>
+  <Col sticky>
+    Get the `editingNote` state manually:
+
+    ```js
+    const { editingNote } = inkdrop.store.getState()
+    ```
+
+    Connect the state with your React component:
+
+    ```js
+    import { useSelector } from 'react-redux'
+    const selector = ({ editingNote }) => editingNote
+    const MyComponent = props => {
+      const editingNote = useSelector(selector)
+      // render
+    }
+    ```
+  </Col>
+</Row>
+
+[note]: /reference/data-models#a-nameresource-notenotea
