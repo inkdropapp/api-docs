@@ -67,9 +67,13 @@ The `package.json` in the plugin we've just generated looks like this currently:
 
 One of the first things you should do is ensure that this information is filled out. The name, description, repository URL the project will be at, and the license can all be filled out immediately. The other information we'll get into more detail on as we go.
 
-<div class="ui warning message">
-<strong>Warning</strong>: Do not forget to update the repository URL. The one generated for you is invalid by design and will prevent you from publishing your package until updated.
-</div>
+<Warning>
+Do not forget to update the repository URL. The one generated for you is invalid by design and will prevent you from publishing your package until updated.
+</Warning>
+
+<Note>
+  Inkdrop is planned to bump up its major version to 6, which has breaking changes to the UI theming system. If your plugin is not a theme, you can target the engine version to `{"inkdrop": ">=5.6.0 <7"}` in your `package.json` file.
+</Note>
 
 ### Source Code
 
@@ -487,7 +491,9 @@ There are a few things you should double check before publishing:
 
 - Your `package.json` file has `name`, `description`, and `repository` fields.
 - Your `package.json` file has a `version` field with a value of "0.0.0".
-- Your `package.json` file has an `engines` field that contains an entry for Inkdrop such as: `"engines": {"inkdrop": "^5.x"}`.
+- Your `package.json` file has an `engines` field that contains an entry for Inkdrop.
+  - If your plugin is a theme, it should be: `"engines": {"inkdrop": "^5.x"}`.
+  - Otherwise, it should be: `"engines": {"inkdrop": ">=5.6.0 <7"}`.
 - Your plugin has a `README.md` file at the root.
 - Change the repository url in the `package.json` file to match the URL of your repository.
 - Your plugin is in a Git repository that has been pushed to [GitHub](https://github.com/). Follow [this guide](http://guides.github.com/overviews/desktop) if your plugin isn't already on GitHub.
