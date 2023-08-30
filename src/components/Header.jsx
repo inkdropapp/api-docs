@@ -14,14 +14,16 @@ import { MobileSearch, Search } from '@/components/Search'
 import { ThemeToggle } from '@/components/ThemeToggle'
 
 function TopLevelNavItem({ href, children }) {
+  const isInternal = href && !href.startsWith('https:')
+  const LinkComponent = isInternal ? Link : 'a'
   return (
     <li>
-      <Link
+      <LinkComponent
         href={href}
         className="text-sm leading-5 text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
       >
         {children}
-      </Link>
+      </LinkComponent>
     </li>
   )
 }
@@ -74,7 +76,7 @@ export const Header = forwardRef(function Header({ className }, ref) {
           <ul role="list" className="flex items-center gap-8">
             <TopLevelNavItem href="/">API</TopLevelNavItem>
             <TopLevelNavItem href="https://docs.inkdrop.app/">
-              Documentation
+              User Manual
             </TopLevelNavItem>
             <TopLevelNavItem href="https://forum.inkdrop.app/">
               Support

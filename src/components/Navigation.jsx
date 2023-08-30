@@ -18,14 +18,16 @@ function useInitialValue(value, condition = true) {
 }
 
 function TopLevelNavItem({ href, children }) {
+  const isInternal = href && !href.startsWith('https:')
+  const LinkComponent = isInternal ? Link : 'a'
   return (
     <li className="md:hidden">
-      <Link
+      <LinkComponent
         href={href}
         className="block py-1 text-sm text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
       >
         {children}
-      </Link>
+      </LinkComponent>
     </li>
   )
 }
@@ -251,7 +253,7 @@ export function Navigation(props) {
       <ul role="list">
         <TopLevelNavItem href="/">API</TopLevelNavItem>
         <TopLevelNavItem href="https://docs.inkdrop.app/">
-          Documentation
+          User Manual
         </TopLevelNavItem>
         <TopLevelNavItem href="https://forum.inkdrop.app/">
           Support
