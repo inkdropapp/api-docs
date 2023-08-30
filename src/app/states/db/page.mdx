@@ -16,10 +16,11 @@ You can obtain the `db` state and integrate it with React components.{{ classNam
 <Row>
   <Col>
     <Properties>
-      <Property name="isSyncing" type="?boolean">
-        true if the database is syncing.
+      <Property name="isSyncing" type="boolean | undefined">
+        `true` if the database is syncing.
+        `undefined` if it has not ever been synced yet since the app launched.
       </Property>
-      <Property name="lastSyncTime" type="?number">
+      <Property name="lastSyncTime" type="number | undefined">
         The last datetime when the database finished syncing. 
         `undefined` if it has not ever been synced yet since the app launched.
       </Property>
