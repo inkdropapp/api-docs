@@ -240,7 +240,7 @@ export const navigation = [
     title: 'App States',
     links: [
       { title: 'Notebooks', href: '/states/books' },
-      { title: 'Currently open note', href: '/states/editing-note' },
+      { title: 'Currently opened note', href: '/states/editing-note' },
       { title: 'Preview', href: '/states/preview' },
     ],
   },
