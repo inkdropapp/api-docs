@@ -1,0 +1,92 @@
+export const metadata = {
+  title: 'Disposable',
+  description: 'A handle to a resource that can be disposed.',
+}
+
+# Disposable
+
+A handle to a resource that can be disposed.
+You can use it by requiring [event-kit](https://github.com/atom/event-kit) module.
+
+```js
+import { Disposable } from 'event-kit'
+```
+
+---
+
+## Construction {{ label: 'constructor(disposalAction)' }}
+
+<Row>
+  <Col>
+    Construct a Disposable
+
+    ### Parameters
+
+    <Properties>
+      <Property name="disposalAction" type="(() => void) | undefined" required>
+        A Function to call when `.dispose()` is called for the first time.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    const disposable = new Disposable(() => this.destroyResource())
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Destruction {{ label: 'dispose()' }}
+
+<Row>
+  <Col>
+    Perform the disposal action, indicating that the resource associated with
+    this disposable is no longer needed. You can call this method more than
+    once, but the disposal action will only be performed the first time.
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    disposable.dispose();
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Check if disposable {{ label: 'Disposable.isDisposable(object)' }}
+
+<Row>
+  <Col>
+    Ensure that `object` correctly implements the `Disposable` contract.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="object" type="object" required>
+        A object.
+      </Property>
+    </Properties>
+
+    ### Return value
+    Returns a Boolean indicating whether `object` is a valid `Disposable`.
+
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    class ExampleDisposable {
+        dispose() {
+            // ...
+        }
+    }
+    Disposable.isDisposable(new ExampleDisposable());
+    ```
+    </CodeGroup>
+  </Col>
+</Row>

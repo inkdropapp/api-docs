@@ -247,6 +247,14 @@ export const navigation = [
       { title: 'Preview', href: '/states/preview' },
     ],
   },
+  {
+    title: 'Event Subscription (event-kit)',
+    links: [
+      { title: 'Disposable', href: '/event-subscription/disposable' },
+      { title: 'Composite Disposable', href: '/event-subscription/composite-disposable' },
+      { title: 'Emitter', href: '/event-subscription/emitter' },
+    ],
+  },
 ]
 
 export function Navigation(props) {
