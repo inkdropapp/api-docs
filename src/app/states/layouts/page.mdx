@@ -1,0 +1,58 @@
+export const metadata = {
+  title: 'layouts',
+  description: 'An app state of component layouts. This section explains how to fetch the `layouts` state.',
+}
+
+# editingNote
+
+An [app state](/guides/flux-architecture) of the layouts.
+You can obtain the `layouts` state and integrate it with React components.{{ className: 'lead' }}
+
+
+---
+
+## Data Structure
+A map of `[layout_name]: LayoutComponents` where:
+
+- `layout_name`: String
+- `LayoutComponents`: A class name of React component
+
+<Row>
+  <Col>
+    <Properties>
+      <Property name="main" type="boolean | undefined">
+      The main layout that consists of 3 columns.
+        ```json
+        ["ModalLayout", "SideBarLayout", "NoteListBarLayout", "EditorLayout"]
+        ```
+      </Property>
+      <Property name="lastSyncTime" type="number | undefined">
+        The last datetime when the database finished syncing. 
+        `undefined` if it has not ever been synced yet since the app launched.
+      </Property>
+      <Property name="lastSyncError" type="Error | null">
+        The last error ocurred while syncing.
+      </Property>
+    </Properties>
+  </Col>
+  <Col sticky>
+    Get the `layouts` state manually:
+
+    ```js
+    const { layouts } = inkdrop.store.getState()
+    ```
+
+    Connect the state with your React component:
+
+    ```js
+    import { useSelector } from 'react-redux'
+    const selector = ({ layouts }) => layouts
+    const MyComponent = props => {
+      const layouts = useSelector(selector)
+      // render
+    }
+    ```
+  </Col>
+</Row>
+
+[layouts]: /data-access/layouts
