@@ -218,6 +218,10 @@ export const navigation = [
         title: 'Create a blog using Astro',
         href: '/guides/create-a-blog-using-astro',
       },
+      {
+        title: 'Use ES modules in your plugin',
+        href: '/guides/es-modules',
+      },
     ],
   },
   {
