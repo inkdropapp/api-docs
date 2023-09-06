@@ -16,10 +16,9 @@ You can obtain the `editor` state and integrate it with React components.{{ clas
 <Row>
   <Col>
     <Properties>
-      <Property name="changed" type="boolean | undefined">
+      <Property name="changed" type="boolean">
         `true` if the note has been changed. 
         The editor will save the note if `changed` is true when it is closed.
-        Otherwise it will be`undefined` if it has not been changed yet since the app launched.
       </Property>
       <Property name="needsUpdatingDate" type="boolean | undefined">
         Whether the note's `updatedAt` field needs to be updated or not.
