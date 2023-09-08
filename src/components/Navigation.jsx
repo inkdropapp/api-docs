@@ -248,6 +248,7 @@ export const navigation = [
       { title: 'Notebooks', href: '/states/books' },
       { title: 'Database', href: '/states/db' },
       { title: 'Editing note', href: '/states/editing-note' },
+      { title: 'Editor', href: '/states/editor' },
       { title: 'Preview', href: '/states/preview' },
     ],
   },
