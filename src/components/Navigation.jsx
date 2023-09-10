@@ -239,6 +239,8 @@ export const navigation = [
     title: 'Core Modules',
     links: [
       { title: 'Command Registry', href: '/modules/command-registry' },
+      { title: 'Component Manager', href: '/modules/component-manager' },
+      { title: 'Layout Manager', href: '/modules/layout-manager' },
       { title: 'Markdown Renderer', href: '/modules/markdown-renderer' },
     ],
   },

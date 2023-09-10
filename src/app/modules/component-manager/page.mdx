@@ -1,0 +1,118 @@
+export const metadata = {
+  title: 'Component Manager',
+  description: 'The Component Manager lets you register React components that you\'d like to display on layouts.',
+}
+
+# Component Manager
+
+Provides a registry for React components that you'd like to display on layouts.
+An instance of this class is always available as the `inkdrop.components` global.
+
+---
+
+## Registering and unregistering a React component
+
+You can register your React component classes to the component registry.
+Then, the registered components can be added to layouts.
+Below example registers `MyDialog` class to the component registry and adds it to `modal` layout so that you can show it as a modal view.
+
+```js
+module.exports = {
+  activate() {
+    inkdrop.components.registerClass(MyDialog)
+    inkdrop.layouts.addComponentToLayout('modal', 'MyDialog')
+  },
+
+  deactivate() {
+    inkdrop.layouts.removeComponentFromLayout('modal', 'MyDialog')
+    inkdrop.components.deleteClass(MyDialog)
+  },
+}
+```
+
+---
+
+## Register a component {{ label: 'registerClass(reactComponent, componentName)' }}
+
+<Row>
+  <Col>
+    Registers a given React component class to the component registry.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="reactComponent" type="React.Component" required>
+        A React component class to be added.
+      </Property>
+      <Property name="componentName" type="string">
+        A custom component class name. It is necessary if the given component is HOC ([Higher-Order Component](https://legacy.reactjs.org/docs/higher-order-components.html)).
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    inkdrop.components.registerClass(MyDialog)
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Delete a component {{ label: 'deleteClass(reactComponent, componentName)' }}
+
+<Row>
+  <Col>
+    Unregisters a given React component class from the component registry.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="reactComponent" type="React.Component" required>
+        A React component class to be removed.
+      </Property>
+      <Property name="componentName" type="string">
+        A custom component class name. It is necessary if the given component is HOC ([Higher-Order Component](https://legacy.reactjs.org/docs/higher-order-components.html)).
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    inkdrop.components.deleteClass(MyDialog)
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Get a component {{ label: 'getComponentClass(componentName)' }}
+
+Returns a React component that has a given component name.
+
+<Row>
+  <Col>
+    ### Parameters
+
+    <Properties>
+      <Property name="componentName" type="string" required>
+        A component class name to get.
+      </Property>
+    </Properties>
+
+    ### Returns
+    A React component class that matched the given class name, or undefined if not found.
+
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    inkdrop.components.getComponentClass("MyDialog")
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
