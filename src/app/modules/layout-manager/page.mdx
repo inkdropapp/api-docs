@@ -1,0 +1,325 @@
+export const metadata = {
+  title: 'Layout Manager',
+  description: 'The Layout Manager is used to manage layouts. It allows you to associate React components with layouts.',
+}
+
+# Layout Manager
+
+Associates React components with layouts.
+
+You can access a global instance of this class via `inkdrop.layouts`.
+
+---
+
+## Registering and unregistering a React component
+
+You can register your React component classes to the [component registry][component-manager].
+Then, the registered components can be added to layouts.
+Below example registers `MyDialog` class to the component registry and adds it to `modal` layout so that you can show it as a modal view.
+
+```js
+module.exports = {
+  activate() {
+    inkdrop.components.registerClass(MyDialog)
+    inkdrop.layouts.addComponentToLayout('modal', 'MyDialog')
+  },
+
+  deactivate() {
+    inkdrop.layouts.removeComponentFromLayout('modal', 'MyDialog')
+    inkdrop.components.deleteClass(MyDialog)
+  }
+}
+```
+
+This is described in detail in the [Word Count plugin](/guides/plugin-word-count#developing-your-plugin) walkthrough.
+
+Available layouts can be found [here](/states/layouts).
+
+---
+
+## Event Subscription {{ label: 'onLayoutChange(name, callback)' }}
+
+<Row>
+  <Col>
+    Invokes the given callback when the layout with given name is changed.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="layoutName" type="string" required>
+        A layout name.
+      </Property>
+      <Property name="callback" type="(components: Array<string>) => void" required>
+        A function which is called with an array of React component class names
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns a [Disposable](/event-subscription/disposable) on which `.dispose()` can be called to unsubscribe.
+
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    inkdrop.layouts.onLayoutChange(
+      'modal',
+      (components) => console.log(components)
+    );
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Add a component to a layout {{ label: 'addComponentToLayout(layoutName, componentClassName)' }}
+
+<Row>
+  <Col>
+    Adds a component to specified layout.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="layoutName" type="string" required>
+        A layout name.
+      </Property>
+      <Property name="componentClassName" type="string" required>
+        A React component class name which is registered in the [component registry][component-manager]
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    inkdrop.layouts.addComponentToLayout('modal', 'MyDialog')
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Add a component to a layout before another {{ label: 'insertComponentToLayoutBefore(layoutName, referenceComponentClassName, componentClassNameToInsert)' }}
+
+<Row>
+  <Col>
+    Inserts a component before the reference component to specified layout.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="layoutName" type="string" required>
+        A layout name.
+      </Property>
+      <Property name="referenceComponentClassName" type="string" required>
+        A React component class name before which `componentClassName` is inserted.
+      </Property>
+      <Property name="componentClassNameToInsert" type="string" required>
+        A React component class name which is registered in the [component registry][component-manager].
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    inkdrop.layouts.insertComponentToLayoutBefore(
+      'modal',
+      'MySecondDialog', 'MyDialog'
+    )
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Add a component to a layout after another {{ label: 'insertComponentToLayoutAfter(layoutName, referenceComponentClassName, componentClassNameToInsert)' }}
+
+<Row>
+  <Col>
+    Inserts a component after the reference component to specified layout.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="layoutName" type="string" required>
+        A layout name.
+      </Property>
+      <Property name="referenceComponentClassName" type="string" required>
+        A React component class name after which `componentClassName` is inserted.
+      </Property>
+      <Property name="componentClassNameToInsert" type="string" required>
+        A React component class name which is registered in the [component registry][component-manager].
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    inkdrop.layouts.insertComponentToLayoutAfter(
+      'modal',
+      'MyDialog',
+      'MySecondDialog'
+    )
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Get components names from layout {{ label: 'getLayout(name)' }}
+
+<Row>
+  <Col>
+    Returns a set of components of the specified layout.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="name" type="string" required>
+        A name of the layout to get.
+      </Property>
+    </Properties>
+
+    ### Return values
+
+    An array of React component class names.
+
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    inkdrop.layouts.getLayout('modal')
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Get components from layout {{ label: 'getLayoutComponents(name)' }}
+
+<Row>
+  <Col>
+    Returns a set of React component classes of the specified layout.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="name" type="string" required>
+        A name of the layout to get.
+      </Property>
+    </Properties>
+
+    ### Return values
+
+    An array of React component classes.
+
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    inkdrop.layouts.getLayoutComponents('modal')
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Get index of component in layout {{ label: 'indexOfComponentInLayout(layoutName, componentClassName)' }}
+
+<Row>
+  <Col>
+    Returns the first index at which a given component can be found in the specified layout, or `-1` if cannot found.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="layoutName" type="string" required>
+        A layout name.
+      </Property>
+      <Property name="componentClassName" type="string" required>
+        A React component class name to search.
+      </Property>
+    </Properties>
+
+    ### Return values
+    
+    Index of the component in the layout
+
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    inkdrop.layouts.indexOfComponentInLayout('modal', 'MyDialog')
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Remove a component from a layout {{ label: 'removeComponentFromLayout(layoutName, componentClassName)' }}
+
+<Row>
+  <Col>
+    Removes a component from specified layout.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="layoutName" type="string" required>
+        A layout name.
+      </Property>
+      <Property name="componentClassName" type="string" required>
+        A React complonent class name which is registered in the [component registry][component-manager].
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    inkdrop.layouts.removeComponentFromLayout('modal', 'MyDialog')
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Overwrite the components of a layout {{ label: 'setLayout(name, components)' }}
+
+<Row>
+  <Col>
+    Sets a set of components to the specified layout
+
+    ### Parameters
+
+    <Properties>
+      <Property name="name" type="string" required>
+        A layout name.
+      </Property>
+      <Property name="components" type="Array<string>" required>
+        An array of component class names.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    inkdrop.layouts.setLayout('modal', ['MyDialog'])
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+[component-manager]: /modules/component-manager
