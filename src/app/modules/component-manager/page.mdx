@@ -32,6 +32,36 @@ module.exports = {
 
 ---
 
+## Using a registered component
+
+When using a custom component registered in the component manager, you may want to observe when the component is registered or unregistered.
+It can be accomplished by creating a custom hook as below:
+
+```ts
+import { ComponentType, useEffect, useState } from 'react'
+import { CompositeDisposable } from 'event-kit'
+
+export const useCustomComponent = <T extends ComponentType<any>>(className: string, DefaultComponent: T) => {
+  const { components } = inkdrop
+  const [Component, setComponent] = useState<T>((components.getComponentClass(
+    className
+  ) as T) || DefaultComponent)
+
+  useEffect(() => {
+    const disposables = new CompositeDisposable()
+    disposables.add(
+      components.onClassRegistered<T>(className, (klass) => setComponent(() => klass)),
+      components.onClassDeleted(className, () => setComponent(() => DefaultComponent))
+    )
+    return () => disposables.dispose()
+  }, [className, DefaultComponent])
+
+  return Component
+}
+```
+
+---
+
 ## Register a component {{ label: 'registerClass(reactComponent, componentName)' }}
 
 <Row>
@@ -116,3 +146,71 @@ Returns a React component that has a given component name.
     </CodeGroup>
   </Col>
 </Row>
+
+---
+
+### Event: Register {{ label: 'onClassRegistered(componentName, callback)' }}
+
+<Row>
+  <Col>
+    Observe when a component with the given component name is registered.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="componentName" type="string">
+        A custom component class name to observe.
+      </Property>
+      <Property name="callback" type="<T extends ComponentType>(klass: T) => void">
+        Invoked when a component with the given component name is registered.
+      </Property>
+    </Properties>
+
+    ### Returns
+    Returns a [Disposable][disposable].
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    components.onClassRegistered('CustomNoteListItemView', (klass) => {
+      // do something
+    })
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Event: Delete {{ label: 'onClassDeleted(componentName, callback)' }}
+
+<Row>
+  <Col>
+    Observe when a component with the given component name is unregistered.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="componentName" type="string">
+        A custom component class name to observe.
+      </Property>
+      <Property name="callback" type="() => void">
+        Invoked when a component with the given component name is unregistered.
+      </Property>
+    </Properties>
+
+    ### Returns
+    Returns a [Disposable][disposable].
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    components.onClassDeleted('CustomNoteListItemView', (klass) => {
+      // do something
+    })
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+[disposable]: /event-subscription/disposable
