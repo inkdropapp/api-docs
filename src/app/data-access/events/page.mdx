@@ -1,44 +1,16 @@
 export const metadata = {
-  title: 'Inkdrop Database',
+  title: 'Events',
   description:
-    'Provides ways to access the local database for managing notes, notebooks, tags and images.',
+    'Provides the ability to subscribe to various events raised by the local database.',
 }
 
-# Inkdrop Database
+# Events
 
-Provides ways to access the local database for managing notes, notebooks, tags and images.
-
-An instance of this class can be got via `inkdrop.main.dataStore.getLocalDB()`.
+Provides the ability to subscribe to various events raised by the local database.
 
 ---
 
-## Properties
-
-<Properties>
-  <Property name="notes" type="DBNote">
-    An instance of [DBNote](/data-access/notes) with a set of management
-    methods.
-  </Property>
-  <Property name="books" type="DBBook">
-    An instance of [DBBook](/data-access/books) with a set of management
-    methods.
-  </Property>
-  <Property name="tags" type="DBTag">
-    An instance of [DBTag](/data-access/tags) with a set of management methods.
-  </Property>
-  <Property name="files" type="DBFile">
-    An instance of [DBFile](/data-access/files) with a set of management
-    methods.
-  </Property>
-  <Property name="utils" type="DBUtils">
-    An instance of [DBUtils](/data-access/utils) with a set of management
-    methods.
-  </Property>
-</Properties>
-
----
-
-## Event Subscription: All changes {{ label: 'onChange(callback)' }}
+## All changes {{ label: 'onChange(callback)' }}
 
 <Row>
   <Col>
@@ -74,7 +46,7 @@ An instance of this class can be got via `inkdrop.main.dataStore.getLocalDB()`.
 
 ---
 
-## Event Subscription: Note changes {{ label: 'onNoteChange(callback)' }}
+## Note changes {{ label: 'onNoteChange(callback)' }}
 
 <Row>
   <Col>
@@ -110,7 +82,7 @@ An instance of this class can be got via `inkdrop.main.dataStore.getLocalDB()`.
 
 ---
 
-## Event Subscription: Book changes {{ label: 'onBookChange(callback)' }}
+## Book changes {{ label: 'onBookChange(callback)' }}
 
 <Row>
   <Col>
@@ -146,7 +118,7 @@ An instance of this class can be got via `inkdrop.main.dataStore.getLocalDB()`.
 
 ---
 
-## Event Subscription: Tag changes {{ label: 'onTagChange(callback)' }}
+## Tag changes {{ label: 'onTagChange(callback)' }}
 
 <Row>
   <Col>
@@ -182,7 +154,7 @@ An instance of this class can be got via `inkdrop.main.dataStore.getLocalDB()`.
 
 ---
 
-## Event Subscription: Full-text index creation start {{ label: 'onFullTextIndexBuildStart(callback)' }}
+## Full-text index creation start {{ label: 'onFullTextIndexBuildStart(callback)' }}
 
 <Row>
   <Col>
@@ -218,7 +190,7 @@ An instance of this class can be got via `inkdrop.main.dataStore.getLocalDB()`.
 
 ---
 
-## Event Subscription: Full-text index creation end {{ label: 'onFullTextIndexBuildEnd(callback)' }}
+## Full-text index creation end {{ label: 'onFullTextIndexBuildEnd(callback)' }}
 
 <Row>
   <Col>
@@ -254,7 +226,7 @@ An instance of this class can be got via `inkdrop.main.dataStore.getLocalDB()`.
 
 ---
 
-## Event Subscription: Full-text index creation error {{ label: 'onFullTextIndexBuildError(callback)' }}
+## Full-text index creation error {{ label: 'onFullTextIndexBuildError(callback)' }}
 
 <Row>
   <Col>

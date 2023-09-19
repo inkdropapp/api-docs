@@ -232,7 +232,7 @@ export const navigation = [
       { title: 'Tags', href: '/data-access/tags' },
       { title: 'Files', href: '/data-access/files' },
       { title: 'Utilities', href: '/data-access/utils' },
-      { title: 'Database', href: '/data-access/database' },
+      { title: 'Events', href: '/data-access/events' },
       { title: 'Local HTTP Server', href: '/data-access/local-http-server' },
     ],
   },
