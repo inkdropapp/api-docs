@@ -43,15 +43,16 @@ import { CompositeDisposable } from 'event-kit'
 
 export const useCustomComponent = <T extends ComponentType<any>>(className: string, DefaultComponent: T) => {
   const { components } = inkdrop
-  const [Component, setComponent] = useState<T>((components.getComponentClass(
+  const initialComponent = (components.getComponentClass(
     className
-  ) as T) || DefaultComponent)
+  ) as T) || DefaultComponent
+  const [{ c: Component }, setComponent] = useState<{ c: T }>({ c: initialComponent })
 
   useEffect(() => {
     const disposables = new CompositeDisposable()
     disposables.add(
-      components.onClassRegistered<T>(className, (klass) => setComponent(() => klass)),
-      components.onClassDeleted(className, () => setComponent(() => DefaultComponent))
+      components.onClassRegistered<T>(className, (klass) => setComponent({ c: klass })),
+      components.onClassDeleted(className, () => setComponent({ c: DefaultComponent }))
     )
     return () => disposables.dispose()
   }, [className, DefaultComponent])
