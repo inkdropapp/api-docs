@@ -1,0 +1,35 @@
+export const metadata = {
+  title: 'local-config',
+  description: 'An app state of the local config. This section explains how to fetch and manipulate the `local config` state.',
+}
+
+# Local config
+
+An [app state](/guides/flux-architecture) of the editor.
+You can obtain the `local config` state and integrate it with React components.{{ className: 'lead' }}
+
+
+---
+
+## Data Structure
+
+<Row>
+  <Col sticky>
+    Get the `editor` state manually:
+
+    ```js
+    const { config } = inkdrop.store.getState()
+    ```
+
+    Connect the state with your React component:
+
+    ```js
+    import { useSelector } from 'react-redux'
+    const selector = ({ config }) => config
+    const MyComponent = props => {
+      const config = useSelector(selector)
+      // render
+    }
+    ```
+  </Col>
+</Row>

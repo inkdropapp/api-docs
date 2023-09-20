@@ -254,6 +254,7 @@ export const navigation = [
       { title: 'Database', href: '/states/db' },
       { title: 'Editing note', href: '/states/editing-note' },
       { title: 'Editor', href: '/states/editor' },
+      { title: 'Local config', href: '/states/local-config' },
       { title: 'Preview', href: '/states/preview' },
     ],
   },
