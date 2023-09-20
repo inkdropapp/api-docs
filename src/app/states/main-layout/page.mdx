@@ -1,0 +1,45 @@
+export const metadata = {
+  title: 'main-layout',
+  description: 'An app state of the main layout. This section explains how to fetch and manipulate the `mainLayout` state.',
+}
+
+# main layout
+
+An [app state](/guides/flux-architecture) of the editor.
+You can obtain the `mainLayout` state and integrate it with React components.{{ className: 'lead' }}
+
+
+---
+
+## Data Structure
+
+<Row>
+  <Col>
+    <Properties>
+      <Property name="distractionFreeEnabled" type="boolean">
+        true if distraction-free mode is enabled
+      </Property>
+      <Property name="sidebarVisible" type="boolean">
+        true if side bar is visible
+      </Property>   
+    </Properties>
+  </Col>
+  <Col sticky>
+    Get the `editor` state manually:
+
+    ```js
+    const { mainLayout } = inkdrop.store.getState()
+    ```
+
+    Connect the state with your React component:
+
+    ```js
+    import { useSelector } from 'react-redux'
+    const selector = ({ mainLayout }) => mainLayout
+    const MyComponent = props => {
+      const mainLayout = useSelector(selector)
+      // render
+    }
+    ```
+  </Col>
+</Row>
