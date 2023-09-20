@@ -1,0 +1,74 @@
+export const metadata = {
+  title: 'Data Store',
+  description: 'The class in the main process for dealing with database and sync.',
+}
+
+# Data Store
+
+The class in the main process for dealing with database and sync.
+An instance of this class is always available as the `inkdrop.main.dataStore` global.
+
+---
+
+## Properties
+
+<Properties>
+  <Property name="localPouch" type="PouchDB.Database">
+    An instance of [PouchDB](https://pouchdb.com) associated with the local database.
+    If the user is not logged in yet, it is `undefined`.
+  </Property>
+  <Property name="local" type="InkdropDatabase">
+    An instance of `InkdropDatabase` If the user is not logged in yet, it is `undefined`.
+  </Property>
+  <Property name="sync" type="InkdropDataSync">
+    An instance of `InkdropDataSync`.
+  </Property>
+</Properties>
+
+---
+
+## Get local database {{ label: 'getLocalDB()' }}
+
+<Row>
+  <Col>
+    Gets the local database instance.
+
+    ### Parameters
+    No parameters
+
+    ### Returns
+    Returns an instance of `InkdropDatabase`.
+    Throws an error if it's not loaded yet.
+
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    inkdrop.main.dataStore.getLocalDB()
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+
+---
+
+## Update FTS Index {{ label: 'updateFTSIndex()' }}
+
+<Row>
+  <Col>
+    Triggers updating full-text search index.
+
+    ### Parameters
+    No parameters
+
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    inkdrop.main.dataStore.updateFTSIndex()
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+

@@ -232,6 +232,7 @@ export const navigation = [
       { title: 'Tags', href: '/data-access/tags' },
       { title: 'Files', href: '/data-access/files' },
       { title: 'Utilities', href: '/data-access/utils' },
+      { title: 'Events', href: '/data-access/events' },
       { title: 'Local HTTP Server', href: '/data-access/local-http-server' },
     ],
   },
@@ -240,6 +241,8 @@ export const navigation = [
     links: [
       { title: 'Command Registry', href: '/modules/command-registry' },
       { title: 'Component Manager', href: '/modules/component-manager' },
+      { title: 'Data Store', href: '/modules/data-store' },
+      { title: 'Inkdrop Application', href: '/modules/inkdrop-application' },
       { title: 'Layout Manager', href: '/modules/layout-manager' },
       { title: 'Markdown Renderer', href: '/modules/markdown-renderer' },
     ],
