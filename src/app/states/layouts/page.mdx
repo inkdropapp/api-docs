@@ -3,7 +3,7 @@ export const metadata = {
   description: 'An app state of component layouts. This section explains how to fetch the `layouts` state.',
 }
 
-# editingNote
+# layouts
 
 An [app state](/guides/flux-architecture) of the layouts.
 You can obtain the `layouts` state and integrate it with React components.{{ className: 'lead' }}
@@ -20,18 +20,29 @@ A map of `[layout_name]: LayoutComponents` where:
 <Row>
   <Col>
     <Properties>
-      <Property name="main" type="boolean | undefined">
+      <Property name="main" type="full">
       The main layout that consists of 3 columns.
+
+      **Default values:**
         ```json
         ["ModalLayout", "SideBarLayout", "NoteListBarLayout", "EditorLayout"]
         ```
       </Property>
-      <Property name="lastSyncTime" type="number | undefined">
-        The last datetime when the database finished syncing. 
-        `undefined` if it has not ever been synced yet since the app launched.
+      <Property name="main" type="slim">
+      The main layout that consists of 2 columns.
+
+      **Default values:**
+        ```json
+        ["ModalLayout", "NoteListBarLayout", "EditorLayout"]
+        ```
       </Property>
-      <Property name="lastSyncError" type="Error | null">
-        The last error ocurred while syncing.
+      <Property name="main" type="distraction-free">
+      The main layout for distraction-free mode.
+
+      **Default values:**
+        ```json
+        ["ModalLayout", "EditorLayout"]
+        ```
       </Property>
     </Properties>
   </Col>
@@ -54,5 +65,3 @@ A map of `[layout_name]: LayoutComponents` where:
     ```
   </Col>
 </Row>
-
-[layouts]: /data-access/layouts
