@@ -1,0 +1,45 @@
+export const metadata = {
+  title: 'noteListBar',
+  description: 'An app state of the noteListBar. This section explains how to fetch the `noteListBar` state.',
+}
+
+# noteListBar
+
+An [app state](/guides/flux-architecture) of the editor.
+You can obtain the `noteListBar` state and integrate it with React components.{{ className: 'lead' }}
+
+
+---
+
+## Data Structure
+
+<Row>
+  <Col>
+    <Properties>
+      <Property name="selectedNoteIds" type="Array<string>">
+        An array of note ID of selected notes on the note list bar.
+      </Property>
+      <Property name="actionTargetNoteIds" type="Array<string>">
+        An array of note IDs of target notes for context menu on the note list bar.
+      </Property>
+    </Properties>
+  </Col>
+  <Col sticky>
+    Get the `noteListBar` state manually:
+
+    ```js
+    const { noteListBar } = inkdrop.store.getState()
+    ```
+
+    Connect the state with your React component:
+
+    ```js
+      import { useSelector } from 'react-redux'
+      const selector = ({ noteListBar }) => noteListBar
+      const MyComponent = props => {
+        const noteListBar = useSelector(selector)
+        // render
+      }
+    ```
+  </Col>
+</Row>
