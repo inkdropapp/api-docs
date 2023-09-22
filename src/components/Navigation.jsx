@@ -254,6 +254,7 @@ export const navigation = [
       { title: 'Database', href: '/states/db' },
       { title: 'Editing note', href: '/states/editing-note' },
       { title: 'Editor', href: '/states/editor' },
+      { title: 'Note list bar', href: '/states/note-list-bar' },
       { title: 'Preview', href: '/states/preview' },
     ],
   },
