@@ -8,7 +8,6 @@ export const metadata = {
 An [app state](/guides/flux-architecture) of notebooks in Inkdrop.
 You can obtain the `books` state and integrate it with React components.{{ className: 'lead' }}
 
-
 ---
 
 ## Data Structure
@@ -16,13 +15,13 @@ You can obtain the `books` state and integrate it with React components.{{ class
 <Row>
   <Col>
     <Properties>
-      <Property name="all" type="Book[]">
+      <Property name="all" type="Array<Book>">
         An array of [Book][book]s.
       </Property>
-      <Property name="hash" type="{ [bookId]: Book }">
+      <Property name="hash" type="Record<string, Book>">
         A map where the keys are `bookId` and values are [Book][book].
       </Property>
-      <Property name="tree" type="BookTree">
+      <Property name="tree" type="Array<BookTreeItem>">
         An array of [Book][book]s with a tree structure. A Book that has child notebooks recursively has a `children` property. The `children` property follows the same structure as `tree`: an array of [Book][book]s.
       </Property>
       <Property name="lastUpdatedAt" type="number">

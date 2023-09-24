@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export function Feedback() {
   return (
-    <div className="relative h-8">
+    <div className="relative pl-4 pt-2 border-l-4 border-yellow-400 dark:border-yellow-600">
       <div className="">Can you help us improve the docs? 🙏</div>
       <p className="text-sm text-zinc-600 dark:text-zinc-400">
         The source of these docs is{' '}

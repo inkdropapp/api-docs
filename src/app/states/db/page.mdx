@@ -21,11 +21,11 @@ You can obtain the `db` state and integrate it with React components.{{ classNam
         `true` if the database is currently syncing.
         `undefined` if it has not ever been synced yet since the app launched.
       </Property>
-      <Property name="lastSyncTime" type="number | undefined">
+      <Property name="lastSyncTime" type="number | null | undefined">
         The last datetime when the database finished syncing. 
         `undefined` if it has not ever been synced yet since the app launched.
       </Property>
-      <Property name="lastSyncError" type="Error | null">
+      <Property name="lastSyncError" type="Error | null | undefined">
         The last error ocurred while syncing.
       </Property>
     </Properties>
