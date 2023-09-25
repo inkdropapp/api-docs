@@ -1,0 +1,272 @@
+export const metadata = {
+  title: 'layouts',
+  description: 'An app state of component layouts. This section explains how to fetch the `layouts` state.',
+}
+
+# layouts
+
+An [app state](/guides/flux-architecture) of the layouts.
+You can obtain the `layouts` state and integrate it with React components.{{ className: 'lead' }}
+
+
+---
+
+## Data Structure
+A map of `Record<string, LayoutComponents>` where:
+
+- `string`: The layout name
+- `LayoutComponents`: An array of React component class names
+
+<Row>
+  <Col>
+    <Properties>
+      <Property name="main:full" type="Array<string>">
+      The main layout that consists of 3 columns.
+
+      **Default values:**
+        ```json
+        [
+          "ModalLayout",
+          "SideBarLayout",
+          "NoteListBarLayout",
+          "EditorLayout"
+        ]
+        ```
+      </Property>
+      <Property name="main:slim" type="Array<string>">
+      The main layout that consists of 2 columns.
+
+      **Default values:**
+        ```json
+        [
+          "ModalLayout",
+          "NoteListBarLayout",
+          "EditorLayout"
+        ]
+        ```
+      </Property>
+      <Property name="main:distraction-free" type="Array<string>">
+      The main layout for distraction-free mode.
+
+      **Default values:**
+        ```json
+        [
+          "ModalLayout",
+          "EditorLayout"
+        ]
+        ```
+      </Property>
+      <Property name="sidebar" type="Array<string>">
+      The sidebar layout
+
+      **Default values:**
+        ```json
+        [
+          "SideBarHeader",
+          "SideBarNavigation",
+          "SideBarSyncStatusView",
+          "SideBarPluginUpdatesNotificationView"
+        ]
+        ```
+      </Property>
+      <Property name="sidebar-menu" type="Array<string>">
+      The menu layout of sidebar
+
+      **Default values:**
+        ```json
+        [
+          "SideBarMenuItemAllNotes",
+          "SideBarMenuSectionNotebooks",
+          "SideBarMenuBookListRoot",
+          "SideBarMenuItemTrash",
+          "SideBarMenuSectionStatus",
+          "SideBarMenuStatusList",
+          "SideBarMenuSectionTags",
+          "SideBarMenuTagList"
+        ]
+        ```
+      </Property>
+      <Property name="sidebar-workspace-menu" type="Array<string>">
+      The menu layout of sidebar workspace menu
+
+      **Default values:**
+        ```json
+        [
+          "SidebarWorkspaceMenuTitle",
+          "SideBarWorkspaceMenuAllNotes",
+          "SideBarMenuSectionNotebooks",
+          "SideBarWorkspaceMenuBookList",
+          "SideBarMenuSectionStatus",
+          "SidebarWorkspaceMenuStatusList",
+          "SideBarMenuSectionTags",
+          "SidebarWorkspaceMenuTagList"
+        ]
+        ```
+      </Property>
+      <Property name="note-list-bar" type="Array<string>">
+      The menu layout of note list bar
+
+      **Default values:**
+        ```json
+        [
+          "NoteListHeader",
+          "NoteListSearchBar",
+          "NoteListBarContainer"
+        ]
+        ```
+      </Property>
+      <Property name="note-list-bar:trash" type="Array<string>">
+      The trash menu layout of note list bar
+
+      **Default values:**
+        ```json
+        [
+          "NoteListHeader",
+          "NoteListBarContainer"
+        ]
+        ```
+      </Property>
+      <Property name="mde" type="Array<string>">
+      The mde layout
+
+      **Default values:**
+        ```json
+        [
+          "Editor"
+        ]
+        ```
+      </Property>
+      <Property name="editor" type="Array<string>">
+      The editor layout
+
+      **Default values:**
+        ```json
+        [
+          "EditorDrawer",
+          "EditorFloatingActions",
+          "EditorHeaderLayout",
+          "EditorMetaLayout",
+          "EditorToolbar",
+          "MDELayout",
+          "MDESearchBar",
+          "EditorStatusBarLayout"
+        ]
+        ```
+      </Property>
+      <Property name="editor-header" type="Array<string>">
+      The header layout of the editor
+
+      **Default values:**
+        ```json
+        [
+          "EditorHeaderTitleInput",
+          "EditorHeaderMore"
+        ]
+        ```
+      </Property>
+      <Property name="editor-meta" type="Array<string>">
+      The meta pane layout of the editor
+
+      **Default values:**
+        ```json
+        [
+          "EditorMetaNotebook",
+          "EditorMetaStatusPicker",
+          "EditorMetaTags"
+        ]
+        ```
+      </Property>
+      <Property name="modal" type="Array<string>">
+      The layout for modal components
+
+      **Default values:**
+        ```json
+        [
+          "NewNotebookDialog",
+          "DeleteNotebookDialog",
+          "RenameNotebookDialog",
+          "TagSettingsDialog",
+          "DeleteTagDialog",
+          "AssistiveErrorDialog",
+          "MoveNotesDialog",
+          "MoveNotebookDialog",
+          "EmptyTrashDialog",
+          "ShareNoteDialog",
+          "NoteRevisionsDialog"
+        ]
+        ```
+      </Property>
+      <Property name="editor-toolbar" type="Array<string>">
+      The toolbar layout of the editor
+
+      **Default values:**
+        ```json
+        []
+        ```
+      </Property>
+      <Property name="editor-drawer-menu" type="Array<string>">
+      The editor drawer menu items
+
+      **Default values:**
+        ```json
+        [
+          "EditorDrawerSectionHeaderNoteInformation",
+          "EditorDrawerMenuItemNotebook",
+          "EditorDrawerItemStatus",
+          "EditorDrawerItemTags",
+          "EditorDrawerItemCreatedDate",
+          "EditorDrawerItemUpdatedDate",
+          "EditorDrawerSeparator-1",
+          "EditorDrawerSectionHeaderActions",
+          "EditorDrawerActionButtonDuplicate",
+          "EditorDrawerActionButtonCopyNoteLink",
+          "EditorDrawerActionButtonPinToTop",
+          "EditorDrawerActionButtonOpenNoteInSeparateWindow",
+          "EditorDrawerSeparator-2",
+          "EditorDrawerActionButtonDeleteNote",
+          "EditorDrawerActionButtonRevisionHistory",
+          "EditorDrawerSeparator-3",
+          "EditorDrawerActionButtonShare"
+        ]
+        ```
+      </Property>
+      <Property name="editor-status-bar" type="Array<string>">
+      The status bar layout of the editor
+
+      **Default values:**
+        ```json
+        []
+        ```
+      </Property>
+      <Property name="editor-floating-actions" type="Array<string>">
+      The floating action buttons on the editor
+
+      **Default values:**
+        ```json
+        [
+          "EditorFloatingActionTogglePreview",
+          "EditorFloatingActionToggleSideBySide"
+        ]
+        ```
+      </Property>
+    </Properties>
+  </Col>
+  <Col sticky>
+    Get the `layouts` state manually:
+
+    ```js
+    const { layouts } = inkdrop.store.getState()
+    ```
+
+    Connect the state with your React component:
+
+    ```js
+    import { useSelector } from 'react-redux'
+    const selector = ({ layouts }) => layouts
+    const MyComponent = props => {
+      const layouts = useSelector(selector)
+      // render
+    }
+    ```
+  </Col>
+</Row>
