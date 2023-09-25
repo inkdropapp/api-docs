@@ -245,6 +245,7 @@ export const navigation = [
       { title: 'Inkdrop Application', href: '/modules/inkdrop-application' },
       { title: 'Layout Manager', href: '/modules/layout-manager' },
       { title: 'Markdown Renderer', href: '/modules/markdown-renderer' },
+      { title: 'Markdown Editor', href: '/modules/markdown-editor' },
       { title: 'Notification', href: '/modules/notification' },
       { title: 'Notification Manager', href: '/modules/notification-manager' },
     ],
