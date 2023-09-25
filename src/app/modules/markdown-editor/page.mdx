@@ -17,20 +17,26 @@ If you are building a plugin that extends the editor, you have to subscribe even
 ```js
 module.exports = {
   activate() {
-    global.inkdrop.onEditorLoad(this.handleEditorDidLoad.bind(this))
-  },
-
-  deactivate() {
-    const editor = global.inkdrop.getActiveEditor()
+    const editor = inkdrop.getActiveEditor()
     if (editor) {
-      // unload
+      this.extendEditor(editor)
+    } else {
+      inkdrop.onEditorLoad(this.extendEditor)
     }
   },
 
-  handleEditorDidLoad(editor) {
-    // extend the editor
+  deactivate() {
+    const editor = inkdrop.getActiveEditor()
+    if (editor) this.unextendEditor(editor)
+  },
+
+  extendEditor: (editor) => {
     const { cm } = editor
   },
+
+  unextendEditor: (editor) => {
+    // unload
+  }
 }
 ```
 
