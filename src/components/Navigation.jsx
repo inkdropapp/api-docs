@@ -246,6 +246,8 @@ export const navigation = [
       { title: 'Layout Manager', href: '/modules/layout-manager' },
       { title: 'Markdown Renderer', href: '/modules/markdown-renderer' },
       { title: 'Markdown Editor', href: '/modules/markdown-editor' },
+      { title: 'Notification', href: '/modules/notification' },
+      { title: 'Notification Manager', href: '/modules/notification-manager' },
     ],
   },
   {
@@ -254,6 +256,7 @@ export const navigation = [
       { title: 'Notebooks', href: '/states/books' },
       { title: 'Database', href: '/states/db' },
       { title: 'Editing note', href: '/states/editing-note' },
+      { title: 'Layouts', href: '/states/layouts' },
       { title: 'Editor', href: '/states/editor' },
       { title: 'Main layout', href: '/states/main-layout' },
       { title: 'Note list bar', href: '/states/note-list-bar' },
