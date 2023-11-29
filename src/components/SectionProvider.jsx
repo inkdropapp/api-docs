@@ -55,7 +55,7 @@ function useVisibleSections(sectionStore) {
       ) {
         let { id, headingRef, offsetRem } = sections[sectionIndex]
         let offset = remToPx(offsetRem)
-        let top = headingRef.current.getBoundingClientRect().top + scrollY
+        let top = headingRef?.current.getBoundingClientRect().top + scrollY
 
         if (sectionIndex === 0 && top - offset > scrollY) {
           newVisibleSections.push('_top')
@@ -63,7 +63,7 @@ function useVisibleSections(sectionStore) {
 
         let nextSection = sections[sectionIndex + 1]
         let bottom =
-          (nextSection?.headingRef.current.getBoundingClientRect().top ??
+          (nextSection?.headingRef?.current.getBoundingClientRect().top ??
             Infinity) +
           scrollY -
           remToPx(nextSection?.offsetRem ?? 0)

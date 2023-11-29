@@ -65,6 +65,8 @@ export function Heading({
   tag,
   label,
   anchor = true,
+  warning,
+  selector,
   ...props
 }) {
   let Component = `h${level}`
@@ -77,7 +79,7 @@ export function Heading({
   })
 
   useEffect(() => {
-    if (level === 2) {
+    if (level === 2 || level === 3) {
       registerHeading({ id, ref, offsetRem: tag || label ? 8 : 6 })
     }
   })
@@ -97,6 +99,19 @@ export function Heading({
           </Anchor>
         ) : (
           children
+        )}
+        {selector && (
+          <span className="ml-2 text-2xs font-normal">
+            <span className="opacity-60">in</span>&nbsp;
+            <code title="Selector" className="text-xs">
+              {selector}
+            </code>
+          </span>
+        )}
+        {warning && (
+          <span className="ml-3 text-2xs font-normal text-orange-400 dark:text-orange-600">
+            {warning}
+          </span>
         )}
       </Component>
     </>

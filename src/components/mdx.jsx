@@ -138,7 +138,7 @@ export function Col({ children, sticky = false }) {
   )
 }
 
-export function Properties({ children, sub }) {
+export function Properties({ children, sub, title }) {
   return (
     <div className="my-6">
       <ul
@@ -150,6 +150,7 @@ export function Properties({ children, sub }) {
             : '')
         }
       >
+        {title && <div className="mb-1 text-2xs uppercase">{title}</div>}
         {children}
       </ul>
     </div>

@@ -1,0 +1,982 @@
+export const metadata = {
+  title: 'List of commands',
+  description:
+    'How to use ES modules in your plugin with Rollup',
+}
+
+# List of commands
+
+Inkdrop provides a bunch of commands to allow you to associate arbitrary interactions with the features.
+You can bind them with [keystrokes](/reference/keymap-manager), [menu](/reference/menu-manager) and [context menu](/reference/context-menu-manager) from [plugins](/manual/plugin-word-count), [the init file](/manual/the-init-file) or [keymap config file](/manual/customizing-keybindings).
+Note that some commands like `core:open-note` require parameters so you have to invoke them programmatically with [CommandRegistry](/reference/command-registry) like so:
+
+```js
+inkdrop.commands.dispatch(document.body, 'core:open-note', {
+  noteId: 'note:uugSvPq5r'
+})
+```
+
+## Table of Contents
+
+- [Application commands](#application-commands)
+- [Core commands](#core-commands)
+- [Editor commands](#editor-commands)
+- [Export commands](#export-commands)
+- [Import commands](#import-commands)
+- [View commands](#view-commands)
+- [Window commands](#window-commands)
+
+---
+
+## Application commands
+
+Special commands that run in the main process to control the Inkdrop app.
+To invoke them, do like so:
+
+```js
+import { ipcRenderer } from 'electron'
+ipcRenderer.send('command', 'application:about', {})
+```
+
+### application:about
+
+Shows a dialog about Inkdrop.
+
+### application:bring-all-windows-to-front {{ warning: 'macOS only' }}
+
+Arranges windows listed in the Window menu in front of all other windows.
+
+### application:hide {{ warning: 'macOS only' }}
+
+Hides Inkdrop windows.
+
+### application:hide-other-applications {{ warning: 'macOS only' }}
+
+Hides all apps, except Inkdrop.
+
+### application:inspect
+
+Shows a Developer Tools and inspects an element.
+
+### application:logout
+
+Logs out from the currently authenticated account.
+
+### application:minimize {{ warning: 'macOS only' }}
+
+Minimizes Inkdrop application.
+
+### application:open-preferences
+
+Opens up the preference window.
+
+### application:open-website
+
+Opens up the Inkdrop website.
+
+### application:quit
+
+Quits the app.
+
+### application:report-issue
+
+Opens up the Inkdrop forum.
+
+### application:show-credits
+
+Opens up the list of software licenses.
+
+### application:show-and-focus-main-window
+
+Show and focus Inkdrop main window.
+
+### application:toggle-main-window
+
+Toggle Inkdrop main window.
+
+### application:unhide-all-applications {{ warning: 'macOS only' }}
+
+Unhides all apps, including Inkdrop.
+
+### application:view-help
+
+Opens up the documentation website.
+
+### application:zoom {{ warning: 'macOS only' }}
+
+Toggles the size and location of the window between its standard state and its user state.
+
+### application:sync-db
+
+Perform data sync from the last checkpointer.
+
+### application:sync-db-full
+
+Perform data sync from the beginning.
+
+### application:quick-note
+
+Create a note and show it in a separate window.
+
+---
+
+## Core commands
+
+### core:copy {{ selector: 'body' }}
+
+Copy the selected text to clipboard.
+
+### core:copy-image {{ selector: 'body' }}
+
+Copy the target element's image to clipboard.
+
+### core:copy-note-link {{ selector: 'body' }}
+
+Copy links to notes as Markdown links. By default, copy currently selected on the note list.
+
+<Properties sub title="Arguments">
+  <Property name="noteId" type="string|array">
+    (Optional) The ID(s) of the note(s) to process.
+  </Property>
+</Properties>
+
+### core:cut {{ selector: 'body' }}
+
+Delete the selected text and copy it to clipboard.
+
+### core:delete-note {{ selector: 'body' }}
+
+Move notes currently selected on the note list to trash.
+If the notes are already in trash, they will be permanently deleted.
+
+### core:delete-notebook
+
+<Warning>It's a private command for now</Warning>
+
+### core:delete-tag
+
+<Warning>It's a private command for now</Warning>
+
+### core:duplicate-note {{ selector: 'body' }}
+
+Duplicates notes currently selected on the note list.
+
+### core:emphasize {{ selector: '.mde-cm-wrapper' }}
+
+Emphasize currently selected text.
+
+### core:empty-trash {{ selector: 'body' }}
+
+Empties trash.
+
+### core:filter-notes {{ selector: 'body' }}
+
+Filters current note list items with given keywords.
+
+<Properties sub title="Arguments">
+  <Property name="keyword" type="string" required>
+    The keywords to filter.
+  </Property>
+</Properties>
+
+### core:filter-by-tag {{ selector: 'body' }}
+
+Adds a filter condition with specified tag.
+
+<Properties sub title="Arguments">
+  <Property name="tagId" type="string" required>
+    The ID of the tag to filter by.
+  </Property>
+</Properties>
+
+### core:find {{ selector: 'body' }}
+
+Moves focus to the search bar.
+
+### core:find-clear {{ selector: 'body' }}
+
+Clears the search bar text.
+
+### core:find-global {{ selector: 'body' }}
+
+Moves focus to the search bar and switch the search scope to global.
+
+### core:focus-next {{ selector: 'body' }}
+
+Moves focus to the next focusable UI component.
+
+### core:focus-note-list-bar {{ selector: 'body' }}
+
+Moves focus to the note list bar.
+
+### core:focus-previous {{ selector: 'body' }}
+
+Moves focus to the previous focusable UI component.
+
+### core:indent {{ selector: '.mde-cm-wrapper' }}
+
+Indents the selected line(s).
+
+### core:insert-code-block {{ selector: '.mde-cm-wrapper' }}
+
+Inserts a code block.
+
+### core:insert-horizontal-rule {{ selector: '.mde-cm-wrapper' }}
+
+Inserts a horizontal rule: `* * *`.
+
+### core:insert-link {{ selector: '.mde-cm-wrapper' }}
+
+Inserts a link.
+
+### core:move-notebook
+
+<Warning>It's a private command for now</Warning>
+
+### core:move-to-notebook
+
+<Warning>It's a private command for now</Warning>
+
+### core:navigate-back {{ selector: 'body' }}
+
+Moves backward through the note open history.
+
+### core:navigate-forward {{ selector: 'body' }}
+
+Moves forward through the note open history.
+
+### core:new-note {{ selector: 'body' }}
+
+Creates a new note and open it in the editor.
+
+### core:new-notebook {{ selector: 'body' }}
+
+Shows up a dialog for creating a new notebook.
+
+<Properties sub title="Arguments">
+  <Property name="parentBookId" type="string">
+    A parent notebook ID. If `undefined`, a notebook will be created under the root. Default: `undefined`
+  </Property>
+</Properties>
+
+### core:note-list-show-all-notes {{ selector: 'body' }}
+
+Lists all notes on the note list bar.
+
+<Properties sub title="Arguments">
+  <Property name="selectFirstNote" type="boolean">
+    Whether to select the first note or not. Default: `true`
+  </Property>
+</Properties>
+
+### core:note-list-show-notes-in-book {{ selector: 'body' }}
+
+List notes in specified notebook on the note list bar
+
+<Properties sub title="Arguments">
+  <Property name="bookId" type="string" required>
+    The notebook ID
+  </Property>
+  <Property name="tagId" type="string">
+    The tag ID to filter items
+  </Property>
+  <Property name="status" type="NoteStatus">
+    The note status which should be **one of:**`"none"` or `"active"` or `"onHold"` or `"completed"` or `"dropped"`
+  </Property>
+  <Property name="selectFirstNote" type="boolean">
+    Whether to select the first note or not. Default: `true`
+  </Property>
+  <Property name="includeChildren" type="boolean">
+    Whether to include the notes in the child notebooks. Default: `false`
+  </Property>
+</Properties>
+
+
+### core:note-list-show-notes-with-tag {{ selector: 'body' }}
+
+List notes with specified tag on the note list bar
+
+<Properties sub title="Arguments">
+  <Property name="tagId" type="string" required>
+    The tag ID.
+  </Property>
+  <Property name="selectFirstNote" type="boolean">
+    Whether to select the first note or not. Default: `true`.
+  </Property>
+</Properties>
+
+### core:note-list-show-notes-with-status {{ selector: 'body' }}
+
+List notes with specified note status on the note list bar
+
+<Properties sub title="Arguments">
+  <Property name="status" type="NoteStatus" required>
+    The note status which should be **one of:** `"none"` or `"active"` or `"onHold"` or `"completed"` or `"dropped"`.
+  </Property>
+  <Property name="selectFirstNote" type="boolean">
+    Whether to select the first note or not. Default: `true`.
+  </Property>
+</Properties>
+
+### core:note-list-show-notes-in-book-of-editing-note {{ selector: 'body' }}
+
+List notes in a notebook of the currently editing note on the note list bar.
+
+### core:note-tags-bar-item-list-unselect {{ selector: '.note-tags-bar-item-list' }}
+
+Unselect items on the note tags bar.
+
+### core:note-tags-bar-item-list-select-prev {{ selector: '.note-tags-bar-item-list' }}
+
+Select the previous item on the note tags bar.
+
+### core:note-tags-bar-item-list-select-next {{ selector: '.note-tags-bar-item-list' }}
+
+Select the next item on the note tags bar.
+
+### core:note-tags-bar-item-list-select-remove-item-before {{ selector: '.note-tags-bar-item-list' }}
+
+Remove the selected item and select its previous item on the note tags bar.
+
+### core:note-tags-bar-item-list-select-remove-item {{ selector: '.note-tags-bar-item-list' }}
+
+Remove the target item on the note tags bar.
+
+<Properties sub title="Arguments">
+  <Property name="tagId" type="string">
+    (Optional) The tag ID to remove.
+  </Property>
+</Properties>
+
+### core:open-first-note {{ selector: 'body' }}
+
+Opens the first note of the note list bar in the editor.
+
+### core:open-next-note {{ selector: 'body' }}
+
+Opens the next note of currently selected note on the note list bar.
+
+### core:close-note {{ selector: 'body' }}
+
+Closes the currently editing note.
+
+### core:open-note {{ selector: 'body' }}
+
+Opens a note with specified note ID.
+
+<Properties sub title="Arguments">
+  <Property name="noteId" type="string" required>
+    The ID of the note to open.
+  </Property>
+  <Property name="selectInNoteListBar" type="boolean">
+    Whether to select the correspond note in the note list bar.
+  </Property>
+  <Property name="pushState" type="boolean">
+    Remember it in the navigation history.
+  </Property>
+  <Property name="newWindow" type="boolean">
+    Whether to open the note in a separate window.
+  </Property>
+</Properties>
+
+### core:open-note-in-separate-window {{ selector: 'body' }}
+
+Opens notes in separate windows. By default, opens notes selected on the note list bar.
+
+<Properties sub title="Arguments">
+  <Property name="noteId" type="string|array">
+    (Optional) The ID(s) of the note(s) to open.
+  </Property>
+</Properties>
+
+### core:open-prev-note {{ selector: 'body' }}
+
+Opens the previous note of currently selected note on the note list bar.
+
+### core:open-prev-note {{ selector: 'body' }}
+
+Opens the previous note of currently selected note on the note list bar.
+
+### core:open-tag-settings {{ selector: 'body' }}
+
+Opens up the settings window for the tag with specified ID.
+
+<Properties sub title="Arguments">
+  <Property name="tagId" type="string">
+    The ID of the tag to set.
+  </Property>
+</Properties>
+
+### core:paste {{ selector: 'body' }}
+
+Pastes a text from clipboard.
+
+### core:paste-as-plain-text {{ selector: 'body' }}
+
+Pastes a text from clipboard as plain text.
+
+### core:redo {{ selector: 'body' }}
+
+Redoes the last undone change.
+
+### core:rename-notebook
+
+<Warning>It's a private command for now</Warning>
+
+### core:save-image {{ selector: 'body' }}
+
+Saves the target element's image to disk.
+
+### core:save-note {{ selector: 'body' }}
+
+Saves the currently editing note to the local database.
+
+### core:select-all {{ selector: 'body' }}
+
+Select all text.
+
+### core:search-notes {{ selector: 'body' }}
+
+Search notes globally with given keywords.
+
+<Properties sub title="Arguments">
+  <Property name="keyword" type="string" required>
+    The keywords to search.
+  </Property>
+</Properties>
+
+### core:share-note {{ selector: 'body' }}
+
+Shows up a dialog for sharing note with specified ID.
+
+<Properties sub title="Arguments">
+  <Property name="noteId" type="string" required>
+    The ID of the note to be shared.
+  </Property>
+</Properties>
+
+### core:show-note-revisions {{ selector: 'body' }}
+
+Shows up a dialog for viewing note change history with specified ID.
+
+<Properties sub title="Arguments">
+  <Property name="noteId" type="string" required>
+    The ID of the note to view its revision history.
+  </Property>
+</Properties>
+
+### core:sidebar-focus {{ selector: 'body' }}
+
+Moves focus to the side bar.
+
+### core:sidebar-select-next-item {{ selector: 'body' }}
+
+Select next item of the side bar menu.
+
+### core:sidebar-select-prev-item {{ selector: 'body' }}
+
+Select previous item of the side bar menu.
+
+### core:strikethrough {{ selector: '.mde-cm-wrapper' }}
+
+Toggles strikethrough to the selected text.
+
+### core:strong {{ selector: '.mde-cm-wrapper' }}
+
+Toggles strong emphasis to the selected text.
+
+### core:toggle-blockquote {{ selector: '.mde-cm-wrapper' }}
+
+Toggles blockquote to the selected lines.
+
+### core:toggle-bulleted-list {{ selector: '.mde-cm-wrapper' }}
+
+Toggles bulleted list to the selected lines.
+
+### core:toggle-heading-1 {{ selector: '.mde-cm-wrapper' }}
+
+Toggles h1 heading to the selected lines.
+
+### core:toggle-heading-2 {{ selector: '.mde-cm-wrapper' }}
+
+Toggles h2 heading to the selected lines.
+
+### core:toggle-heading-3 {{ selector: '.mde-cm-wrapper' }}
+
+Toggles h3 heading to the selected lines.
+
+### core:toggle-heading-4 {{ selector: '.mde-cm-wrapper' }}
+
+Toggles h4 heading to the selected lines.
+
+### core:toggle-heading-bigger {{ selector: '.mde-cm-wrapper' }}
+
+Decreases heading level of the selected lines.
+
+### core:toggle-heading-smaller {{ selector: '.mde-cm-wrapper' }}
+
+Increases heading level of the selected lines.
+
+### core:toggle-numbered-list {{ selector: '.mde-cm-wrapper' }}
+
+Toggles ordered list to the selected lines.
+
+### core:toggle-task-list {{ selector: '.mde-cm-wrapper' }}
+
+Toggles task list to the selected lines.
+
+### core:undo {{ selector: '.mde-cm-wrapper' }}
+
+Undoes the last change.
+
+### core:unindent {{ selector: '.mde-cm-wrapper' }}
+
+Unindents the current lines.
+
+---
+
+## Editor commands
+
+### editor:clear-find {{ selector: 'body' }}
+
+Clears the text in the editor search bar.
+
+### editor:change-note-status-none {{ selector: 'body' }}
+
+Set the note status of the editing note to None.
+
+### editor:change-note-status-active {{ selector: 'body' }}
+
+Set the note status of the editing note to Active.
+
+### editor:change-note-status-onhold {{ selector: 'body' }}
+
+Set the note status of the editing note to OnHold.
+
+### editor:change-note-status-completed {{ selector: 'body' }}
+
+Set the note status of the editing note to Completed.
+
+### editor:change-note-status-dropped {{ selector: 'body' }}
+
+Set the note status of the editing note to Dropped.
+
+### editor:delete-char-after {{ selector: '.mde-cm-wrapper' }}
+
+Deletes the char after the cursor.
+
+### editor:delete-char-before {{ selector: '.mde-cm-wrapper' }}
+
+Deletes the char before the cursor.
+
+### editor:delete-group-after {{ selector: '.mde-cm-wrapper' }}
+
+Deletes the text group after the cursor.
+
+### editor:delete-group-before {{ selector: '.mde-cm-wrapper' }}
+
+Deletes the text group before the cursor.
+
+### editor:delete-line {{ selector: '.mde-cm-wrapper' }}
+
+Deletes the line.
+
+### editor:delete-word-after {{ selector: '.mde-cm-wrapper' }}
+
+Deletes the word after the cursor.
+
+### editor:delete-word-before {{ selector: '.mde-cm-wrapper' }}
+
+Deletes the word before the cursor.
+
+### editor:delete-wrapped-line-left {{ selector: '.mde-cm-wrapper' }}
+
+Deletes the wrapped line left.
+
+### editor:delete-wrapped-line-right {{ selector: '.mde-cm-wrapper' }}
+
+Deletes the wrapped line right.
+
+### editor:find {{ selector: 'body' }}
+
+Toggles the editor search bar.
+
+### editor:find-next {{ selector: 'body' }}
+
+Locates the next item in the editor that matches criteria.
+
+### editor:find-prev {{ selector: 'body' }}
+
+Locates the previous item in the editor that matches criteria.
+
+### editor:find-text {{ selector: 'body' }}
+
+Finds given text in the editor.
+
+<Properties sub title="Arguments">
+  <Property name="text" type="string">
+    String, the text to find.
+  </Property>
+</Properties>
+
+### editor:focus {{ selector: 'body' }}
+
+Focuses to the MDE or preview pane depending on the editor mode.
+
+### editor:focus-mde {{ selector: 'body' }}
+
+Moves focus to the MDE.
+
+### editor:focus-preview {{ selector: 'body' }}
+
+Moves focus to the preview pane.
+
+### editor:go-char-left {{ selector: '.mde-cm-wrapper' }}
+
+Moves the cursor to one character left.
+
+### editor:go-char-right {{ selector: '.mde-cm-wrapper' }}
+
+Moves the cursor to one character right.
+
+### editor:go-doc-end {{ selector: '.mde-cm-wrapper' }}
+
+Moves the cursor to the end of the document.
+
+### editor:go-doc-start {{ selector: '.mde-cm-wrapper' }}
+
+Moves the cursor to the start of the document.
+
+### editor:go-group-left {{ selector: '.mde-cm-wrapper' }}
+
+Moves the cursor to one group left.
+
+### editor:go-group-right {{ selector: '.mde-cm-wrapper' }}
+
+Moves the cursor to one group right.
+
+### editor:go-line-down {{ selector: '.mde-cm-wrapper' }}
+
+Moves the cursor to one line down.
+
+### editor:go-line-end {{ selector: '.mde-cm-wrapper' }}
+
+Moves the cursor to the line end.
+
+### editor:go-line-left {{ selector: '.mde-cm-wrapper' }}
+
+Moves the cursor to the line left.
+
+### editor:go-line-right {{ selector: '.mde-cm-wrapper' }}
+
+Moves the cursor to the line right.
+
+### editor:go-line-start {{ selector: '.mde-cm-wrapper' }}
+
+Moves the cursor to the line start.
+
+### editor:go-line-up {{ selector: '.mde-cm-wrapper' }}
+
+Moves the cursor to one line up.
+
+### editor:go-page-down {{ selector: '.mde-cm-wrapper' }}
+
+Moves the cursor to one page down.
+
+### editor:go-page-up {{ selector: '.mde-cm-wrapper' }}
+
+Moves the cursor to one page up.
+
+### editor:go-word-left {{ selector: '.mde-cm-wrapper' }}
+
+Moves the cursor to one word left.
+
+### editor:go-word-right {{ selector: '.mde-cm-wrapper' }}
+
+Moves the cursor to one word right.
+
+### editor:indent {{ selector: '.mde-cm-wrapper' }}
+
+Indents the currently selected line(s).
+
+### editor:indent-less {{ selector: '.mde-cm-wrapper' }}
+
+Unindents the currently selected line(s).
+
+### editor:indent-more {{ selector: '.mde-cm-wrapper' }}
+
+Indents one more the currently selected line(s).
+
+### editor:insert-images {{ selector: '.mde-cm-wrapper' }}
+
+Inserts image files at the cursor to the editing note.
+
+<Row>
+  <Col>
+
+    <Properties sub title="Arguments">
+      <Property name="pos" type="object">
+        Position to insert with the following keys:
+
+        <Properties sub>
+          <Property name="ch" type="number">
+            Character position.
+          </Property>
+          <Property name="line" type="number">
+            Line position.
+          </Property>
+        </Properties>
+
+      </Property>
+      <Property name="files" type="FileList|array">
+        [FileList](https://developer.mozilla.org/en-US/docs/Web/API/FileList), or an Array of [File](https://developer.mozilla.org/en-US/docs/Web/API/File) or [NativeImage](https://electronjs.org/docs/api/native-image) to insert.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+    You can override the default file drop handler like so:
+
+    ```js {{ title: 'Example' }}
+    const mde = inkdrop.getActiveEditorOrThrowError()
+    inkdrop.commands.add(mde.wrapper.wrapper, {
+      'editor:insert-images': e => {
+        const { files, pos } = e
+        // Do something
+
+        // prevent the default behavior
+        e.stopPropagation()
+      }
+    })
+    ```
+  </Col>
+</Row>
+
+### editor:jump-to-line {{ selector: '.mde-cm-wrapper' }}
+
+Toggles a dialog which allows you to jump to the line at the specified number.
+
+### editor:kill-line {{ selector: '.mde-cm-wrapper' }}
+
+Deletes the line at the cursor.
+
+### editor:new-line {{ selector: '.mde-cm-wrapper' }}
+
+Inserts a new line below the cursor.
+
+### editor:open-line {{ selector: '.mde-cm-wrapper' }}
+
+Inserts a new line above the cursor.
+
+### editor:redo-selection {{ selector: '.mde-cm-wrapper' }}
+
+Redoes the last selection.
+
+### editor:replace {{ selector: 'body' }}
+
+Initiates the replace sequence in the editor.
+
+### editor:replace-selection {{ selector: '.mde-cm-wrapper' }}
+
+Replaces selected text with the given text.
+
+<Properties sub title="Arguments">
+  <Property name="text" type="string">
+    String, the text to replace.
+  </Property>
+</Properties>
+
+### editor:save-editor-scroll
+
+<Warning>It's a private command</Warning>
+
+### editor:save-preview-scroll
+
+<Warning>It's a private command</Warning>
+
+### editor:scroll-editor-to-line {{ selector: 'body' }}
+
+Scrolls the editor to the given line.
+
+<Properties sub title="Arguments">
+  <Property name="line" type="number">
+    Number, the destination line number.
+  </Property>
+</Properties>
+
+### editor:scroll-preview-to-line {{ selector: 'body' }}
+
+Scrolls the preview to the given line.
+
+<Properties sub title="Arguments">
+  <Property name="line" type="number">
+    Number, the destination line number.
+  </Property>
+</Properties>
+
+### editor:select-all {{ selector: '.mde-cm-wrapper' }}
+
+Selects all text in the editor.
+
+### editor:select-lines-downward {{ selector: '.mde-cm-wrapper' }}
+
+Adds a cursor downward.
+
+### editor:select-lines-upward {{ selector: '.mde-cm-wrapper' }}
+
+Adds a cursor upward.
+
+### editor:single-selection {{ selector: '.mde-cm-wrapper' }}
+
+Removes all cursors except the primary one.
+
+### editor:sync-editor-scroll {{ selector: 'body' }}
+
+Syncs the scroll position of the editor with the same position of the preview pane.
+
+### editor:sync-preview-scroll {{ selector: 'body' }}
+
+Syncs the scroll position of the preview pane with the same position of the editor.
+
+### editor:focus-title {{ selector: 'body' }}
+
+Moves focus to the title input bar of the editor.
+
+### editor:toggle-overwrite {{ selector: '.mde-cm-wrapper' }}
+
+Toggles overwrite mode.
+
+### editor:toggle-task-list {{ selector: '.mde-cm-wrapper' }}
+
+Toggles task list to the current selections.
+
+### editor:transpose-chars {{ selector: '.mde-cm-wrapper' }}
+
+Transposes characters at the cursor.
+
+### editor:undo-selection {{ selector: '.mde-cm-wrapper' }}
+
+Undoes the last selection.
+
+### editor:unindent {{ selector: '.mde-cm-wrapper' }}
+
+Unindents the current lines.
+
+### core:toggle-editor-drawer {{ selector: 'body' }}
+
+Toggle editor drawer.
+
+### core:show-editor-drawer {{ selector: 'body' }}
+
+Show editor drawer.
+
+### core:close-editor-drawer {{ selector: 'body' }}
+
+Hide editor drawer.
+
+---
+
+## Export commands
+
+### export-as-html:export {{ selector: 'body' }}
+
+Exports selected notes on the note list bar as HTML to disk.
+
+### export-as-markdown:all {{ selector: 'body' }}
+
+Exports all notes as Markdown to disk.
+
+### export-as-markdown:single {{ selector: 'body' }}
+
+Exports the editing note as Markdown to disk.
+
+### export-print:export-as-pdf {{ selector: 'body' }}
+
+Exports the editing note as PDF to disk.
+
+### export-print:print {{ selector: 'body' }}
+
+Prints the editing note.
+
+---
+
+## Import commands
+
+### import-html:import-from-file {{ selector: 'body' }}
+
+Imports a note from a HTML file.
+---
+
+## View commands
+
+### view:sort-by-date-created {{ selector: 'body' }}
+
+Sorts the note list by date created.
+
+### view:sort-by-date-updated {{ selector: 'body' }}
+
+Sorts the note list by date updated.
+
+### view:sort-by-title {{ selector: 'body' }}
+
+Sorts the note list by title.
+
+### view:sort-in-ascending {{ selector: 'body' }}
+
+Sorts the note list in ascending order.
+
+### view:sort-in-descending {{ selector: 'body' }}
+
+Sorts the note list in descending order.
+
+### view:toggle-distraction-free {{ selector: 'body' }}
+
+Toggles distraction-free mode.
+
+### view:toggle-preview {{ selector: 'body' }}
+
+Toggles the preview pane.
+
+### view:toggle-side-by-side {{ selector: 'body' }}
+
+Toggles the side-by-side mode.
+
+### view:toggle-sidebar {{ selector: 'body' }}
+
+Toggles the side bar.
+
+---
+
+## Window commands
+
+### window:close {{ selector: 'body' }}
+
+Closes the window.
+
+### window:decrease-font-size {{ selector: 'body' }}
+
+Decreases the font size in the editor.
+
+### window:increase-font-size {{ selector: 'body' }}
+
+Increases the font size in the editor.
+
+### window:install-shell-commands {{ selector: 'body' }}
+
+Installs `ipm` command to your system.
+
+### window:new-inkdrop-window {{ selector: 'body' }}
+
+Opens up a new window.
+
+### window:reload {{ selector: 'body' }}
+
+Reloads the window.
+
+### window:toggle-dev-tools {{ selector: 'body' }}
+
+Toggles the Developer Tools window.
+
+### window:toggle-full-screen {{ selector: 'body' }}
+
+Toggles full screen mode.

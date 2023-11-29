@@ -222,6 +222,10 @@ export const navigation = [
         title: 'Use ES modules in your plugin',
         href: '/guides/es-modules',
       },
+      {
+        title: 'List of commands',
+        href: '/guides/list-of-commands',
+      },
     ],
   },
   {
@@ -267,8 +271,20 @@ export const navigation = [
     title: 'Event Subscription (event-kit)',
     links: [
       { title: 'Disposable', href: '/event-subscription/disposable' },
-      { title: 'Composite Disposable', href: '/event-subscription/composite-disposable' },
+      {
+        title: 'Composite Disposable',
+        href: '/event-subscription/composite-disposable',
+      },
       { title: 'Emitter', href: '/event-subscription/emitter' },
+    ],
+  },
+  {
+    title: 'Appendix',
+    links: [
+      {
+        title: 'Plugin Migration Guide from v3 to v4',
+        href: '/appendix/plugin-migration-from-v3-to-v4',
+      },
     ],
   },
 ]
