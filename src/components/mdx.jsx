@@ -58,6 +58,10 @@ export const h2 = function H2(props) {
   return <Heading level={2} {...props} />
 }
 
+export const h3 = function H3(props) {
+  return <Heading level={3} {...props} />
+}
+
 function InfoIcon(props) {
   return (
     <svg viewBox="0 0 16 16" aria-hidden="true" {...props}>
