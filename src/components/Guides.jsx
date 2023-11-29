@@ -3,26 +3,25 @@ import { Heading } from '@/components/Heading'
 
 const guides = [
   {
-    href: '/authentication',
-    name: 'Authentication',
-    description: 'Learn how to authenticate your API requests.',
+    href: '/guides/create-a-theme',
+    name: 'Create a theme',
+    description: 'A tutorial on how to create a theme.',
   },
   {
-    href: '/pagination',
-    name: 'Pagination',
-    description: 'Understand how to work with paginated responses.',
+    href: '/guides/plugin-word-count',
+    name: 'Create a plugin',
+    description: 'A tutorial on how to create a plugin.',
   },
   {
-    href: '/errors',
-    name: 'Errors',
+    href: '/guides/access-the-local-database',
+    name: 'Access the database',
     description:
-      'Read about the different types of errors returned by the API.',
+      'Learn how to access the local database from plugins and external programs.',
   },
   {
-    href: '/webhooks',
-    name: 'Webhooks',
-    description:
-      'Learn how to programmatically configure webhooks for your app.',
+    href: '/guides/create-a-blog-using-astro',
+    name: 'Create a blog using Astro',
+    description: 'A tutorial on how to create a blog using Astro.',
   },
 ]
 

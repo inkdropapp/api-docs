@@ -1,0 +1,514 @@
+export const metadata = {
+  title: 'Files',
+  description:
+    'Files in Inkdrop are primarily used as image attachments that can be inserted into notes.',
+}
+
+# Files
+
+Files in Inkdrop are primarily used as image attachments that can be inserted into notes.{{ className: 'lead' }}
+
+## The file model
+
+Files capture all the essential details about the image attachments, such as content type, data, associated note IDs, and other crucial metadata.
+
+<Row>
+  <Col>
+
+    ### Properties
+
+    <Properties>
+      <Property name="_id" type="string">
+        The unique document ID which should start with `file:` and the remains are randomly generated string.
+      </Property>
+      <Property name="_rev" type="string">
+        This is a CouchDB specific field. The current MVCC-token/revision of this document (mandatory and immutable).
+      </Property>
+      <Property name="contentLength" type="number">
+        The content length of the file, with a value \<= 10485760.
+      </Property>
+      <Property name="contentType" type="string">
+        The MIME type of the content. **One of:** `"image/png"`, `"image/jpeg"`, `"image/jpg"`, `"image/svg+xml"`, `"image/gif"`, `"image/heic"`, or `"image/heif"`. Length is between 0 and 128 characters.
+      </Property>
+      <Property name="createdAt" type="number">
+        The date time when the note was created, represented with Unix timestamps in milliseconds.
+      </Property>
+      <Property name="name" type="string">
+        The file name, with a length between 1 and 128 characters.
+      </Property>
+      <Property name="publicIn" type="array">
+        An array of the note IDs where the file is included.
+      </Property>
+      <Property name="_attachments.index" type="object">
+        The attachment object with the following keys:
+
+        <Properties sub>
+          <Property name="content_type" type="string">
+            The content type of the file. **One of:** `"image/png"`, `"image/jpeg"`, `"image/jpg"`, `"image/svg+xml"`, `"image/gif"`, `"image/heic"`, or `"image/heif"`.
+          </Property>
+          <Property name="data" type="string or object">
+            The file data encoded with base64.
+          </Property>
+        </Properties>
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    ```json {{ title: 'The file object' }}
+    {
+      "createdAt": 1561687797115,
+      "name": "nora_small.gif",
+      "contentType": "image/gif",
+      "contentLength": 1219,
+      "md5digest": "019926e3f92769731547ca2ffc655bb7",
+      "publicIn": [
+        "note:Aa70pM075"
+      ],
+      "_attachments": {
+        "index": {
+          "content_type": "image/gif",
+          "digest": "md5-AZkm4/knaXMVR8ov/GVbtw==",
+          "revpos": 4,
+          "data": "R0lGODlhUAA2APcAAP///wAAAAAAyAgTAAwAAABuAG8AcgBhAF8AcwBtAGEAbABsAC4AZwBpAGYAAAD8dxa1/Hcttfx3ZPoSAGz6EgAAAAAAePgSAAACAAAAABMASCAYAHgBEwD3AQAAULb8d3gBEwB4ARMAAAAAAID6EgBABhMAAm7id0e/33fo6G0ACEoXAAhKFwBMtOB3CEoXAHgBEwB4ARMACEoXAKx+33dABhMA6BdZAOjobQAM+RIAPqPedxjlYQABAAAAAQAFAHgBEwB4ARMAeAETAHgBEwAYAQEAeAETAHgBEwBU+RIAJAAAAHA5+HcAABMASA0TACQAAAC4axMALPkSAAACAADo+hIAlSv4d7g5+Hf/////+PoSACey/HdIDRMAAAAAAAAAAACoc0gAgB0YAKD5EgAAAAAA5Tj4dwAAEwB4chcAAAAAAHz5EgCIBhMAMPoSAJUr+HcgOfh3/////0D6EgBAt/x32AcTAIByFwCUchcAgHIXAAEAAAA4HhgAUCAYAEggGABoARMAAAAIAgwAAACiAKQAoVP4d5Dx/HeGU/h3mGcTAHhnEwCUchcAAAAAAAAAAAA4+hIAlSv4d0hU+Hf/////SPoSAAAAEwAHAAAAAHIXAIByFwABAAAAAWcTABDw/Hew+RIAgPoSAID6EgCVK/h3GDb4d/////+Q+hIAiVfmdwAAEwAAAAAAAQAAAF7P3ncAAAAAAQAAAADg/X9fAFMAfgAxAIByFwAAAAAASAEAAFT6EgAMAAAAsP8SAGwT6ndoHuV3/////xg2+HfcTUMAgHIXAAAAEwAAAAAAIAAAAMAqdHE16sIBAJgBOCQAAAAA15txNerCAQAAAACAAQAAyAgTAAwAAABub3JhuGsTACABAABpZgAAXgoCAF4KAgA0+xIAlSv4dwg2+Hf/////RPsSADaR5XcAABMACAAUABgBAABez953AAAAAAAAAAAAAAAAAAAAAMTARAALbBMAbNEVAA9sEwD/c0gA/////7hrEwAuwUQAC2wTACH5BAEAAAAALAAAAABQADYAQAj/AAEIHEiwoMGDCBMqXMiwocOHECEGmEgxYsKKAjECoMhxosWMHUF6LNixpMgAJDUSLMlSYciTKBe2RMhy5MCaKl1y/GjwZUqPM23uhGlzY0yePHHiXOnTJ9KnUKPezCnV6VSqFk0WfTh0o1GlV486NPl1a9mGVssCXfoTK1aaSuMOZRvWqVmpF2M23VpzKlOxeAMLHky4sOHDaLsKflu4L96Zde9yBYvUMVvFk+cyllmULMy6mYW+lUu6NMqKptsyTPs0qOSDm+Gapkx57Gmos7vWPqv2aOzBtVWGxCgcMOLPvUHT/Xqcs+O8z5tLn0498O/quK9jr4x5u3XPj7VHoH35+iN4otmHG+eutzPkrOrF6xS9FrX8yKe7h7Yf/H5y3knRF59G93mm319mueVebwe2JeB8uaGHX2pWNcicbP2R1lN0J61moW317aQfZh86GB555SHIXm6K7eacV+axCJmIJIK04XgypoaggSnut5R7dOlm13qHySVSWFddaCN1yxXnWkrV6UjUc/5V1eBeQxIpnZQTsubdij1+KWZBAQEAOw=="
+        }
+      },
+      "_id": "file:bhi701rgp",
+      "_rev": "4-21e2bcd1d6540d73b76104fe8d3a759f"
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## The file class
+
+<Row>
+  <Col>
+
+    The `File` class is a wrapper class of the file, providing various methods for its operations such as loading, validation, saving, and serialization.
+
+    ### Methods
+
+    <Properties>
+      <Property name="static loadWithId(docid: string)">
+        Loads a file by its ID from the local database and returns a new instance of the `File`.
+      </Property>
+      <Property name="static createFromFile(file: Readonly<File>)">
+        Creates a new file attachment from the provided file and returns a new instance of the `File`.
+      </Property>
+      <Property name="static createFromNativeImage(nativeImage: Record<string, any>, filename?: string)">
+        Creates a new file attachment from the provided native image and returns a new instance of the `File`.
+      </Property>
+      <Property name="static createFromFilePath(filePath: string)">
+        Creates a new file attachment from the provided file path and returns a new instance of the `File`.
+      </Property>
+      <Property name="constructor(initialValues: Partial<IDFile> = {})">
+        Initializes a new `File` instance with the given initial values. If no values are provided, it assigns default values.
+      </Property>
+      <Property name="validate()">
+        Validates the current file instance based on the predefined validation rules. If valid, returns an empty array. If not, returns the list of validation errors.
+      </Property>
+      <Property name="save()">
+        Validates and then saves the file to the local database. Throws an error if the validation fails or if there's a problem with the saving process.
+      </Property>
+      <Property name="setFile(file: Readonly<File>)">
+        Sets the file content of the current instance with the provided file.
+      </Property>
+      <Property name="setPNGBuffer(buffer: Buffer)">
+        Sets the file content of the current instance with the provided PNG buffer.
+      </Property>
+      <Property name="getAsBase64()">
+        Retrieves the file attachment's data as a base64 string.
+      </Property>
+      <Property name="getAsBuffer()">
+        Retrieves the file attachment's data as a buffer.
+      </Property>
+      <Property name="saveFileSync(dirToSave: string)">
+        Synchronously saves the file to the provided directory and returns the saved file's name.
+      </Property>
+      <Property name="toObject()">
+        Converts the file instance into a plain JavaScript object.
+      </Property>
+      <Property name="toJson()">
+        Serializes the file instance into a JSON string.
+      </Property>
+      <Property name="toMarkdown()">
+        Converts the file instance into a markdown image link format.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+    ```js {{ title: 'Import the class' }}
+    const { File } = require('inkdrop').models
+    ```
+
+    ```js {{ title: 'Load a file from the database' }}
+    const file = await File.loadWithId('file:9dc6a7a7')
+    ```
+
+    ```js {{ title: 'Create a new file' }}
+    const file = new File({
+      name: 'My file'
+    })
+    ```
+
+    ```js {{ title: 'Load from a file' }}
+    const file = file.createFromFilePath('/path/to/file.png')
+    ```
+
+    ```js {{ title: 'Change its name' }}
+    file.name = 'Updated file'
+    ```
+
+    ```js {{ title: 'Save the changes' }}
+    await file.save()
+    ```
+
+    ```js {{ title: 'Convert the file into a plain object' }}
+    const object = file.toObject()
+    ```
+
+    ```js {{ title: 'Convert the file into JSON' }}
+    const json = file.toJson()
+    ```
+
+    ```js {{ title: 'Convert the file to markdown' }}
+    const markdown = file.toMarkdown()
+    // -> ![Image attachment](inkdrop://file:9dc6a7a7)
+    ```
+  </Col>
+</Row>
+
+
+---
+
+## Retrieve a file {{ label: 'get(docId, options)' }}
+
+<Row>
+  <Col>
+
+    Retrieve a file with the given ID.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="docId" type="string" required>
+      The file ID
+      </Property>
+      <Property name="options" type="object">
+      Options. See [PouchDB's documentation](https://pouchdb.com/api.html#fetch_document) for available options.
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns a file if a valid file ID was provided.
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const file = await db.files.get('file:bhi701rgp', { attachments: true })
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "createdAt": 1561687797115,
+      "name": "nora_small.gif",
+      "contentType": "image/gif",
+      "contentLength": 1219,
+      "md5digest": "019926e3f92769731547ca2ffc655bb7",
+      "publicIn": [
+        "note:Aa70pM075"
+      ],
+      "_attachments": {
+        "index": {
+          "content_type": "image/gif",
+          "digest": "md5-AZkm4/knaXMVR8ov/GVbtw==",
+          "revpos": 4,
+          "data": "R0lGODlhUAA2APcA...subdij1+KWZBAQEAOw=="
+        }
+      },
+      "_id": "file:bhi701rgp",
+      "_rev": "4-21e2bcd1d6540d73b76104fe8d3a759f"
+    }
+    ```
+  </Col>
+</Row>
+
+---
+
+## List all files {{ label: 'all()' }}
+
+<Row>
+  <Col>
+
+    Retrieve a list of your files.
+
+    ### Parameters
+
+    No parameters
+
+    ### Returns
+
+    Returns a list of files.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const list = await db.files.all()
+    ```
+
+    </CodeGroup>
+
+    ```js {{ title: 'Response' }}
+    [
+      {
+        createdAt: 1537774057842,
+        name: 'IMG_1004 copy.JPG',
+        contentType: 'image/jpeg',
+        contentLength: 40020,
+        md5digest: '9e00f2a9242499ccd3c47dbfa802d548',
+        revpos: 1,
+        _attachments: {
+          index: {
+            digest: 'md5-ngDyqSQkmczTxH2/qALVSA==',
+            content_type: 'image/jpeg',
+            revpos: 1,
+            data: '...(base64)...'
+          }
+        }
+      },
+      ...
+    ]
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Create a file ID {{ label: 'createId(): string' }}
+
+<Row>
+  <Col>
+
+    Creates new file ID which is String
+
+    ### Parameters
+
+    No parameters
+
+    ### Returns
+
+    Returns a new file ID.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const fileId = await db.files.createId()
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    "file:ak0s1ce6"
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Validate a file ID {{ label: 'validateDocId(): boolean' }}
+
+<Row>
+  <Col>
+
+    Tests if the given `docId` is a valid file ID
+
+    ### Parameters
+
+    <Properties>
+      <Property name="docId" type="string" required>
+      A document ID to validate
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns `true` if valid
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const isValid = await db.files.validateDocId('file:ak0s1ce6')
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    true
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Create or update a file {{ label: 'put(doc)' }}
+
+<Row>
+  <Col>
+    Create a new file or update an existing note.
+    If the file already exists, you must specify its revision `_rev`, otherwise a conflict will occur.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="doc" type="object" required>
+      A File data to store
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    It throws an `InvalidDataError` if the given doc was invalid.
+    The response contains the `id` of the document, the new `rev`, and an `ok` to reassure you that everything is okay.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const result = await db.files.put({
+      _id: 'file:9IoGtoCuv',
+      "createdAt": 1561687797115,
+      "name": "nora_small.gif",
+      "contentType": "image/gif",
+      "contentLength": 1219,
+      "md5digest": "019926e3f92769731547ca2ffc655bb7",
+      "publicIn": [],
+      "_attachments": {
+        "index": {
+          "content_type": "image/gif",
+          "digest": "md5-AZkm4/knaXMVR8ov/GVbtw==",
+          "revpos": 4,
+          "data": "R0lGODlhUAA2APcA...subdij1+KWZBAQEAOw=="
+        }
+      }
+    })
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "ok": true,
+      "id": "file:9IoGtoCuv",
+      "rev": "1-a6157a5ea545c99b00ff904eef05fd9f"
+    }
+    ```
+
+  </Col>
+</Row>
+
+
+---
+
+## Remove a file {{ label: 'remove(docId)' }}
+
+<Row>
+  <Col>
+
+    Deletes a file with the given file ID.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="docId" type="string" required>
+      A file ID to delete.
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    The response contains the `id` of the document, the new `rev`, and an `ok` to reassure you that everything is okay.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const result = await db.files.remove("file:9IoGtoCuv")
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "ok": true,
+      "id": "file:9IoGtoCuv",
+      "rev": "2-9af304be281790604d1d8a4b0f4c9adb"
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Count number of files {{ label: 'countAll()' }}
+
+<Row>
+  <Col>
+
+    Counts a number of files in the database.
+
+    ### Parameters
+
+    No parameters.
+
+    ### Returns
+
+    Returns a number of files stored in the database.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const num = await db.files.countAll()
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    5
+    ```
+
+  </Col>
+</Row>
+
+

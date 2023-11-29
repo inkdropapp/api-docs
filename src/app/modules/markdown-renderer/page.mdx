@@ -1,0 +1,216 @@
+export const metadata = {
+  title: 'Markdown Renderer',
+  description: "Inkdrop's markdown rendering system is built on top of remark, a markdown processor powered by plugins part of the unified collective.",
+}
+
+# Markdown Renderer
+
+Inkdrop's markdown rendering system is built on top of [remark](https://github.com/remarkjs/remark), a markdown processor powered by [plugins](https://github.com/remarkjs/remark/tree/master/doc/plugins.md) part of [the unified collective](https://github.com/unifiedjs/unified).
+You can access a global instance of this class using the code provided below.{{ className: 'lead' }}
+
+```js
+const { markdownRenderer } = require('inkdrop')
+```
+
+<Note>
+  **Compatibility note**: Inkdrop (>=5.6.0) uses **unified@10**, **remark@14**, **remark-rehype@10**.
+</Note>
+
+---
+
+## remarkPlugins
+
+<Row>
+  <Col>
+    An array of custom [Remark plugins](https://github.com/remarkjs/remark#plugins).
+
+    **See also**: [math plugin](https://github.com/inkdropapp/inkdrop-math)
+  </Col>
+  <Col sticky>
+    Here is a plugin that adds your custom Remark plugin:
+
+    <CodeGroup title="Example plugin">
+    ```js
+    const { markdownRenderer } = require('inkdrop')
+
+    module.exports = {
+      activate() {
+        if (markdownRenderer) {
+          markdownRenderer.remarkPlugins.push(YOUR_PLUGIN)
+        }
+      },
+      deactivate() {
+        if (markdownRenderer) {
+          markdownRenderer.remarkPlugins = markdownRenderer.remarkPlugins.filter(
+            plugin => YOUR_PLUGIN !== plugin
+          )
+        }
+      }
+    }
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## rehypePlugins
+
+<Row>
+  <Col>
+    The Markdown notes are converted from Markdown to HTML.
+    The HTML data is then processed with [Rehype](https://github.com/rehypejs/rehype).
+    You can extend the process by adding your custom [Rehype plugins](https://github.com/rehypejs/rehype#plugins).
+  </Col>
+  <Col sticky>
+    Here is a plugin that adds your custom Rehype plugin:
+
+    <CodeGroup title="Example plugin">
+    ```js
+    const { markdownRenderer } = require('inkdrop')
+
+    module.exports = {
+      activate() {
+        if (markdownRenderer) {
+          markdownRenderer.rehypePlugins.push(YOUR_PLUGIN)
+        }
+      },
+      deactivate() {
+        if (markdownRenderer) {
+          markdownRenderer.rehypePlugins = markdownRenderer.remarkPlugins.filter(
+            plugin => YOUR_PLUGIN !== plugin
+          )
+        }
+      }
+    }
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## remarkReactComponents
+
+<Row>
+  <Col>
+    This property is an object that maps HTML element names to React components.
+    You can override default elements (such as `a`, `p`, etc.) by passing your custom components.
+
+    Check out [rehype-react](https://github.com/rehypejs/rehype-react#optionscomponents) for more details.
+
+    - Example plugin: [toc](https://github.com/inkdropapp/inkdrop-toc)
+
+    <Warning>
+    Do not use `remarkReactComponents` to override the click events of `a` HTML elements.
+    Instead, use the `events` property.
+    </Warning>
+  </Col>
+  <Col sticky>
+    If you want to override the rendering of `a` HTML elements with a custom component, you can do it as shown:
+
+    <CodeGroup title="Override Anchor Element">
+    ```js
+    class Anchor extends React.Component {
+      render() {
+        // ...
+      }
+    }
+    markdownRenderer.remarkReactComponents.a = Anchor
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## remarkCodeComponents
+
+<Row>
+  <Col>
+    Allows you to render code blocks with custom React components.
+    You can define a component for a specific language as demonstrated:
+
+    - Example plugin: [mermaid](https://github.com/inkdropapp/inkdrop-mermaid)
+  </Col>
+  <Col sticky>
+    <CodeGroup title="JavaScript Code Block">
+    ```js
+    const JSCodeBlock = props => {
+      const { lang, title, lineAt } = props
+      const code = props.children[0]
+      return (
+        <pre>
+          {/* Custom JS block */}
+        </pre>
+      )
+    }
+
+    markdownRenderer.remarkCodeComponents['javascript'] = JSCodeBlock
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## events
+
+<Row>
+  <Col>
+    The `events` property allows you to listen to events emitted by the renderer.
+    An event handler can be an `async` function.
+    Here is a list of events that you can listen to:
+
+    <Properties>
+      <Property name="a:click">
+        Emitted when `a` link is clicked. Returns `true` if the event is handled.
+        <Properties sub>
+          <Property name="event" type="React.MouseEvent<HTMLAnchorElement, MouseEvent>">
+          Mouse event
+          </Property>
+        </Properties>
+      </Property>
+      <Property name="checkbox:change">
+        Emitted when `checkbox` is clicked. Returns `true` if the event is handled.
+
+        <Properties sub>
+          <Property name="event" type="React.ChangeEvent<HTMLInputElement>">
+          Change event
+          </Property>
+          <Property name="detail" type="{ checked: boolean numLine: number }">
+          `checked` indicates whether the checkbox is checked or not.
+          `numLine` is the line number of the checkbox.
+          </Property>
+        </Properties>
+      </Property>
+    </Properties>
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Listening to the renderer events">
+    ```js
+    useEffect(() => {
+      const app = getApp()
+      const disposables = [
+        events.on('checkbox:change', (_e, { checked, numLine }) => {
+          console.log(`checkbox ${checked ? 'checked' : 'unchecked'} at line ${numLine}`)
+        }),
+        events.on('a:click', e => {
+          const target = e.target as HTMLAnchorElement
+          const { href } = target
+
+          console.log(`clicked link: ${href}`)
+          // Should return true if the event is handled
+          return true
+        })
+      ]
+      return () => {
+        disposables.forEach(d => d())
+      }
+    }, [])
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+

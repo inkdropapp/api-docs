@@ -14,14 +14,16 @@ import { MobileSearch, Search } from '@/components/Search'
 import { ThemeToggle } from '@/components/ThemeToggle'
 
 function TopLevelNavItem({ href, children }) {
+  const isInternal = href && !href.startsWith('https:')
+  const LinkComponent = isInternal ? Link : 'a'
   return (
     <li>
-      <Link
+      <LinkComponent
         href={href}
         className="text-sm leading-5 text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
       >
         {children}
-      </Link>
+      </LinkComponent>
     </li>
   )
 }
@@ -61,16 +63,24 @@ export const Header = forwardRef(function Header({ className }, ref) {
       <Search />
       <div className="flex items-center gap-5 lg:hidden">
         <MobileNavigation />
-        <Link href="/" aria-label="Home">
+        <Link href="/" aria-label="Home" className="flex">
           <Logo className="h-6" />
+          <div className="ml-2 inline-block font-semibold">Developers</div>
+          <sup className="pl-1 text-xs text-orange-600 dark:text-yellow-400">
+            beta
+          </sup>
         </Link>
       </div>
       <div className="flex items-center gap-5">
         <nav className="hidden md:block">
           <ul role="list" className="flex items-center gap-8">
             <TopLevelNavItem href="/">API</TopLevelNavItem>
-            <TopLevelNavItem href="#">Documentation</TopLevelNavItem>
-            <TopLevelNavItem href="#">Support</TopLevelNavItem>
+            <TopLevelNavItem href="https://docs.inkdrop.app/">
+              User Manual
+            </TopLevelNavItem>
+            <TopLevelNavItem href="https://forum.inkdrop.app/">
+              Support
+            </TopLevelNavItem>
           </ul>
         </nav>
         <div className="hidden md:block md:h-5 md:w-px md:bg-zinc-900/10 md:dark:bg-white/15" />
@@ -79,7 +89,7 @@ export const Header = forwardRef(function Header({ className }, ref) {
           <ThemeToggle />
         </div>
         <div className="hidden min-[416px]:contents">
-          <Button href="#">Sign in</Button>
+          <Button href="https://my.inkdrop.app/">Log in</Button>
         </div>
       </div>
     </motion.div>

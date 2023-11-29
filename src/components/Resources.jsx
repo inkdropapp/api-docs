@@ -7,16 +7,22 @@ import { GridPattern } from '@/components/GridPattern'
 import { Heading } from '@/components/Heading'
 import { ChatBubbleIcon } from '@/components/icons/ChatBubbleIcon'
 import { EnvelopeIcon } from '@/components/icons/EnvelopeIcon'
+import { NoteIcon } from '@/components/icons/NoteIcon'
+import { NotebookIcon } from '@/components/icons/NotebookIcon'
 import { UserIcon } from '@/components/icons/UserIcon'
 import { UsersIcon } from '@/components/icons/UsersIcon'
+import { TagIcon } from '@/components/icons/TagIcon'
+import { ImageFileIcon } from '@/components/icons/FileIcon'
+import { UtilsIcon } from '@/components/icons/UtilsIcon'
+import { DatabaseIcon } from '@/components/icons/DatabaseIcon'
 
 const resources = [
   {
-    href: '/contacts',
-    name: 'Contacts',
+    href: '/data-access/notes',
+    name: 'Notes',
     description:
-      'Learn about the contact model and how to create, retrieve, update, delete, and list contacts.',
-    icon: UserIcon,
+      'Learn about the note model and the note class, which provide the core functionality for handling notes.',
+    icon: NoteIcon,
     pattern: {
       y: 16,
       squares: [
@@ -26,11 +32,11 @@ const resources = [
     },
   },
   {
-    href: '/conversations',
-    name: 'Conversations',
+    href: '/data-access/books',
+    name: 'Notebooks',
     description:
-      'Learn about the conversation model and how to create, retrieve, update, delete, and list conversations.',
-    icon: ChatBubbleIcon,
+      'Notebooks are how notes are organized in Inkdrop and are commonly used to separate notes by category, project, or purpose.',
+    icon: NotebookIcon,
     pattern: {
       y: -6,
       squares: [
@@ -40,11 +46,11 @@ const resources = [
     },
   },
   {
-    href: '/messages',
-    name: 'Messages',
+    href: '/data-access/tags',
+    name: 'Tags',
     description:
-      'Learn about the message model and how to create, retrieve, update, delete, and list messages.',
-    icon: EnvelopeIcon,
+      "Tags let you add keywords to notes, making them easier to find and browse when you've got a lot of them.",
+    icon: TagIcon,
     pattern: {
       y: 32,
       squares: [
@@ -54,11 +60,33 @@ const resources = [
     },
   },
   {
-    href: '/groups',
-    name: 'Groups',
+    href: '/data-access/files',
+    name: 'Files',
     description:
-      'Learn about the group model and how to create, retrieve, update, delete, and list groups.',
-    icon: UsersIcon,
+      'Files in Inkdrop are primarily used as image attachments that can be inserted into notes.',
+    icon: ImageFileIcon,
+    pattern: {
+      y: 22,
+      squares: [[0, 1]],
+    },
+  },
+  {
+    href: '/data-access/utils',
+    name: 'Utilities',
+    description:
+      'Provides convenient methods for managing documents in the local database.',
+    icon: UtilsIcon,
+    pattern: {
+      y: 22,
+      squares: [[0, 1]],
+    },
+  },
+  {
+    href: '/data-access/local-http-server',
+    name: 'Local HTTP server',
+    description:
+      'The Inkdrop client app can open a simple HTTP server so that you can access the data from an external program easily.',
+    icon: DatabaseIcon,
     pattern: {
       y: 22,
       squares: [[0, 1]],
@@ -143,11 +171,11 @@ function Resource({ resource }) {
   )
 }
 
-export function Resources() {
+export function Resources(props) {
   return (
     <div className="my-16 xl:max-w-none">
-      <Heading level={2} id="resources">
-        Resources
+      <Heading level={props.level || 2} id="data-access">
+        Data Access
       </Heading>
       <div className="not-prose mt-4 grid grid-cols-1 gap-8 border-t border-zinc-900/5 pt-10 dark:border-white/5 sm:grid-cols-2 xl:grid-cols-4">
         {resources.map((resource) => (
