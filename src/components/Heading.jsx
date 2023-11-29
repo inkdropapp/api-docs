@@ -59,18 +59,18 @@ function Anchor({ id, inView, children }) {
 }
 
 export function Heading({
-  level = 2,
   children,
-  id,
   tag,
   label,
+  level,
   anchor = true,
   warning,
   selector,
   ...props
 }) {
+  level = level ?? 2
   let Component = `h${level}`
-  let ref = useRef()
+  let ref = useRef(null)
   let registerHeading = useSectionStore((s) => s.registerHeading)
 
   let inView = useInView(ref, {
@@ -80,7 +80,7 @@ export function Heading({
 
   useEffect(() => {
     if (level === 2 || level === 3) {
-      registerHeading({ id, ref, offsetRem: tag || label ? 8 : 6 })
+      registerHeading({ id: props.id, ref, offsetRem: tag || label ? 8 : 6 })
     }
   })
 
@@ -89,12 +89,11 @@ export function Heading({
       <Eyebrow tag={tag} label={label} />
       <Component
         ref={ref}
-        id={anchor ? id : undefined}
         className={tag || label ? 'mt-2 scroll-mt-32' : 'scroll-mt-24'}
         {...props}
       >
         {anchor ? (
-          <Anchor id={id} inView={inView}>
+          <Anchor id={props.id} inView={inView}>
             {children}
           </Anchor>
         ) : (
