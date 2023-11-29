@@ -12,14 +12,14 @@ import { createStore, useStore } from 'zustand'
 import { remToPx } from '@/lib/remToPx'
 
 function createSectionStore(sections) {
-  return createStore((set) => ({
+  return createStore()((set) => ({
     sections,
     visibleSections: [],
     setVisibleSections: (visibleSections) =>
       set((state) =>
         state.visibleSections.join() === visibleSections.join()
           ? {}
-          : { visibleSections }
+          : { visibleSections },
       ),
     registerHeading: ({ id, ref, offsetRem }) =>
       set((state) => {
@@ -53,7 +53,12 @@ function useVisibleSections(sectionStore) {
         sectionIndex < sections.length;
         sectionIndex++
       ) {
-        let { id, headingRef, offsetRem } = sections[sectionIndex]
+        let { id, headingRef, offsetRem = 0 } = sections[sectionIndex]
+
+        if (!headingRef?.current) {
+          continue
+        }
+
         let offset = remToPx(offsetRem)
         let top = headingRef.current.getBoundingClientRect().top + scrollY
 
@@ -63,7 +68,7 @@ function useVisibleSections(sectionStore) {
 
         let nextSection = sections[sectionIndex + 1]
         let bottom =
-          (nextSection?.headingRef.current.getBoundingClientRect().top ??
+          (nextSection?.headingRef?.current?.getBoundingClientRect().top ??
             Infinity) +
           scrollY -
           remToPx(nextSection?.offsetRem ?? 0)
@@ -92,7 +97,7 @@ function useVisibleSections(sectionStore) {
   }, [setVisibleSections, sections])
 }
 
-const SectionStoreContext = createContext()
+const SectionStoreContext = createContext(null)
 
 const useIsomorphicLayoutEffect =
   typeof window === 'undefined' ? useEffect : useLayoutEffect

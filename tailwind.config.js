@@ -1,6 +1,10 @@
+const typographyStyles = require('./typography')
+const typographyPlugin = require('@tailwindcss/typography')
+const headlessuiPlugin = require('@headlessui/tailwindcss')
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./src/**/*.{js,mjs,jsx,mdx}'],
+  content: ['./src/**/*.{js,mjs,jsx,ts,tsx,mdx}'],
   darkMode: 'class',
   theme: {
     fontSize: {
@@ -19,7 +23,7 @@ module.exports = {
       '8xl': ['6rem', { lineHeight: '1' }],
       '9xl': ['8rem', { lineHeight: '1' }],
     },
-    typography: require('./typography'),
+    typography: typographyStyles,
     extend: {
       boxShadow: {
         glow: '0 0 4px rgb(0 0 0 / 0.1)',
@@ -38,8 +42,5 @@ module.exports = {
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/typography'),
-    require('@headlessui/tailwindcss'),
-  ],
+  plugins: [typographyPlugin, headlessuiPlugin],
 }

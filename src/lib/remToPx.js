@@ -4,5 +4,5 @@ export function remToPx(remValue) {
       ? 16
       : parseFloat(window.getComputedStyle(document.documentElement).fontSize)
 
-  return parseFloat(remValue) * rootFontSize
+  return remValue * rootFontSize
 }
