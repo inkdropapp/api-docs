@@ -3,6 +3,7 @@
 import {
   forwardRef,
   Fragment,
+  Suspense,
   useCallback,
   useEffect,
   useId,
@@ -23,6 +24,10 @@ function useAutocomplete({ close }) {
   let [autocompleteState, setAutocompleteState] = useState({})
 
   function navigate({ itemUrl }) {
+    if (!itemUrl) {
+      return
+    }
+
     router.push(itemUrl)
 
     if (
@@ -63,7 +68,7 @@ function useAutocomplete({ close }) {
           ]
         })
       },
-    })
+    }),
   )
 
   return { autocomplete, autocompleteState }
@@ -143,15 +148,17 @@ function SearchResult({
   let id = useId()
 
   let sectionTitle = navigation.find((section) =>
-    section.links.find((link) => link.href === result.url.split('#')[0])
+    section.links.find((link) => link.href === result.url.split('#')[0]),
   )?.title
-  let hierarchy = [sectionTitle, result.pageTitle].filter(Boolean)
+  let hierarchy = [sectionTitle, result.pageTitle].filter(
+    (x) => typeof x === 'string',
+  )
 
   return (
     <li
       className={clsx(
         'group block cursor-default px-4 py-3 aria-selected:bg-zinc-50 dark:aria-selected:bg-zinc-800/50',
-        resultIndex > 0 && 'border-t border-zinc-100 dark:border-zinc-800'
+        resultIndex > 0 && 'border-t border-zinc-100 dark:border-zinc-800',
       )}
       aria-labelledby={`${id}-hierarchy ${id}-title`}
       {...autocomplete.getItemProps({
@@ -209,7 +216,7 @@ function SearchResults({ autocomplete, query, collection }) {
   }
 
   return (
-    <ul role="list" {...autocomplete.getListProps()}>
+    <ul {...autocomplete.getListProps()}>
       {collection.items.map((result, resultIndex) => (
         <SearchResult
           key={result.url}
@@ -226,9 +233,9 @@ function SearchResults({ autocomplete, query, collection }) {
 
 const SearchInput = forwardRef(function SearchInput(
   { autocomplete, autocompleteState, onClose },
-  inputRef
+  inputRef,
 ) {
-  let inputProps = autocomplete.getInputProps({})
+  let inputProps = autocomplete.getInputProps({ inputElement: null })
 
   return (
     <div className="group relative flex h-12">
@@ -237,7 +244,7 @@ const SearchInput = forwardRef(function SearchInput(
         ref={inputRef}
         className={clsx(
           'flex-auto appearance-none bg-transparent pl-10 text-zinc-900 outline-none placeholder:text-zinc-500 focus:w-full focus:flex-none dark:text-white sm:text-sm [&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden [&::-webkit-search-results-button]:hidden [&::-webkit-search-results-decoration]:hidden',
-          autocompleteState.status === 'stalled' ? 'pr-11' : 'pr-4'
+          autocompleteState.status === 'stalled' ? 'pr-11' : 'pr-4',
         )}
         {...inputProps}
         onKeyDown={(event) => {
@@ -248,7 +255,9 @@ const SearchInput = forwardRef(function SearchInput(
           ) {
             // In Safari, closing the dialog with the escape key can sometimes cause the scroll position to jump to the
             // bottom of the page. This is a workaround for that until we can figure out a proper fix in Headless UI.
-            document.activeElement?.blur()
+            if (document.activeElement instanceof HTMLElement) {
+              document.activeElement.blur()
+            }
 
             onClose()
           } else {
@@ -266,9 +275,9 @@ const SearchInput = forwardRef(function SearchInput(
 })
 
 function SearchDialog({ open, setOpen, className }) {
-  let formRef = useRef()
-  let panelRef = useRef()
-  let inputRef = useRef()
+  let formRef = useRef(null)
+  let panelRef = useRef(null)
+  let inputRef = useRef(null)
   let { autocomplete, autocompleteState } = useAutocomplete({
     close() {
       setOpen(false)
@@ -370,7 +379,7 @@ function SearchDialog({ open, setOpen, className }) {
 }
 
 function useSearchProps() {
-  let buttonRef = useRef()
+  let buttonRef = useRef(null)
   let [open, setOpen] = useState(false)
 
   return {
@@ -382,20 +391,15 @@ function useSearchProps() {
     },
     dialogProps: {
       open,
-      // setOpen(open) {
-      //   let { width, height } = buttonRef.current.getBoundingClientRect()
-      //   if (!open || (width !== 0 && height !== 0)) {
-      //     setOpen(open)
-      //   }
-      // },
       setOpen: useCallback(
         (open) => {
-          let { width, height } = buttonRef.current.getBoundingClientRect()
+          let { width = 0, height = 0 } =
+            buttonRef.current?.getBoundingClientRect() ?? {}
           if (!open || (width !== 0 && height !== 0)) {
             setOpen(open)
           }
         },
-        [setOpen]
+        [setOpen],
       ),
     },
   }
@@ -407,7 +411,7 @@ export function Search() {
 
   useEffect(() => {
     setModifierKey(
-      /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform) ? '⌘' : 'Ctrl '
+      /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform) ? '⌘' : 'Ctrl ',
     )
   }, [])
 
@@ -425,7 +429,9 @@ export function Search() {
           <kbd className="font-sans">K</kbd>
         </kbd>
       </button>
-      <SearchDialog className="hidden lg:block" {...dialogProps} />
+      <Suspense fallback={null}>
+        <SearchDialog className="hidden lg:block" {...dialogProps} />
+      </Suspense>
     </div>
   )
 }
@@ -443,7 +449,9 @@ export function MobileSearch() {
       >
         <SearchIcon className="h-5 w-5 stroke-zinc-900 dark:stroke-white" />
       </button>
-      <SearchDialog className="lg:hidden" {...dialogProps} />
+      <Suspense fallback={null}>
+        <SearchDialog className="lg:hidden" {...dialogProps} />
+      </Suspense>
     </div>
   )
 }
