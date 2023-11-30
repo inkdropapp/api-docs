@@ -1,0 +1,125 @@
+export const metadata = {
+  title: 'Style Manager',
+  description: 'How to use the Style Manager in Inkdrop for managing and observing active style sheets.',
+}
+
+# Style Manager
+
+A singleton instance of this class available via `inkdrop.styles`, which you can use to globally query and observe the set of active style sheets.
+The `StyleManager` doesn't add any style elements to the DOM on its own, but is instead subscribed to by individual `<inkdrop-styles>` elements, which clone and attach style elements in different contexts.{{ className: 'lead' }}
+
+---
+
+## Style Elements Observation {{ label: '::observeStyleElements(callback)' }}
+
+Invoke the provided callback for all current and future style elements.
+
+<Row>
+  <Col>
+    ### Parameters
+    <Properties>
+      <Property name="callback(styleElement)" type="function" required>
+        An `HTMLStyleElement` instance. The `.sheet` property will be null because this element isn't attached to the DOM. If you want to attach this element to the DOM, be sure to clone it first by calling `.cloneNode(true)` on it. The style element will also have the following non-standard properties:
+
+        <Properties sub title="styleElement object">
+          <Property name="sourcePath" type="string">
+            A String containing the path from which the style element was loaded.
+          </Property>
+          <Property name="context" type="string">
+            A String indicating the target context of the style element.
+          </Property>
+        </Properties>
+      </Property>
+    </Properties>
+
+    ### Returns
+    Returns a [Disposable](/event-subscription/disposable) on which `.dispose()` can be called to unsubscribe.
+  </Col>
+</Row>
+
+---
+
+## Style Element Addition Subscription {{ label: '::onDidAddStyleElement(callback)' }}
+
+Invoke the provided callback when a style element is added.
+
+<Row>
+  <Col>
+    ### Parameters
+    <Properties>
+      <Property name="callback(styleElement)" type="function" required>
+        Function called with each added `HTMLStyleElement` instance.
+      </Property>
+    </Properties>
+
+    ### Returns
+    Returns a [Disposable](/event-subscription/disposable) on which `.dispose()` can be called to unsubscribe.
+  </Col>
+</Row>
+
+---
+
+## Style Element Removal Subscription {{ label: '::onDidRemoveStyleElement(callback)' }}
+
+Invoke the provided callback when a style element is removed.
+
+<Row>
+  <Col>
+    ### Parameters
+    <Properties>
+      <Property name="callback(styleElement)" type="function" required>
+        Function called with each removed `HTMLStyleElement` instance.
+      </Property>
+    </Properties>
+
+    ### Returns
+    Returns a [Disposable](/event-subscription/disposable) on which `.dispose()` can be called to unsubscribe.
+  </Col>
+</Row>
+
+---
+
+## Style Element Update Subscription {{ label: '::onDidUpdateStyleElement(callback)' }}
+
+Invoke the provided callback when an existing style element is updated.
+
+<Row>
+  <Col>
+    ### Parameters
+    <Properties>
+      <Property name="callback(styleElement)" type="function" required>
+        Function called with each updated `HTMLStyleElement` instance.
+      </Property>
+    </Properties>
+
+    ### Returns
+    Returns a [Disposable](/event-subscription/disposable) on which `.dispose()` can be called to unsubscribe.
+  </Col>
+</Row>
+
+---
+
+## Get Style Elements {{ label: '::getStyleElements()' }}
+
+Retrieve all loaded style elements.
+
+<Row>
+  <Col>
+    ### Returns
+    Returns an array of `HTMLStyleElement` instances.
+  </Col>
+</Row>
+
+---
+
+## Get User StyleSheet Path {{ label: '::getUserStyleSheetPath()' }}
+
+Obtain the path of the user style sheet.
+
+<Row>
+  <Col>
+    ### Returns
+    Returns the path of the user style sheet located in [the config path](https://docs.inkdrop.app/reference/user-data-directory).
+  </Col>
+</Row>
+

@@ -1,0 +1,62 @@
+export const metadata = {
+  title: 'Package',
+  description: 'Explains how Inkdrop loads and activates a package’s main module and resources, such as stylesheets, keymaps, and menus.',
+}
+
+# Package
+
+Loads and activates a package's main module and resources like stylesheets, keymaps, and menus in Inkdrop.{{ className: 'lead' }}
+
+---
+
+## Package Deactivation Event Subscription {{ label: '::onDidDeactivate(callback)' }}
+
+Invoke a callback function when all packages have been deactivated.
+
+<Row>
+  <Col>
+    ### Parameters
+    <Properties>
+      <Property name="callback()" type="function" required>
+        A function to be called when all packages have been deactivated.
+      </Property>
+    </Properties>
+
+    ### Returns
+    A [Disposable](/event-subscription/disposable) on which `.dispose()` can be called to unsubscribe.
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Event Subscription Example">
+    ```js
+    const disposable = inkdrop.packages.onDidDeactivate(() => {
+      console.log('All packages have been deactivated');
+    });
+    // To unsubscribe
+    disposable.dispose();
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Native Module Compatibility Check {{ label: '::isCompatible()' }}
+
+Determine if all native modules required by this package are correctly compiled against the current version of Inkdrop.
+
+Incompatible packages cannot be activated.
+
+<Row>
+  <Col>
+    ### Returns
+    A Boolean value: `true` if compatible, `false` if incompatible.
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Compatibility Check Example">
+    ```js
+    const isPackageCompatible = inkdrop.packages.isCompatible();
+    console.log('Is compatible:', isPackageCompatible);
+    ```
+    </CodeGroup>
+  </Col>
+</Row>

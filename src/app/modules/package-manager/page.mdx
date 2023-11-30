@@ -1,0 +1,417 @@
+export const metadata = {
+  title: 'Package Manager',
+  description: 'This page provides details on managing the lifecycle of Inkdrop packages using the Package Manager.',
+}
+
+# Package Manager
+
+The Package Manager in Inkdrop is responsible for the lifecycle management of packages. You can access a global instance of this class via `inkdrop.packages`.
+
+---
+
+## Package Lifecycle
+
+<Row>
+  <Col>
+    Package lifecycle includes:
+
+    - **Loading**: Reads and parses the package's metadata and resources like keymaps, menus, stylesheets, etc.
+    - **Activating**: Registers the loaded resources and calls `activate()` on the package's main module.
+    - **Deactivating**: Unregisters resources and calls `deactivate()` on the package's main module.
+    - **Unloading**: Removes the package completely from the package manager.
+
+    You can enable or disable packages via the `core.disabledPackages` config settings or by using `enablePackage()` or `disablePackage()`.
+  </Col>
+</Row>
+
+---
+
+## Package Load Completion Subscription {{ label: '::onDidLoadInitialPackages(callback)' }}
+
+Invoke the callback when all packages have been loaded.
+
+<Row>
+  <Col>
+    ### Parameters
+    <Properties>
+      <Property name="callback()" type="function" required>
+        Function to be invoked upon package load completion.
+      </Property>
+    </Properties>
+
+    ### Returns
+    Returns a [Disposable](/event-subscription/disposable) for unsubscribing.
+  </Col>
+</Row>
+
+---
+
+## Initial Package Activation Subscription {{ label: '::onDidActivateInitialPackages(callback)' }}
+
+Invoke the callback when all packages have been activated.
+
+<Row>
+  <Col>
+    ### Parameters
+    <Properties>
+      <Property name="callback()" type="function" required>
+        Function to be invoked upon the activation of all packages.
+      </Property>
+    </Properties>
+
+    ### Returns
+    Returns a [Disposable](/event-subscription/disposable) for unsubscribing.
+  </Col>
+</Row>
+
+---
+
+## Individual Package Activation Subscription {{ label: '::onDidActivatePackage(callback)' }}
+
+Invoke the callback when a specific package is activated.
+
+<Row>
+  <Col>
+    ### Parameters
+    <Properties>
+      <Property name="callback(package)" type="function" required>
+        Function to be invoked when a package is activated, where `package` is the [Package](/modules/package) that was activated.
+      </Property>
+    </Properties>
+
+    ### Returns
+    Returns a [Disposable](/event-subscription/disposable) for unsubscribing.
+  </Col>
+</Row>
+
+---
+
+## Package Deactivation Subscription {{ label: '::onDidDeactivatePackage(callback)' }}
+
+Invoke the callback when a package is deactivated.
+
+<Row>
+  <Col>
+    ### Parameters
+    <Properties>
+      <Property name="callback(package)" type="function" required>
+        Function to be invoked when a package is deactivated, where `package` is the [Package](/modules/package) that was deactivated.
+      </Property>
+    </Properties>
+
+    ### Returns
+    Returns a [Disposable](/event-subscription/disposable) for unsubscribing.
+  </Col>
+</Row>
+
+---
+
+## Package Load Subscription {{ label: '::onDidLoadPackage(callback)' }}
+
+Invoke the callback when a package is loaded.
+
+<Row>
+  <Col>
+    ### Parameters
+    <Properties>
+      <Property name="callback(package)" type="function" required>
+        Function to be invoked when a package is loaded, where `package` is the [Package](/modules/package) that was loaded.
+      </Property>
+    </Properties>
+
+    ### Returns
+    Returns a [Disposable](/event-subscription/disposable) for unsubscribing.
+  </Col>
+</Row>
+
+---
+
+## Package Unload Subscription {{ label: '::onDidUnloadPackage(callback)' }}
+
+Invoke the callback when a package is unloaded.
+
+<Row>
+  <Col>
+    ### Parameters
+    <Properties>
+      <Property name="callback(package)" type="function" required>
+        Function to be invoked when a package is unloaded, where `package` is the [Package](/modules/package) that was unloaded.
+      </Property>
+    </Properties>
+
+    ### Returns
+    Returns a [Disposable](/event-subscription/disposable) for unsubscribing.
+  </Col>
+</Row>
+
+---
+
+## Get IPM Path {{ label: '::getIpmPath()' }}
+
+Get the path to the `ipm` command.
+
+<Row>
+  <Col>
+    ### Returns
+    Returns a String file path to `ipm`.
+  </Col>
+</Row>
+
+---
+
+## Get Package Directory Paths {{ label: '::getPackageDirPaths()' }}
+
+Get paths used for searching packages.
+
+<Row>
+  <Col>
+    ### Returns
+    Returns an Array of String directory paths.
+  </Col>
+</Row>
+
+---
+
+## Resolve Package Path {{ label: '::resolvePackagePath(name)' }}
+
+Resolve a package name to a disk path.
+
+<Row>
+  <Col>
+    ### Parameters
+    <Properties>
+      <Property name="name" type="string" required>
+        The package name to be resolved.
+      </Property>
+    </Properties>
+
+    ### Returns
+    Returns a String folder path or undefined if not resolvable.
+  </Col>
+</Row>
+
+---
+
+## Check if Package is Bundled {{ label: '::isBundledPackage(name)' }}
+
+Determine if a package is bundled with Inkdrop.
+
+<Row>
+  <Col>
+    ### Parameters
+    <Properties>
+      <Property name="name" type="string" required>
+        Name of the package to check.
+      </Property>
+    </Properties>
+
+    ### Returns
+    Returns a Boolean, true if bundled, otherwise false.
+  </Col>
+</Row>
+
+---
+
+## Enable Package {{ label: '::enablePackage(name)' }}
+
+Enable the package with the specified name.
+
+<Row>
+  <Col>
+    ### Parameters
+    <Properties>
+      <Property name="name" type="string" required>
+        The name of the package to be enabled.
+      </Property>
+    </Properties>
+
+    ### Returns
+    Returns the [Package](/modules/package) that was enabled, or `null` if it isn't loaded.
+  </Col>
+</Row>
+
+---
+
+## Disable Package {{ label: '::disablePackage(name)' }}
+
+Disable the package with the specified name.
+
+<Row>
+  <Col>
+    ### Parameters
+    <Properties>
+      <Property name="name" type="string" required>
+        The name of the package to be disabled.
+      </Property>
+    </Properties>
+
+    ### Returns
+    Returns the [Package](/modules/package) that was disabled, or `null` if it isn't loaded.
+  </Col>
+</Row>
+
+---
+
+## Check Package Disabled Status {{ label: '::isPackageDisabled(name)' }}
+
+Check if the package with the given name is disabled.
+
+<Row>
+  <Col>
+    ### Parameters
+    <Properties>
+      <Property name="name" type="string" required>
+        The name of the package to check.
+      </Property>
+    </Properties>
+
+    ### Returns
+    Returns a Boolean: `true` if disabled, `false` if not.
+  </Col>
+</Row>
+
+---
+
+## Get Active Packages List {{ label: '::getActivePackages()' }}
+
+Retrieve an array of all the active packages.
+
+<Row>
+  <Col>
+    ### Returns
+    Returns an Array of active [Packages](/modules/package).
+  </Col>
+</Row>
+
+---
+
+## Get Active Package {{ label: '::getActivePackage(name)' }}
+
+Get the active package with the specified name.
+
+<Row>
+  <Col>
+    ### Parameters
+    <Properties>
+      <Property name="name" type="string" required>
+        The name of the package to retrieve.
+      </Property>
+    </Properties>
+
+    ### Returns
+    Returns the active [Package](/modules/package) or `undefined`.
+  </Col>
+</Row>
+
+---
+
+## Check Package Active Status {{ label: '::isPackageActive(name)' }}
+
+Determine if the package with the specified name is active.
+
+<Row>
+  <Col>
+    ### Parameters
+    <Properties>
+      <Property name="name" type="string" required>
+        The name of the package to check.
+      </Property>
+    </Properties>
+
+    ### Returns
+    Returns a Boolean indicating active status.
+  </Col>
+</Row>
+
+---
+
+## Get Loaded Packages List {{ label: '::getLoadedPackages()' }}
+
+Retrieve an array of all loaded packages.
+
+<Row>
+  <Col>
+    ### Returns
+    Returns an Array of loaded [Packages](/modules/package).
+  </Col>
+</Row>
+
+---
+
+## Get Loaded Package {{ label: '::getLoadedPackage(name)' }}
+
+Get the loaded package with the specified name.
+
+<Row>
+  <Col>
+    ### Parameters
+    <Properties>
+      <Property name="name" type="string" required>
+        The name of the package to retrieve.
+      </Property>
+    </Properties>
+
+    ### Returns
+    Returns the loaded [Package](/modules/package) or `undefined`.
+  </Col>
+</Row>
+
+---
+
+## Check Package Loaded Status {{ label: '::isPackageLoaded(name)' }}
+
+Check if the package with the given name is loaded.
+
+<Row>
+  <Col>
+    ### Parameters
+    <Properties>
+      <Property name="name" type="string" required>
+        The name of the package to check.
+      </Property>
+    </Properties>
+
+    ### Returns
+    Returns a Boolean indicating if the package is loaded.
+  </Col>
+</Row>
+
+---
+
+## Get Available Package Paths {{ label: '::getAvailablePackagePaths()' }}
+
+Retrieve an array of paths for all available packages.
+
+<Row>
+  <Col>
+    ### Returns
+    Returns an Array of Strings with all available package paths.
+  </Col>
+</Row>
+
+---
+
+## Get Available Package Names {{ label: '::getAvailablePackageNames()' }}
+
+Get a list of all available package names.
+
+<Row>
+  <Col>
+    ### Returns
+    Returns an Array of Strings with all available package names.
+  </Col>
+</Row>
+
+---
+
+## Get Available Package Metadata {{ label: '::getAvailablePackageMetadata()' }}
+
+Obtain metadata for all available packages.
+
+<Row>
+  <Col>
+    ### Returns
+    Returns an Array of Objects with metadata for all available packages.
+  </Col>
+</Row>
+
