@@ -245,8 +245,10 @@ export const navigation = [
     links: [
       { title: 'Config', href: '/modules/config' },
       { title: 'Command Registry', href: '/modules/command-registry' },
+      { title: 'Context Menu Manager', href: '/modules/context-menu-manager' },
       { title: 'Component Manager', href: '/modules/component-manager' },
       { title: 'Data Store', href: '/modules/data-store' },
+      { title: 'IPM Wrapper', href: '/modules/ipm-wrapper' },
       { title: 'Inkdrop Application', href: '/modules/inkdrop-application' },
       { title: 'Keymap Manager', href: '/modules/keymap-manager' },
       { title: 'Layout Manager', href: '/modules/layout-manager' },
