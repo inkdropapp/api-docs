@@ -79,7 +79,7 @@ export function Heading({
   })
 
   useEffect(() => {
-    if (level === 2 || level === 3) {
+    if (level === 2) {
       registerHeading({ id: props.id, ref, offsetRem: tag || label ? 8 : 6 })
     }
   })
