@@ -42,7 +42,7 @@ function NavLink({ href, tag, active, isAnchorLink = false, children }) {
         isAnchorLink ? 'pl-7' : 'pl-4',
         active
           ? 'text-zinc-900 dark:text-white'
-          : 'text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white'
+          : 'text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white',
       )}
     >
       <span className="truncate">{children}</span>
@@ -61,15 +61,15 @@ function VisibleSectionHighlight({ group, pathname }) {
       useSectionStore((s) => s.sections),
       useSectionStore((s) => s.visibleSections),
     ],
-    useIsInsideMobileNavigation()
+    useIsInsideMobileNavigation(),
   )
 
   let isPresent = useIsPresent()
   let firstVisibleSectionIndex = Math.max(
     0,
     [{ id: '_top' }, ...sections].findIndex(
-      (section) => section.id === visibleSections[0]
-    )
+      (section) => section.id === visibleSections[0],
+    ),
   )
   let itemHeight = remToPx(2)
   let height = isPresent
@@ -116,7 +116,7 @@ function NavigationGroup({ group, className }) {
   let isInsideMobileNavigation = useIsInsideMobileNavigation()
   let [pathname, sections] = useInitialValue(
     [usePathname(), useSectionStore((s) => s.sections)],
-    isInsideMobileNavigation
+    isInsideMobileNavigation,
   )
 
   let isActiveGroup =
@@ -243,6 +243,7 @@ export const navigation = [
   {
     title: 'Core Modules',
     links: [
+      { title: 'Config', href: '/modules/config' },
       { title: 'Command Registry', href: '/modules/command-registry' },
       { title: 'Component Manager', href: '/modules/component-manager' },
       { title: 'Data Store', href: '/modules/data-store' },
@@ -265,6 +266,7 @@ export const navigation = [
       { title: 'Main layout', href: '/states/main-layout' },
       { title: 'Note list bar', href: '/states/note-list-bar' },
       { title: 'Preview', href: '/states/preview' },
+      { title: 'Local config', href: '/states/local-config' },
     ],
   },
   {

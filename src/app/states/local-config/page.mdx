@@ -1,0 +1,39 @@
+export const metadata = {
+  title: 'Local config',
+  description: 'An app state of the local configuration in Inkdrop.',
+}
+
+# localConfig
+
+An [app state](/guides/flux-architecture) of [the local config](/modules/config) currently loaded.
+This state allows you to use the config values of [`config.json`](https://docs.inkdrop.app/reference/user-data-directory) in your react components.
+It immediately reflects to the state whenever the config file is changed.
+The data structure is same as the file content.{{ className: 'lead' }}
+
+---
+
+## Accessing the State
+
+<Row>
+  <Col>
+    The `localConfig` state provides information about the currently loaded local configuration settings of the application.
+  </Col>
+  <Col sticky>
+    To get the `localConfig` state manually:
+
+    ```js
+    const { localConfig } = inkdrop.store.getState()
+    ```
+
+    Connect the state with your React component:
+
+    ```js
+      import { useSelector } from 'react-redux'
+      const selector = ({ localConfig }) => localConfig
+      const MyComponent = props => {
+        const localConfig = useSelector(selector)
+        // render
+      }
+    ```
+  </Col>
+</Row>
