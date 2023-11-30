@@ -291,7 +291,10 @@ export const navigation = [
   },
   {
     title: 'Components',
-    links: [{ title: 'Dialog', href: '/components/dialog' }],
+    links: [
+      { title: 'Dialog', href: '/components/dialog' },
+      { title: 'MessageDialog', href: '/components/message-dialog' },
+    ],
   },
   {
     title: 'Event Subscription (event-kit)',
