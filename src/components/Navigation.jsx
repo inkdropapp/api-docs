@@ -283,6 +283,13 @@ export const navigation = [
     ],
   },
   {
+    title: 'App Actions',
+    links: [
+      { title: 'Editing note', href: '/actions/editing-note' },
+      { title: 'Editor', href: '/actions/editor' },
+    ],
+  },
+  {
     title: 'Event Subscription (event-kit)',
     links: [
       { title: 'Disposable', href: '/event-subscription/disposable' },

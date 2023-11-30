@@ -1,0 +1,65 @@
+export const metadata = {
+  title: 'editingNote',
+  description: 'Actions for changing the [editingNote](/states/editing-note) app state.',
+}
+
+# editingNote
+
+Actions for changing the [editingNote](/states/editing-note) app state, including updating note details and managing note editing.{{ className: 'lead' }}
+
+---
+
+## Update {{ label: 'update(data)' }}
+
+<Row>
+  <Col>
+    Update the editing note data.
+
+    <Properties>
+      <Property name="data" type="Partial<Note>" required>
+        A [Note](/data-access/notes) data object to update. Every field of the Note is optional. You can pass pairs of fields you would like to update.
+      </Property>
+    </Properties>
+  </Col>
+  <Col>
+    To change the title of the editing note:
+    
+    ```js
+    import { actions } from 'inkdrop'
+    inkdrop.store.dispatch(actions.editingNote.update({ title: 'NEW TITLE' }))
+    inkdrop.store.dispatch(actions.editor.change(true))
+    ```
+  </Col>
+</Row>
+
+---
+
+## Open {{ label: 'open(note)' }}
+
+Load a note data to the editor.
+
+<Warning>
+  Do not use this action in your plugin. Please use [`core:open-note` command](/guides/list-of-commands#core-open-note) if you would like to open a note in the editor.
+</Warning>
+
+<Row>
+  <Col>
+    <Properties>
+      <Property name="note" type="object" required>
+        A [Note](/data-access/notes) data object to load.
+      </Property>
+    </Properties>
+  </Col>
+</Row>
+
+---
+
+## Close {{ label: 'close()' }}
+
+Close the editing note.
+
+<Warning>
+  Use [`editor.close` action](/actions/editor#close) instead in your plugin.
+</Warning>
+
+---
