@@ -38,7 +38,7 @@ function extractLabelTextAsContent(tree) {
 }
 
 function extractSections() {
-  return (tree, { sections }) => {
+  return (tree, { sections, url }) => {
     slugify.reset()
 
     visit(tree, (node) => {
@@ -46,7 +46,11 @@ function extractSections() {
         let content = toString(
           excludeObjectExpressions(extractLabelTextAsContent(node)),
         )
-        if (node.type === 'heading' && node.depth <= 2) {
+        if (
+          node.type === 'heading' &&
+          (node.depth <= 2 ||
+            (node.depth === 3 && url === '/guides/list-of-commands'))
+        ) {
           let title = toString(excludeObjectExpressions(node))
           let hash = node.depth === 1 ? null : slugify(title)
           sections.push([content, hash, []])
@@ -81,7 +85,7 @@ export default function (nextConfig = {}) {
               if (cache.get(file)?.[0] === mdx) {
                 sections = cache.get(file)[1]
               } else {
-                let vfile = { value: mdx, sections }
+                let vfile = { value: mdx, sections, url }
                 processor.runSync(processor.parse(vfile), vfile)
                 cache.set(file, [mdx, sections])
               }
