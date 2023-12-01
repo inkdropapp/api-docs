@@ -46,7 +46,7 @@ export const Header = forwardRef(function Header({ className }, ref) {
           'backdrop-blur-sm dark:backdrop-blur lg:left-72 xl:left-80',
         isInsideMobileNavigation
           ? 'bg-white dark:bg-zinc-900'
-          : 'bg-white/[var(--bg-opacity-light)] dark:bg-zinc-900/[var(--bg-opacity-dark)]'
+          : 'bg-white/[var(--bg-opacity-light)] dark:bg-zinc-900/[var(--bg-opacity-dark)]',
       )}
       style={{
         '--bg-opacity-light': bgOpacityLight,
@@ -57,7 +57,7 @@ export const Header = forwardRef(function Header({ className }, ref) {
         className={clsx(
           'absolute inset-x-0 top-full h-px transition',
           (isInsideMobileNavigation || !mobileNavIsOpen) &&
-            'bg-zinc-900/7.5 dark:bg-white/7.5'
+            'bg-zinc-900/7.5 dark:bg-white/7.5',
         )}
       />
       <Search />
@@ -79,7 +79,7 @@ export const Header = forwardRef(function Header({ className }, ref) {
               User Manual
             </TopLevelNavItem>
             <TopLevelNavItem href="https://forum.inkdrop.app/">
-              Support
+              Forum
             </TopLevelNavItem>
           </ul>
         </nav>

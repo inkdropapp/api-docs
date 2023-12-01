@@ -327,7 +327,7 @@ export function Navigation(props) {
           User Manual
         </TopLevelNavItem>
         <TopLevelNavItem href="https://forum.inkdrop.app/">
-          Support
+          Forum
         </TopLevelNavItem>
         {navigation.map((group, groupIndex) => (
           <NavigationGroup
