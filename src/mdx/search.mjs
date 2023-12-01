@@ -7,6 +7,7 @@ import { remark } from 'remark'
 import remarkMdx from 'remark-mdx'
 import { createLoader } from 'simple-functional-loader'
 import { filter } from 'unist-util-filter'
+import { map } from 'unist-util-map'
 import { SKIP, visit } from 'unist-util-visit'
 import * as url from 'url'
 
@@ -25,15 +26,29 @@ function excludeObjectExpressions(tree) {
   return filter(tree, (node) => !isObjectExpression(node))
 }
 
+function extractLabelTextAsContent(tree) {
+  return map(tree, (node) => {
+    if (node.type === 'mdxTextExpression') {
+      const txtExp = eval(`(${node.value})`)
+      return txtExp?.label ? { type: 'text', value: `: ${txtExp.label}` } : node
+    } else {
+      return node
+    }
+  })
+}
+
 function extractSections() {
   return (tree, { sections }) => {
     slugify.reset()
 
     visit(tree, (node) => {
       if (node.type === 'heading' || node.type === 'paragraph') {
-        let content = toString(excludeObjectExpressions(node))
+        let content = toString(
+          excludeObjectExpressions(extractLabelTextAsContent(node)),
+        )
         if (node.type === 'heading' && node.depth <= 2) {
-          let hash = node.depth === 1 ? null : slugify(content)
+          let title = toString(excludeObjectExpressions(node))
+          let hash = node.depth === 1 ? null : slugify(title)
           sections.push([content, hash, []])
         } else {
           sections.at(-1)?.[2].push(content)
