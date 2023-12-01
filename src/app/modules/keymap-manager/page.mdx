@@ -61,7 +61,7 @@ Key bindings are JavaScript objects containing **CSS selectors** as their top-le
 
 ---
 
-## Matched Binding Subscription {{ label: '::onDidMatchBinding(callback)' }}
+## Matched Binding Subscription {{ label: 'onDidMatchBinding(callback)' }}
 
 Invoke the given callback when keystrokes completely match a key binding.
 
@@ -102,7 +102,7 @@ Invoke the given callback when keystrokes completely match a key binding.
 
 ---
 
-## Partial Match Subscription {{ label: '::onDidPartiallyMatchBindings(callback)' }}
+## Partial Match Subscription {{ label: 'onDidPartiallyMatchBindings(callback)' }}
 
 Invoke the given callback when keystrokes partially match a binding.
 
@@ -143,7 +143,7 @@ Invoke the given callback when keystrokes partially match a binding.
 
 ---
 
-## Failed Match Subscription {{ label: '::onDidFailToMatchBinding(callback)' }}
+## Failed Match Subscription {{ label: 'onDidFailToMatchBinding(callback)' }}
 
 Invoke the given callback when keystrokes fail to match any bindings.
 
@@ -181,7 +181,7 @@ Invoke the given callback when keystrokes fail to match any bindings.
 
 ---
 
-## Constructing Key Bindings {{ label: '::build(source, bindings, priority)' }}
+## Constructing Key Bindings {{ label: 'build(source, bindings, priority)' }}
 
 Construct `KeyBinding`s from an object grouping them by CSS selector.
 
@@ -215,7 +215,7 @@ Construct `KeyBinding`s from an object grouping them by CSS selector.
 
 ---
 
-## Adding Bindings {{ label: '::add(source, bindings, priority)' }}
+## Adding Bindings {{ label: 'add(source, bindings, priority)' }}
 
 Add sets of key bindings grouped by CSS selector.
 
@@ -249,7 +249,7 @@ Add sets of key bindings grouped by CSS selector.
 
 ---
 
-## Accessing Bindings {{ label: '::getKeyBindings()' }}
+## Accessing Bindings {{ label: 'getKeyBindings()' }}
 
 Get all current key bindings.
 
@@ -259,7 +259,7 @@ An array of `KeyBinding`s.
 
 ---
 
-## Finding Bindings {{ label: '::findKeyBindings(params)' }}
+## Finding Bindings {{ label: 'findKeyBindings(params)' }}
 
 Get key bindings for a command and optional target.
 

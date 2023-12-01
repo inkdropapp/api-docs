@@ -26,7 +26,7 @@ The Package Manager in Inkdrop is responsible for the lifecycle management of pa
 
 ---
 
-## Package Load Completion Subscription {{ label: '::onDidLoadInitialPackages(callback)' }}
+## Package Load Completion Subscription {{ label: 'onDidLoadInitialPackages(callback)' }}
 
 Invoke the callback when all packages have been loaded.
 
@@ -46,7 +46,7 @@ Invoke the callback when all packages have been loaded.
 
 ---
 
-## Initial Package Activation Subscription {{ label: '::onDidActivateInitialPackages(callback)' }}
+## Initial Package Activation Subscription {{ label: 'onDidActivateInitialPackages(callback)' }}
 
 Invoke the callback when all packages have been activated.
 
@@ -66,7 +66,7 @@ Invoke the callback when all packages have been activated.
 
 ---
 
-## Individual Package Activation Subscription {{ label: '::onDidActivatePackage(callback)' }}
+## Individual Package Activation Subscription {{ label: 'onDidActivatePackage(callback)' }}
 
 Invoke the callback when a specific package is activated.
 
@@ -86,7 +86,7 @@ Invoke the callback when a specific package is activated.
 
 ---
 
-## Package Deactivation Subscription {{ label: '::onDidDeactivatePackage(callback)' }}
+## Package Deactivation Subscription {{ label: 'onDidDeactivatePackage(callback)' }}
 
 Invoke the callback when a package is deactivated.
 
@@ -106,7 +106,7 @@ Invoke the callback when a package is deactivated.
 
 ---
 
-## Package Load Subscription {{ label: '::onDidLoadPackage(callback)' }}
+## Package Load Subscription {{ label: 'onDidLoadPackage(callback)' }}
 
 Invoke the callback when a package is loaded.
 
@@ -126,7 +126,7 @@ Invoke the callback when a package is loaded.
 
 ---
 
-## Package Unload Subscription {{ label: '::onDidUnloadPackage(callback)' }}
+## Package Unload Subscription {{ label: 'onDidUnloadPackage(callback)' }}
 
 Invoke the callback when a package is unloaded.
 
@@ -146,7 +146,7 @@ Invoke the callback when a package is unloaded.
 
 ---
 
-## Get IPM Path {{ label: '::getIpmPath()' }}
+## Get IPM Path {{ label: 'getIpmPath()' }}
 
 Get the path to the `ipm` command.
 
@@ -159,7 +159,7 @@ Get the path to the `ipm` command.
 
 ---
 
-## Get Package Directory Paths {{ label: '::getPackageDirPaths()' }}
+## Get Package Directory Paths {{ label: 'getPackageDirPaths()' }}
 
 Get paths used for searching packages.
 
@@ -172,7 +172,7 @@ Get paths used for searching packages.
 
 ---
 
-## Resolve Package Path {{ label: '::resolvePackagePath(name)' }}
+## Resolve Package Path {{ label: 'resolvePackagePath(name)' }}
 
 Resolve a package name to a disk path.
 
@@ -192,7 +192,7 @@ Resolve a package name to a disk path.
 
 ---
 
-## Check if Package is Bundled {{ label: '::isBundledPackage(name)' }}
+## Check if Package is Bundled {{ label: 'isBundledPackage(name)' }}
 
 Determine if a package is bundled with Inkdrop.
 
@@ -212,7 +212,7 @@ Determine if a package is bundled with Inkdrop.
 
 ---
 
-## Enable Package {{ label: '::enablePackage(name)' }}
+## Enable Package {{ label: 'enablePackage(name)' }}
 
 Enable the package with the specified name.
 
@@ -232,7 +232,7 @@ Enable the package with the specified name.
 
 ---
 
-## Disable Package {{ label: '::disablePackage(name)' }}
+## Disable Package {{ label: 'disablePackage(name)' }}
 
 Disable the package with the specified name.
 
@@ -252,7 +252,7 @@ Disable the package with the specified name.
 
 ---
 
-## Check Package Disabled Status {{ label: '::isPackageDisabled(name)' }}
+## Check Package Disabled Status {{ label: 'isPackageDisabled(name)' }}
 
 Check if the package with the given name is disabled.
 
@@ -272,7 +272,7 @@ Check if the package with the given name is disabled.
 
 ---
 
-## Get Active Packages List {{ label: '::getActivePackages()' }}
+## Get Active Packages List {{ label: 'getActivePackages()' }}
 
 Retrieve an array of all the active packages.
 
@@ -285,7 +285,7 @@ Retrieve an array of all the active packages.
 
 ---
 
-## Get Active Package {{ label: '::getActivePackage(name)' }}
+## Get Active Package {{ label: 'getActivePackage(name)' }}
 
 Get the active package with the specified name.
 
@@ -305,7 +305,7 @@ Get the active package with the specified name.
 
 ---
 
-## Check Package Active Status {{ label: '::isPackageActive(name)' }}
+## Check Package Active Status {{ label: 'isPackageActive(name)' }}
 
 Determine if the package with the specified name is active.
 
@@ -325,7 +325,7 @@ Determine if the package with the specified name is active.
 
 ---
 
-## Get Loaded Packages List {{ label: '::getLoadedPackages()' }}
+## Get Loaded Packages List {{ label: 'getLoadedPackages()' }}
 
 Retrieve an array of all loaded packages.
 
@@ -338,7 +338,7 @@ Retrieve an array of all loaded packages.
 
 ---
 
-## Get Loaded Package {{ label: '::getLoadedPackage(name)' }}
+## Get Loaded Package {{ label: 'getLoadedPackage(name)' }}
 
 Get the loaded package with the specified name.
 
@@ -358,7 +358,7 @@ Get the loaded package with the specified name.
 
 ---
 
-## Check Package Loaded Status {{ label: '::isPackageLoaded(name)' }}
+## Check Package Loaded Status {{ label: 'isPackageLoaded(name)' }}
 
 Check if the package with the given name is loaded.
 
@@ -378,7 +378,7 @@ Check if the package with the given name is loaded.
 
 ---
 
-## Get Available Package Paths {{ label: '::getAvailablePackagePaths()' }}
+## Get Available Package Paths {{ label: 'getAvailablePackagePaths()' }}
 
 Retrieve an array of paths for all available packages.
 
@@ -391,7 +391,7 @@ Retrieve an array of paths for all available packages.
 
 ---
 
-## Get Available Package Names {{ label: '::getAvailablePackageNames()' }}
+## Get Available Package Names {{ label: 'getAvailablePackageNames()' }}
 
 Get a list of all available package names.
 
@@ -404,7 +404,7 @@ Get a list of all available package names.
 
 ---
 
-## Get Available Package Metadata {{ label: '::getAvailablePackageMetadata()' }}
+## Get Available Package Metadata {{ label: 'getAvailablePackageMetadata()' }}
 
 Obtain metadata for all available packages.
 
