@@ -1,0 +1,481 @@
+export const metadata = {
+  title: 'Tags',
+  description:
+    'Tags let you add keywords to notes, making them easier to find and browse when you\'ve got a lot of them.',
+}
+
+# Tags
+
+Tags let you add keywords to notes, making them easier to find and browse when you've got a lot of them. Use tags when a note might apply to more than one category or when you want to filter results in a certain notebook by a keyword.{{ className: 'lead' }}
+
+## The tag model
+
+The tag model contains all the information about your tags, such as their name, associated color, creation and modification timestamps, and any other metadata.
+
+<Row>
+  <Col>
+
+    ### Properties
+
+    <Properties>
+      <Property name="_id" type="string">
+        The unique tag ID which should start with `tag:` and the remains are randomly generated string.
+        **Pattern:** `^tag:`
+        **Length:** `6..128`
+      </Property>
+      <Property name="_rev" type="string">
+        This is a CouchDB specific field. The current MVCC-token/revision of this document (mandatory and immutable).
+      </Property>
+      <Property name="color" type="string">
+        The color type of the tag. **One of:** `"default"`, `"red"`, `"orange"`, `"yellow"`, `"olive"`, `"green"`, `"teal"`, `"blue"`, `"violet"`, `"purple"`, `"pink"`, `"brown"`, `"grey"`, `"black"`
+      </Property>
+      <Property name="count" type="number">
+        It indicates the number of notes with the tag.
+      </Property>
+      <Property name="createdAt" type="number">
+        The date time when the tag was created, represented with Unix timestamps in milliseconds.
+      </Property>
+      <Property name="name" type="string">
+        The name of the tag.
+        **Length:** `0..64`
+      </Property>
+      <Property name="updatedAt" type="number">
+        The date time when the tag was last updated, represented with Unix timestamps in milliseconds.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    ```json {{ title: 'The tag object' }}
+    {
+      "_id": "tag:tBELDUITs",
+      "_rev": "5-caf95ffd831665119f6d4f01113cdab4",
+      "count": 3,
+      "color": "green",
+      "createdAt": 1482130519215,
+      "updatedAt": 1493014639273,
+      "name": "Admin"
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## The tag class
+
+<Row>
+  <Col>
+
+    The `Tag` class is a wrapper class of the tag, providing various methods for its operations such as loading, validation, saving, and serialization.
+
+    ### Methods
+
+    <Properties>
+      <Property name="static loadWithId(tagId: string)">
+        Loads a tag by its ID from the local database and returns a new instance of the `Tag`.
+      </Property>
+      <Property name="constructor(initialValues: Partial<Tag>)">
+        Initializes a new `Tag` instance with the given initial values. If no values are provided, it assigns default values.
+      </Property>
+      <Property name="validate()">
+        Validates the current tag instance based on the predefined validation rules. If valid, returns an empty array. If not, returns the list of validation errors.
+      </Property>
+      <Property name="save()">
+        Validates and then saves the tag to the local database. Throws an error if the validation fails or if there's a problem with the saving process.
+      </Property>
+      <Property name="toObject()">
+        Converts the tag instance into a plain JavaScript object.
+      </Property>
+      <Property name="toJson()">
+        Serializes the tag instance into a JSON string.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+    ```js {{ title: 'Import the class' }}
+    const { Tag } = require('inkdrop').models
+    ```
+
+    ```js {{ title: 'Load a tag from the database' }}
+    const tag = await Tag.loadWithId('tag:9dc6a7a7')
+    ```
+
+    ```js {{ title: 'Create a new tag' }}
+    const tag = new Tag({
+      name: 'My tag'
+    })
+    ```
+
+    ```js {{ title: 'Change its name' }}
+    tag.name = 'Updated tag'
+    ```
+
+    ```js {{ title: 'Save the changes' }}
+    await tag.save()
+    ```
+
+    ```js {{ title: 'Convert the tag into a plain object' }}
+    const object = tag.toObject()
+    ```
+
+    ```js {{ title: 'Convert the tag into JSON' }}
+    const json = tag.toJson()
+    ```
+  </Col>
+</Row>
+
+
+---
+
+## Retrieve a tag {{ label: 'get(docId, options)' }}
+
+<Row>
+  <Col>
+
+    Retrieve a tag with the given ID.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="docId" type="string" required>
+      The tag ID
+      </Property>
+      <Property name="options" type="object">
+      Options. See [PouchDB's documentation](https://pouchdb.com/api.html#fetch_document) for available options.
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns a tag if a valid tag ID was provided.
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const tag = await db.tags.get('tag:tBELDUITs')
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "_id": "tag:tBELDUITs",
+      "_rev": "5-caf95ffd831665119f6d4f01113cdab4",
+      "count": 3,
+      "color": "green",
+      "createdAt": 1482130519215,
+      "updatedAt": 1493014639273,
+      "name": "Admin"
+    }
+    ```
+  </Col>
+</Row>
+
+---
+
+## List all tags {{ label: 'all()' }}
+
+<Row>
+  <Col>
+
+    Retrieve a list of your tags.
+
+    ### Parameters
+
+    No parameters
+
+    ### Returns
+
+    Returns a list of tags.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const list = await db.tags.all()
+    ```
+
+    </CodeGroup>
+
+    ```js {{ title: 'Response' }}
+    [
+      {
+        "_id": "tag:tBELDUITs",
+        "_rev": "5-caf95ffd831665119f6d4f01113cdab4",
+        "count": 3,
+        "color": "green",
+        "createdAt": 1482130519215,
+        "updatedAt": 1493014639273,
+        "name": "Admin"
+      },
+      ...
+    ]
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Create a tag ID {{ label: 'createId(): string' }}
+
+<Row>
+  <Col>
+
+    Creates new tag ID which is String
+
+    ### Parameters
+
+    No parameters
+
+    ### Returns
+
+    Returns a new tag ID.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const tagId = await db.tags.createId()
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    "tag:ak0s1ce6"
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Validate a tag ID {{ label: 'validateDocId(): boolean' }}
+
+<Row>
+  <Col>
+
+    Tests if the given `docId` is a valid tag ID
+
+    ### Parameters
+
+    <Properties>
+      <Property name="docId" type="string" required>
+      A document ID to validate
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns `true` if valid
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const isValid = await db.tags.validateDocId('tag:ak0s1ce6')
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    true
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Create or update a tag {{ label: 'put(doc)' }}
+
+<Row>
+  <Col>
+    Create a new tag or update an existing note.
+    If the tag already exists, you must specify its revision `_rev`, otherwise a conflict will occur.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="doc" type="object" required>
+      A Tag data to store
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    It throws an `InvalidDataError` if the given doc was invalid.
+    The response contains the `id` of the document, the new `rev`, and an `ok` to reassure you that everything is okay.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const result = await db.tags.put({
+      _id: 'tag:9IoGtoCuv',
+      updatedAt: 1475549348850,
+      createdAt: 1475549348850,
+      name: 'New tag',
+      color: 'green',
+      count: 0
+    })
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "ok": true,
+      "id": "tag:9IoGtoCuv",
+      "rev": "1-a6157a5ea545c99b00ff904eef05fd9f"
+    }
+    ```
+
+  </Col>
+</Row>
+
+
+---
+
+## Remove a tag {{ label: 'remove(docId)' }}
+
+<Row>
+  <Col>
+
+    Deletes a tag with the given tag ID.
+
+    <Warning>
+      This method does not de-associate the tag from notes. Use [`db.utils.deleteTag(tagId)`](/utils#delete-a-tag)
+    </Warning>
+
+    ### Parameters
+
+    <Properties>
+      <Property name="docId" type="string" required>
+      A tag ID to delete.
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    The response contains the `id` of the document, the new `rev`, and an `ok` to reassure you that everything is okay.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const result = await db.tags.remove("tag:9IoGtoCuv")
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "ok": true,
+      "id": "tag:9IoGtoCuv",
+      "rev": "2-9af304be281790604d1d8a4b0f4c9adb"
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Count number of tags {{ label: 'countAll()' }}
+
+<Row>
+  <Col>
+
+    Counts a number of tags in the database.
+
+    ### Parameters
+
+    No parameters.
+
+    ### Returns
+
+    Returns a number of tags stored in the database.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const num = await db.tags.countAll()
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    5
+    ```
+
+  </Col>
+</Row>
+
+
+---
+
+## Lookup a tag by name {{ label: 'findWithName(name)' }}
+
+<Row>
+  <Col>
+
+    Retrieves a tag with the given name.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="name" type="string" required>
+        A tag name to find.
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns a tag if found otherwise `undefined`.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const tag = await db.tags.findWithName('Videography')
+    ```
+
+    </CodeGroup>
+
+    ```js {{ title: 'Response' }}
+    {
+      "name": "Videography",
+      "color": "red",
+      "updatedAt": 1662946230118,
+      "createdAt": 1662946219086,
+      "count": 0,
+      "_id": "tag:ZiQET3lID",
+      "_rev": "2-23c30db926215b718dae860556277fd5"
+    }
+    ```
+
+  </Col>
+</Row>
