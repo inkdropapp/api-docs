@@ -7,8 +7,8 @@ export const metadata = {
 # List of commands
 
 Inkdrop provides a bunch of commands to allow you to associate arbitrary interactions with the features.
-You can bind them with [keystrokes](/reference/keymap-manager), [menu](/reference/menu-manager) and [context menu](/reference/context-menu-manager) from [plugins](/manual/plugin-word-count), [the init file](/manual/the-init-file) or [keymap config file](/manual/customizing-keybindings).
-Note that some commands like `core:open-note` require parameters so you have to invoke them programmatically with [CommandRegistry](/reference/command-registry) like so:
+You can bind them with [keystrokes](/modules/keymap-manager), [menu](/modules/menu-manager) and [context menu](/modules/context-menu-manager) from [plugins](/guides/plugin-word-count), [the init file](/guides/the-init-file) or [keymap config file](https://docs.inkdrop.app/manual/customizing-keybindings).
+Note that some commands like `core:open-note` require parameters so you have to invoke them programmatically with [CommandRegistry](/modules/command-registry) like so:
 
 ```js
 inkdrop.commands.dispatch(document.body, 'core:open-note', {

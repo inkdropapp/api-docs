@@ -8,7 +8,7 @@ export const metadata = {
 
 Inkdrop's text editor is built on top of [CodeMirror](https://codemirror.net/) which is specialized for editing code, and comes with a number of [language modes](https://codemirror.net/mode/index.html) and [addons](https://codemirror.net/doc/manual.html#addons) that implement more advanced editing functionality. {{ className: 'lead' }}
 
-You can access the instance of CodeMirror via [MDE](/reference/mde) like this:
+You can access the instance of CodeMirror via [MDE](/modules/markdown-editor) like this:
 
 ```js
 inkdrop.getActiveEditor().cm
@@ -40,4 +40,4 @@ global.inkdrop.onEditorLoad(editor => console.log('Editor loaded'))
 global.inkdrop.onEditorUnload(() => console.log('Editor unloaded'))
 ```
 
-See also [this page](/reference/environment#event-subscription) for more detail about the event subscription.
+See also [this page](/modules/environment#editor-load-event) for more detail about the event subscription.
