@@ -120,7 +120,7 @@ Keymaps are placed in the `keymaps` subdirectory. By default, all keymaps are lo
 
 Keybindings are executed by determining which element the keypress occurred on. In the example above, the `wordcount:toggle` command is executed when pressing `Alt+Ctrl+O` on the `body` element. This means the key combination will work anywhere in the application.
 
-See also: [Keymap Manager](/reference/keymap-manager)
+See also: [Keymap Manager](/modules/keymap-manager)
 
 ### Menus
 
@@ -128,7 +128,7 @@ Menus are placed in the `menus` subdirectory. This defines menu elements like wh
 
 By default, all menus are loaded in alphabetical order. An optional `menus` array in your `package.json` can specify which menus to load and in what order.
 
-See also: [Menu Manager](/reference/menu-manager)
+See also: [Menu Manager](/modules/menu-manager)
 
 ### Application Menu
 
@@ -271,7 +271,7 @@ export default WordcountMessageDialog
 
 Inkdrop is built with [React](https://facebook.github.io/react/), and you can make UI components with it.
 The `WordcountMessageDialog` defines a React Component which shows a modal message dialog on toggling from the command.
-This component is [a function component](https://reactjs.org/docs/components-and-props.html) that renders the message dialog using `Dialog` built-in component imported from [the component manager](/reference/component-manager) by doing like so:
+This component is [a function component](https://reactjs.org/docs/components-and-props.html) that renders the message dialog using `Dialog` built-in component imported from [the component manager](/modules/component-manager) by doing like so:
 
 ```js
 const { Dialog } = inkdrop.components.classes
@@ -299,7 +299,7 @@ useEffect(() => {
 }, [toggle])
 ```
 
-The [`inkdrop.commands.add` method](/reference/command-registry#addtarget-commands) returns an instance of the [CompositeDisposable](/reference/composite-disposable) class.
+The [`inkdrop.commands.add` method](/modules/command-registry#register-a-command) returns an instance of the [CompositeDisposable](/event-subscription/composite-disposable) class.
 It automatically unbinds the command when the component is unmounted from the DOM by calling `CompositeDisposable#dispose()` method.
 
 The second file we have is the main entry point to the plugin. Again, because it's referenced in the `package.json` file. Let's take a look at that file, it's pretty simple:
@@ -325,9 +325,9 @@ module.exports = {
 }
 ```
 
-In the `activate` method called on activation of the plugin, it registers the `WordcountMessageDialog` class to a [Inkdrop component registry](/reference/component-manager) and adds it to a hidden modal layout.
+In the `activate` method called on activation of the plugin, it registers the `WordcountMessageDialog` class to a [Inkdrop component registry](/modules/component-manager) and adds it to a hidden modal layout.
 
-See also: [Component Manager](/reference/component-manager) and [Layout Manager](/reference/layout-manager)
+See also: [Component Manager](/modules/component-manager) and [Layout Manager](/modules/layout-manager)
 
 ### The Flow
 
@@ -368,8 +368,8 @@ const [count, setCount] = useState(0)
 ```
 
 The app state is managed with [Redux](https://react-redux.js.org/).
-You can refer the state via [inkdrop.store](/reference/environment#store) or the Redux function.
-In this example, we use [useSelector](https://react-redux.js.org/api/hooks) function to get the current state of [the editing note](/reference/state-editing-note) like so:
+You can refer the state via [inkdrop.store](/modules/environment) or the Redux function.
+In this example, we use [useSelector](https://react-redux.js.org/api/hooks) function to get the current state of [the editing note](/states/editing-note) like so:
 
 ```js
 const noteBody = useSelector(selectEditingNoteBody)
@@ -483,7 +483,7 @@ From here you can inspect objects, run code and view console output just as thou
 
 Now that our simple plugin is working and tested, let's go ahead and publish it so it's available to the world.
 
-Inkdrop bundles a command line utility called `ipm` which we first used back in [Using ipm (Inkdrop Plugin Manager)](/manual/extend-inkdrop-with-plugins#using-ipm-inkdrop-plugin-manager-) to search for and install plugins via the command line. The `ipm` command can also be used to publish Inkdrop plugins to the public registry and update them.
+Inkdrop bundles a command line utility called `ipm` which we first used back in [Using ipm (Inkdrop Plugin Manager)](https://docs.inkdrop.app/manual/extend-inkdrop-with-plugins#command-line-ipm---inkdrop-plugin-manager) to search for and install plugins via the command line. The `ipm` command can also be used to publish Inkdrop plugins to the public registry and update them.
 
 ### Prepare Your Package
 
@@ -541,7 +541,7 @@ You can also run `ipm help publish` to see all the available options and `ipm he
 
 ## Summary
 
-We've now generated, customized and published our first plugin for Inkdrop. Congratulations! Now anyone can install our masterpiece from directly within Inkdrop as we did in [Extend Inkdrop with Plugins](/manual/extend-inkdrop-with-plugins).
+We've now generated, customized and published our first plugin for Inkdrop. Congratulations! Now anyone can install our masterpiece from directly within Inkdrop as we did in [Extend Inkdrop with Plugins](https://docs.inkdrop.app/manual/extend-inkdrop-with-plugins).
 
 If you can't decide what to build, there are many ideas posted on our forum and those topics are [tagged with `plugin-idea`](https://forum.inkdrop.app/tags/plugin-idea).
 You will get inspirations from them!

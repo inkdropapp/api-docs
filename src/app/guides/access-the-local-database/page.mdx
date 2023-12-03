@@ -11,7 +11,7 @@ export const metadata = {
 There are two databases in local and on remote and they sync via HTTP(S).
 The Inkdrop client app is built on top of a [PouchDB](https://pouchdb.com/) for storing data in local and syncing with the remote database. For many parts of the application, the database is the source of truth. {{ className: 'lead' }}
 
-Data is written to the local database first, then synced with the remote database, and changes to the database trigger [Actions, Stores](/manual/flux-architecture) and components to refresh their contents. The illustration below shows this flow of data:
+Data is written to the local database first, then synced with the remote database, and changes to the database trigger [Actions, Stores](/guides/flux-architecture) and components to refresh their contents. The illustration below shows this flow of data:
 
 ![Data flow](/images/accessing-the-local-database_data-flow.png)
 
@@ -78,12 +78,12 @@ Now, launch the app.
 
 ### API reference
 
-See [the local HTTP server reference](/local-http-server) for more details.
+See [the local HTTP server reference](/data-access/local-http-server) for more details.
 
 ## Accessing the PouchDB instance (Advanced, not recommended)
 
-There is a global variables named [`inkdrop`](/reference/environment) which allows you to access the internal objects of Inkdrop.
-It has [`main`](/reference/inkdrop-application) property, which is a reference to the inkdrop instance in the main process.
+There is a global variables named [`inkdrop`](/modules/environment) which allows you to access the internal objects of Inkdrop.
+It has [`main`](/modules/inkdrop-application) property, which is a reference to the inkdrop instance in the main process.
 To access the local PouchDB instance in the main process:
 
 ```js

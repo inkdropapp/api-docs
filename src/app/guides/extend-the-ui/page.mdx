@@ -7,11 +7,11 @@ export const metadata = {
 # Extending the UI
 
 Inkdrop's UI is built on top of [React](https://reactjs.org/).
-You can add your own React components to Inkdrop by invoking [Layout Manager](/reference/layout-manager) and [Component Manager](/reference/component-manager) APIs. {{ className: 'lead' }}
+You can add your own React components to Inkdrop by invoking [Layout Manager](/modules/layout-manager) and [Component Manager](/modules/component-manager) APIs. {{ className: 'lead' }}
 
 ## Registering and unregistering a React component
 
-To add your React components, you first have to register them to the [component registry](/reference/component-manager).
+To add your React components, you first have to register them to the [component registry](/modules/component-manager).
 Then, the registered components can be added to layouts.
 Below example registers `MyDialog` class to the component registry and adds it to `modal` layout so that you can show it as a modal view.
 
@@ -29,9 +29,9 @@ module.exports = {
 }
 ```
 
-This is described in detail in the [Word Count plugin](/manual/plugin-word-count#developing-our-plugin) walkthrough.
+This is described in detail in the [Word Count plugin](/guides/plugin-word-count#developing-your-plugin) walkthrough.
 
-Available layouts can be found [here](/reference/state-layouts).
+Available layouts can be found [here](/states/layouts).
 
 ## Examples
 
@@ -46,7 +46,7 @@ We will explore along with this example to learn how to add components to each l
 
 - [Example: LayoutExampleMessageDialog](https://github.com/inkdropapp/layout-example-plugin/blob/master/lib/layout-example-message-dialog.js)
 
-Inkdrop provides [MessageDialog](/reference/message-dialog) component so that you can easily create a custom dialog like so:
+Inkdrop provides [MessageDialog](/components/message-dialog) component so that you can easily create a custom dialog like so:
 
 ```js
 render() {
@@ -63,7 +63,7 @@ render() {
 
 - [Example: LayoutExampleLeftMostBar](https://github.com/inkdropapp/layout-example-plugin/blob/master/lib/layout-example-left-most-bar.js)
 
-It inserts a component into ['main:full'](/reference/state-layouts#mainfull) layout.
+It inserts a component into ['main:full'](/states/layouts#main-full) layout.
 
 ### Adding a sidebar menu item
 
