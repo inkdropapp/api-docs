@@ -1,0 +1,47 @@
+export const metadata = {
+  title: 'tags',
+  description: 'An app state of note tags currently loaded for the sidebar. This section explains how to fetch and manipulate the `tags` state.',
+}
+
+# tags
+
+An [app state](/guides/flux-architecture) of note tags currently loaded for the sidebar.
+You can obtain the `tags` state and integrate it with React components.{{ className: 'lead' }}
+
+---
+
+## Data Structure
+
+<Row>
+  <Col>
+    <Properties>
+      <Property name="all" type="Tag[]">
+        An array of [Tag](/data-access/tags)s.
+      </Property>
+      <Property name="hash" type="{ [tagId]: Tag }">
+        A map where keys are tagIds and values are [Tag](/data-access/tags)s.
+      </Property>
+      <Property name="lastUpdatedAt" type="number">
+        Last datetime when the state was changed.
+      </Property>
+    </Properties>
+  </Col>
+  <Col sticky>
+    Get the `tags` state manually:
+
+    ```js
+    const { tags } = inkdrop.store.getState()
+    ```
+
+    Connect the state with your React component:
+
+    ```js
+    import { useSelector } from 'react-redux'
+    const selector = ({ tags }) => tags
+    const MyComponent = props => {
+      const tags = useSelector(selector)
+      // render
+    }
+    ```
+  </Col>
+</Row>
