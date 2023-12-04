@@ -266,6 +266,7 @@ export const navigation = [
   },
   {
     title: 'App States',
+    link: "/states",
     links: [
       { title: 'Notebooks', href: '/states/books' },
       { title: 'Database', href: '/states/db' },
@@ -284,6 +285,7 @@ export const navigation = [
   },
   {
     title: 'App Actions',
+    link: "/actions",
     links: [
       { title: 'Editing note', href: '/actions/editing-note' },
       { title: 'Editor', href: '/actions/editor' },
