@@ -3,7 +3,7 @@ import { Resources } from '@/components/Resources'
 export const metadata = {
   title: 'Accessing the Local Database',
   description:
-    'Learn how to access the local database from plugins and external programs.',
+    'Learn how to access the local database from plugins and external programs.'
 }
 
 # Accessing the local database
@@ -40,7 +40,10 @@ console.log('Search result:', docs)
 ```
 
 <Note>
-<strong>NOTE</strong>: Returned objects from the database represent <a href="https://github.com/electron/remote#remote-objects">Remote Objects</a>. They can be converted into plain objects by calling [`structuredClone(remoteObj)`](https://developer.mozilla.org/en-US/docs/Web/API/structuredClone).
+  <strong>NOTE</strong>: Returned objects from the database represent{' '}
+  <a href="https://github.com/electron/remote#remote-objects">Remote Objects</a>
+  . They can be converted into plain objects by calling
+  [`structuredClone(remoteObj)`](https://developer.mozilla.org/en-US/docs/Web/API/structuredClone).
 </Note>
 
 <Resources level={3} />
@@ -55,16 +58,19 @@ You can configure the HTTP server settings by editing `config.json` in [the user
 
 Quit Inkdrop, then edit it like so:
 
-```yaml
-'*':
-  core:
-    server:
-      enabled: true
-      port: 19840
-      bindAddress: '127.0.0.1'
-      auth:
-        username: 'foo'
-        password: 'bar'
+```json
+{
+  "*": {
+    "core": {
+      "server": {
+        "enabled": true,
+        "port": 19840,
+        "bindAddress": "127.0.0.1",
+        "auth": { "username": "foo", "password": "bar" }
+      }
+    }
+  }
+}
 ```
 
 Now, launch the app.
@@ -99,6 +105,7 @@ _Be careful, you could break your database_ by accessing it with PouchDB since i
 Use it only if the data access API does not provide what you would do.
 
 <Note>
-<strong>NOTE</strong>: Returned objects from the database represent <a href="https://github.com/electron/remote#remote-objects">Remote Objects</a>.
+  <strong>NOTE</strong>: Returned objects from the database represent{' '}
+  <a href="https://github.com/electron/remote#remote-objects">Remote Objects</a>
+  .
 </Note>
-

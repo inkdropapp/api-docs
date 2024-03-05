@@ -1,7 +1,6 @@
 export const metadata = {
   title: 'Create a blog using Astro',
-  description:
-    'How to create a blog using Astro',
+  description: 'How to create a blog using Astro'
 }
 
 # Create a blog using Astro
@@ -24,7 +23,10 @@ On top of that, as its name says, it can export 'continuously' as changes occur 
 Which means that you can write articles while checking the actual look of your site like so:
 
 <video controls playsInline muted>
-  <source src="https://site-cdn.inkdrop.app/docs/manual/integrating-with-an-astro-site-export_demo.m4v" type="video/mp4" />
+  <source
+    src="https://site-cdn.inkdrop.app/docs/manual/integrating-with-an-astro-site-export_demo.m4v"
+    type="video/mp4"
+  />
 </video>
 
 Pretty neat.
@@ -119,16 +121,22 @@ So, you first have to enable it by editing the `config.json` file stored in [the
 
 Quit Inkdrop, and add the following lines like so:
 
-```yaml
-'*':
-  core:
-    server:
-      enabled: true
-      port: 19840
-      bindAddress: '127.0.0.1'
-      auth:
-        username: 'foo'
-        password: 'bar'
+```json
+{
+  "*": {
+    "core": {
+      "server": {
+        "enabled": true,
+        "port": 19840,
+        "bindAddress": "127.0.0.1",
+        "auth": {
+          "username": "foo",
+          "password": "bar"
+        }
+      }
+    }
+  }
+}
 ```
 
 Then, relaunch the app.
@@ -255,6 +263,7 @@ Let's insert an image file into the note something like:
       \`\`\`
       </pre>
     </div>
+
   </div>
 </div>
 
