@@ -249,6 +249,10 @@ Moves forward through the note open history.
 
 Creates a new note and open it in the editor.
 
+### core:new-note-from-selection {{ selector: 'body' }}
+
+Creates a new note from the selected text on the editor.
+
 ### core:new-notebook {{ selector: 'body' }}
 
 Shows up a dialog for creating a new notebook.
@@ -532,6 +536,36 @@ Undoes the last change.
 ### core:unindent {{ selector: '.mde-cm-wrapper' }}
 
 Unindents the current lines.
+
+### core:insert-alert {{ selector: '.mde-cm-wrapper' }}
+
+Inserts an alert block with the specified type.
+
+<Properties sub title="Arguments">
+  <Property name="type" type="string" required>
+    The type of the alert block. It should be one of "NOTE", "TIP", "IMPORTANT", "WARNING", or "CAUTION".
+  </Property>
+</Properties>
+
+### core:insert-alert-note {{ selector: '.mde-cm-wrapper' }}
+
+Inserts a note alert block.
+
+### core:insert-alert-tip {{ selector: '.mde-cm-wrapper' }}
+
+Inserts a tip alert block.
+
+### core:insert-alert-important {{ selector: '.mde-cm-wrapper' }}
+
+Inserts an important alert block.
+
+### core:insert-alert-warning {{ selector: '.mde-cm-wrapper' }}
+
+Inserts a warning alert block.
+
+### core:insert-alert-caution {{ selector: '.mde-cm-wrapper' }}
+
+Inserts a caution alert block.
 
 ---
 
@@ -861,6 +895,14 @@ Undoes the last selection.
 ### editor:unindent {{ selector: '.mde-cm-wrapper' }}
 
 Unindents the current lines.
+
+### editor:show-notes-in-book-of-editing-note {{ selector: 'body' }}
+
+Display notes in a notebook of the currently editing note on the note list bar.
+
+### editor:go-to-workspace-of-editing-note {{ selector: 'body' }}
+
+Switches to the workspace of the notebook of the currently editing note.
 
 ### core:toggle-editor-drawer {{ selector: 'body' }}
 
