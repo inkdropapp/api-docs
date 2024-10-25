@@ -1,0 +1,98 @@
+export const metadata = {
+  title: 'Use ES modules in your plugin',
+  description:
+    'How to use ES modules in your plugin with Rollup',
+}
+
+# How to use ES modules in your plugin
+
+If you are looking to extend Inkdrop with plugins that use `remark` or related packages, 
+you might encounter a common hiccup: these packages often come as ES modules (short for ECMAScript modules) which can't be directly consumed by CommonJS modules due to Electron's current limitations.
+Attempting to dynamically import an ES module from a CommonJS module using `import()` can cause Inkdrop to crash.
+As a workaround, you have to use a bundler like Rollup to include those modules into your plugin. {{ className: 'lead' }}
+
+## Example: Use Rollup
+
+As a case study, consider the math plugin which integrates [remark-math](https://github.com/remarkjs/remark-math). The solution adopted for this plugin was to utilize Rollup for bundling:
+
+- [Change-log showing the transition to Rollup: Comparing v1.2.2...v1.3.0 · inkdropapp/inkdrop-math · GitHub](https://github.com/inkdropapp/inkdrop-math/compare/v1.2.2...v1.3.0)
+
+### Step-by-step Rollup Setup
+
+First, run the following command to install Rollup along with plugins for Babel and Node resolution:
+
+```sh
+npm i -D rollup @rollup/plugin-babel @rollup/plugin-node-resolve
+```
+
+If your plugin contains React components, you also want to install the Babel preset for React.
+
+```sh
+npm i -D @babel/preset-react
+```
+
+The next step is to configure Rollup.
+Create a file named `rollup.config.js` and populate it as follows:
+
+```js
+import { nodeResolve } from '@rollup/plugin-node-resolve'
+import babel from '@rollup/plugin-babel'
+import packageJson from './package.json'
+const deps = Object.keys(packageJson.dependencies || {})
+
+export default [
+  {
+    input: 'src/index.js',
+    output: {
+      dir: 'lib',
+      format: 'cjs',
+      strict: true,
+      sourcemap: true,
+      exports: 'auto'
+    },
+    external: ['react', 'codemirror', 'inkdrop', ...deps],
+    plugins: [
+      nodeResolve(),
+      babel({
+        presets: ['@babel/preset-react']
+      })
+    ]
+  }
+]
+```
+
+This configuration tells Rollup to bundle `src/index.js` and output to the `lib` directory. Any dependencies listed in your `package.json` will be treated as external, and won't be bundled.
+
+Now, you can safely use ES module import statements in your plugin code:
+
+```js
+import remarkMath from 'remark-math'
+```
+
+Modify your `package.json` to include build and development scripts:
+
+```js
+  "scripts": {
+    "build": "rm -rf lib && rollup -c --bundleConfigAsCjs",
+    "watch": "rollup -c --watch --bundleConfigAsCjs"
+  },
+```
+
+Now, running `npm run build` will bundle your plugin, and `npm run watch` will do so in watch mode, rebuilding whenever your source files change.
+
+---
+
+## A Note on Performance
+
+Remember that adding more modules or dependencies can potentially slow down the app's launch time. To ensure your plugin remains performant:
+
+### Lazily Load React Components
+
+Use `React.lazy` to defer loading of components until they're required:
+
+```js
+const ReactMath = lazy(() => import('./react-math'))
+```
+
+This prevents the entire component tree from being loaded and parsed at startup, and can significantly improve the perceived performance of your plugin.
+
