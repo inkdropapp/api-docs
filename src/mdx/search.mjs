@@ -63,7 +63,7 @@ function extractSections() {
   }
 }
 
-export default function (nextConfig = {}) {
+export default function Search(nextConfig = {}) {
   let cache = new Map()
 
   return Object.assign({}, nextConfig, {

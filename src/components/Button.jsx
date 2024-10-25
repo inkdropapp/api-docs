@@ -23,7 +23,7 @@ const variantStyles = {
     'rounded-full bg-zinc-900 py-1 px-3 text-white hover:bg-zinc-700 dark:bg-pink-500 dark:text-white dark:hover:bg-pink-400',
   outline:
     'rounded-full py-1 px-3 text-zinc-700 ring-1 ring-inset ring-zinc-900/10 hover:bg-zinc-900/2.5 hover:text-zinc-900 dark:text-zinc-400 dark:ring-white/10 dark:hover:bg-white/5 dark:hover:text-white',
-  text: 'text-pink-500 hover:text-pink-600 dark:text-pink-400 dark:hover:text-pink-500',
+  text: 'text-pink-500 hover:text-pink-600 dark:text-pink-400 dark:hover:text-pink-500'
 }
 
 export function Button({
@@ -33,8 +33,6 @@ export function Button({
   arrow,
   ...props
 }) {
-  let Component = props.href ? Link : 'button'
-
   className = clsx(
     'inline-flex gap-0.5 justify-center overflow-hidden text-sm font-medium transition',
     variantStyles[variant],
@@ -52,11 +50,25 @@ export function Button({
     />
   )
 
-  return (
-    <Component className={className} {...props}>
+  let inner = (
+    <>
       {arrow === 'left' && arrowIcon}
       {children}
       {arrow === 'right' && arrowIcon}
-    </Component>
+    </>
+  )
+
+  if (typeof props.href === 'undefined') {
+    return (
+      <button className={className} {...props}>
+        {inner}
+      </button>
+    )
+  }
+
+  return (
+    <Link className={className} {...props}>
+      {inner}
+    </Link>
   )
 }

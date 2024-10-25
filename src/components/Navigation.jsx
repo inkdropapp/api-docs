@@ -18,21 +18,25 @@ function useInitialValue(value, condition = true) {
 }
 
 function TopLevelNavItem({ href, children }) {
-  const isInternal = href && !href.startsWith('https:')
-  const LinkComponent = isInternal ? Link : 'a'
   return (
     <li className="md:hidden">
-      <LinkComponent
+      <Link
         href={href}
         className="block py-1 text-sm text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
       >
         {children}
-      </LinkComponent>
+      </Link>
     </li>
   )
 }
 
-function NavLink({ href, tag, active, isAnchorLink = false, children }) {
+function NavLink({
+  href,
+  children,
+  tag,
+  active = false,
+  isAnchorLink = false
+}) {
   return (
     <Link
       href={href}
@@ -42,7 +46,7 @@ function NavLink({ href, tag, active, isAnchorLink = false, children }) {
         isAnchorLink ? 'pl-7' : 'pl-4',
         active
           ? 'text-zinc-900 dark:text-white'
-          : 'text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white',
+          : 'text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white'
       )}
     >
       <span className="truncate">{children}</span>
@@ -57,26 +61,23 @@ function NavLink({ href, tag, active, isAnchorLink = false, children }) {
 
 function VisibleSectionHighlight({ group, pathname }) {
   let [sections, visibleSections] = useInitialValue(
-    [
-      useSectionStore((s) => s.sections),
-      useSectionStore((s) => s.visibleSections),
-    ],
-    useIsInsideMobileNavigation(),
+    [useSectionStore(s => s.sections), useSectionStore(s => s.visibleSections)],
+    useIsInsideMobileNavigation()
   )
 
   let isPresent = useIsPresent()
   let firstVisibleSectionIndex = Math.max(
     0,
     [{ id: '_top' }, ...sections].findIndex(
-      (section) => section.id === visibleSections[0],
-    ),
+      section => section.id === visibleSections[0]
+    )
   )
   let itemHeight = remToPx(2)
   let height = isPresent
     ? Math.max(1, visibleSections.length) * itemHeight
     : itemHeight
   let top =
-    group.links.findIndex((link) => link.href === pathname) * itemHeight +
+    group.links.findIndex(link => link.href === pathname) * itemHeight +
     firstVisibleSectionIndex * itemHeight
 
   return (
@@ -94,7 +95,7 @@ function VisibleSectionHighlight({ group, pathname }) {
 function ActivePageMarker({ group, pathname }) {
   let itemHeight = remToPx(2)
   let offset = remToPx(0.25)
-  let activePageIndex = group.links.findIndex((link) => link.href === pathname)
+  let activePageIndex = group.links.findIndex(link => link.href === pathname)
   let top = offset + activePageIndex * itemHeight
 
   return (
@@ -115,12 +116,12 @@ function NavigationGroup({ group, className }) {
   // The state will still update when we re-open (re-render) the navigation.
   let isInsideMobileNavigation = useIsInsideMobileNavigation()
   let [pathname, sections] = useInitialValue(
-    [usePathname(), useSectionStore((s) => s.sections)],
-    isInsideMobileNavigation,
+    [usePathname(), useSectionStore(s => s.sections)],
+    isInsideMobileNavigation
   )
 
   let isActiveGroup =
-    group.links.findIndex((link) => link.href === pathname) !== -1
+    group.links.findIndex(link => link.href === pathname) !== -1
 
   return (
     <li className={clsx('relative mt-6', className)}>
@@ -146,7 +147,7 @@ function NavigationGroup({ group, className }) {
           )}
         </AnimatePresence>
         <ul role="list" className="border-l border-transparent">
-          {group.links.map((link) => (
+          {group.links.map(link => (
             <motion.li key={link.href} layout="position" className="relative">
               <NavLink href={link.href} active={link.href === pathname}>
                 {link.title}
@@ -158,14 +159,14 @@ function NavigationGroup({ group, className }) {
                     initial={{ opacity: 0 }}
                     animate={{
                       opacity: 1,
-                      transition: { delay: 0.1 },
+                      transition: { delay: 0.1 }
                     }}
                     exit={{
                       opacity: 0,
-                      transition: { duration: 0.15 },
+                      transition: { duration: 0.15 }
                     }}
                   >
-                    {sections.map((section) => (
+                    {sections.map(section => (
                       <li key={section.id}>
                         <NavLink
                           href={`${link.href}#${section.id}`}
@@ -198,35 +199,35 @@ export const navigation = [
       { title: 'Plugin: Word count', href: '/guides/plugin-word-count' },
       {
         title: 'Getting & modifying the app state',
-        href: '/guides/flux-architecture',
+        href: '/guides/flux-architecture'
       },
       {
         title: 'Access the local database',
-        href: '/guides/access-the-local-database',
+        href: '/guides/access-the-local-database'
       },
       { title: 'Customize the editor', href: '/guides/customize-the-editor' },
       { title: 'Extend the UI', href: '/guides/extend-the-ui' },
       {
         title: 'Create a note template',
-        href: '/guides/create-a-note-template',
+        href: '/guides/create-a-note-template'
       },
       {
         title: 'Add styles for text annotations',
-        href: '/guides/text-annotations',
+        href: '/guides/text-annotations'
       },
       {
         title: 'Create a blog using Astro',
-        href: '/guides/create-a-blog-using-astro',
+        href: '/guides/create-a-blog-using-astro'
       },
       {
         title: 'Use ES modules in your plugin',
-        href: '/guides/es-modules',
+        href: '/guides/es-modules'
       },
       {
         title: 'List of commands',
-        href: '/guides/list-of-commands',
-      },
-    ],
+        href: '/guides/list-of-commands'
+      }
+    ]
   },
   {
     title: 'Data Access',
@@ -237,8 +238,8 @@ export const navigation = [
       { title: 'Files', href: '/data-access/files' },
       { title: 'Utilities', href: '/data-access/utils' },
       { title: 'Events', href: '/data-access/events' },
-      { title: 'Local HTTP Server', href: '/data-access/local-http-server' },
-    ],
+      { title: 'Local HTTP Server', href: '/data-access/local-http-server' }
+    ]
   },
   {
     title: 'Core Modules',
@@ -261,8 +262,8 @@ export const navigation = [
       { title: 'Package', href: '/modules/package' },
       { title: 'Package Manager', href: '/modules/package-manager' },
       { title: 'Style Manager', href: '/modules/style-manager' },
-      { title: 'Theme Manager', href: '/modules/theme-manager' },
-    ],
+      { title: 'Theme Manager', href: '/modules/theme-manager' }
+    ]
   },
   {
     title: 'App States',
@@ -280,23 +281,23 @@ export const navigation = [
       { title: 'Preview', href: '/states/preview' },
       { title: 'Query context', href: '/states/query-context' },
       { title: 'Tags', href: '/states/tags' },
-      { title: 'Stats', href: '/states/stats' },
-    ],
+      { title: 'Stats', href: '/states/stats' }
+    ]
   },
   {
     title: 'App Actions',
     link: '/actions',
     links: [
       { title: 'Editing note', href: '/actions/editing-note' },
-      { title: 'Editor', href: '/actions/editor' },
-    ],
+      { title: 'Editor', href: '/actions/editor' }
+    ]
   },
   {
     title: 'Components',
     links: [
       { title: 'Dialog', href: '/components/dialog' },
-      { title: 'MessageDialog', href: '/components/message-dialog' },
-    ],
+      { title: 'MessageDialog', href: '/components/message-dialog' }
+    ]
   },
   {
     title: 'Event Subscription (event-kit)',
@@ -304,20 +305,20 @@ export const navigation = [
       { title: 'Disposable', href: '/event-subscription/disposable' },
       {
         title: 'Composite Disposable',
-        href: '/event-subscription/composite-disposable',
+        href: '/event-subscription/composite-disposable'
       },
-      { title: 'Emitter', href: '/event-subscription/emitter' },
-    ],
+      { title: 'Emitter', href: '/event-subscription/emitter' }
+    ]
   },
   {
     title: 'Appendix',
     links: [
       {
         title: 'Plugin Migration Guide from v3 to v4',
-        href: '/appendix/plugin-migration-from-v3-to-v4',
-      },
-    ],
-  },
+        href: '/appendix/plugin-migration-from-v3-to-v4'
+      }
+    ]
+  }
 ]
 
 export function Navigation(props) {
@@ -335,7 +336,7 @@ export function Navigation(props) {
           <NavigationGroup
             key={group.title}
             group={group}
-            className={groupIndex === 0 && 'md:mt-0'}
+            className={groupIndex === 0 ? 'md:mt-0' : ''}
           />
         ))}
         <li className="sticky bottom-0 z-10 mt-6 min-[416px]:hidden">

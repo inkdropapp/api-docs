@@ -7,28 +7,26 @@ import { Button } from '@/components/Button'
 import { Logo } from '@/components/Logo'
 import {
   MobileNavigation,
-  useIsInsideMobileNavigation,
+  useIsInsideMobileNavigation
 } from '@/components/MobileNavigation'
 import { useMobileNavigationStore } from '@/components/MobileNavigation'
 import { MobileSearch, Search } from '@/components/Search'
 import { ThemeToggle } from '@/components/ThemeToggle'
 
 function TopLevelNavItem({ href, children }) {
-  const isInternal = href && !href.startsWith('https:')
-  const LinkComponent = isInternal ? Link : 'a'
   return (
     <li>
-      <LinkComponent
+      <Link
         href={href}
         className="text-sm leading-5 text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
       >
         {children}
-      </LinkComponent>
+      </Link>
     </li>
   )
 }
 
-export const Header = forwardRef(function Header({ className }, ref) {
+export const Header = forwardRef(function Header({ className, ...props }, ref) {
   let { isOpen: mobileNavIsOpen } = useMobileNavigationStore()
   let isInsideMobileNavigation = useIsInsideMobileNavigation()
 
@@ -38,26 +36,27 @@ export const Header = forwardRef(function Header({ className }, ref) {
 
   return (
     <motion.div
+      {...props}
       ref={ref}
       className={clsx(
         className,
         'fixed inset-x-0 top-0 z-50 flex h-14 items-center justify-between gap-12 px-4 transition sm:px-6 lg:left-72 lg:z-30 lg:px-8 xl:left-80',
         !isInsideMobileNavigation &&
-          'backdrop-blur-sm dark:backdrop-blur lg:left-72 xl:left-80',
+          'backdrop-blur-sm lg:left-72 xl:left-80 dark:backdrop-blur',
         isInsideMobileNavigation
           ? 'bg-white dark:bg-zinc-900'
-          : 'bg-white/[var(--bg-opacity-light)] dark:bg-zinc-900/[var(--bg-opacity-dark)]',
+          : 'bg-white/[var(--bg-opacity-light)] dark:bg-zinc-900/[var(--bg-opacity-dark)]'
       )}
       style={{
         '--bg-opacity-light': bgOpacityLight,
-        '--bg-opacity-dark': bgOpacityDark,
+        '--bg-opacity-dark': bgOpacityDark
       }}
     >
       <div
         className={clsx(
           'absolute inset-x-0 top-full h-px transition',
           (isInsideMobileNavigation || !mobileNavIsOpen) &&
-            'bg-zinc-900/7.5 dark:bg-white/7.5',
+            'bg-zinc-900/7.5 dark:bg-white/7.5'
         )}
       />
       <Search />

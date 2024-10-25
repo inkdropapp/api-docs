@@ -8,13 +8,13 @@ export function HeroPattern() {
           <GridPattern
             width={72}
             height={56}
-            x="-12"
-            y="4"
+            x={-12}
+            y={4}
             squares={[
               [4, 3],
               [2, 1],
               [7, 3],
-              [10, 6],
+              [10, 6]
             ]}
             className="absolute inset-x-0 inset-y-[-50%] h-[200%] w-full skew-y-[-18deg] fill-black/40 stroke-black/50 mix-blend-overlay dark:fill-white/2.5 dark:stroke-white/5"
           />

@@ -27,9 +27,9 @@ const resources = [
       y: 16,
       squares: [
         [0, 1],
-        [1, 3],
-      ],
-    },
+        [1, 3]
+      ]
+    }
   },
   {
     href: '/data-access/books',
@@ -41,9 +41,9 @@ const resources = [
       y: -6,
       squares: [
         [-1, 2],
-        [1, 3],
-      ],
-    },
+        [1, 3]
+      ]
+    }
   },
   {
     href: '/data-access/tags',
@@ -55,9 +55,9 @@ const resources = [
       y: 32,
       squares: [
         [0, 2],
-        [1, 4],
-      ],
-    },
+        [1, 4]
+      ]
+    }
   },
   {
     href: '/data-access/files',
@@ -67,8 +67,8 @@ const resources = [
     icon: ImageFileIcon,
     pattern: {
       y: 22,
-      squares: [[0, 1]],
-    },
+      squares: [[0, 1]]
+    }
   },
   {
     href: '/data-access/utils',
@@ -78,8 +78,8 @@ const resources = [
     icon: UtilsIcon,
     pattern: {
       y: 22,
-      squares: [[0, 1]],
-    },
+      squares: [[0, 1]]
+    }
   },
   {
     href: '/data-access/local-http-server',
@@ -89,9 +89,9 @@ const resources = [
     icon: DatabaseIcon,
     pattern: {
       y: 22,
-      squares: [[0, 1]],
-    },
-  },
+      squares: [[0, 1]]
+    }
+  }
 ]
 
 function ResourceIcon({ icon: Icon }) {
@@ -177,8 +177,8 @@ export function Resources(props) {
       <Heading level={props.level || 2} id="data-access">
         Data Access
       </Heading>
-      <div className="not-prose mt-4 grid grid-cols-1 gap-8 border-t border-zinc-900/5 pt-10 dark:border-white/5 sm:grid-cols-2 xl:grid-cols-4">
-        {resources.map((resource) => (
+      <div className="not-prose mt-4 grid grid-cols-1 gap-8 border-t border-zinc-900/5 pt-10 sm:grid-cols-2 xl:grid-cols-4 dark:border-white/5">
+        {resources.map(resource => (
           <Resource key={resource.href} resource={resource} />
         ))}
       </div>
