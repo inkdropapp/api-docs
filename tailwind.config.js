@@ -1,11 +1,12 @@
-const typographyStyles = require('./typography')
-const typographyPlugin = require('@tailwindcss/typography')
 const headlessuiPlugin = require('@headlessui/tailwindcss')
+const typographyPlugin = require('@tailwindcss/typography')
+
+const typographyStyles = require('./typography')
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/**/*.{js,mjs,jsx,ts,tsx,mdx}'],
-  darkMode: 'class',
+  darkMode: 'selector',
   theme: {
     fontSize: {
       '2xs': ['0.75rem', { lineHeight: '1.25rem' }],

@@ -18,21 +18,25 @@ function useInitialValue(value, condition = true) {
 }
 
 function TopLevelNavItem({ href, children }) {
-  const isInternal = href && !href.startsWith('https:')
-  const LinkComponent = isInternal ? Link : 'a'
   return (
     <li className="md:hidden">
-      <LinkComponent
+      <Link
         href={href}
         className="block py-1 text-sm text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
       >
         {children}
-      </LinkComponent>
+      </Link>
     </li>
   )
 }
 
-function NavLink({ href, tag, active, isAnchorLink = false, children }) {
+function NavLink({
+  href,
+  children,
+  tag,
+  active = false,
+  isAnchorLink = false,
+}) {
   return (
     <Link
       href={href}
@@ -42,7 +46,7 @@ function NavLink({ href, tag, active, isAnchorLink = false, children }) {
         isAnchorLink ? 'pl-7' : 'pl-4',
         active
           ? 'text-zinc-900 dark:text-white'
-          : 'text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white'
+          : 'text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white',
       )}
     >
       <span className="truncate">{children}</span>
@@ -61,15 +65,15 @@ function VisibleSectionHighlight({ group, pathname }) {
       useSectionStore((s) => s.sections),
       useSectionStore((s) => s.visibleSections),
     ],
-    useIsInsideMobileNavigation()
+    useIsInsideMobileNavigation(),
   )
 
   let isPresent = useIsPresent()
   let firstVisibleSectionIndex = Math.max(
     0,
     [{ id: '_top' }, ...sections].findIndex(
-      (section) => section.id === visibleSections[0]
-    )
+      (section) => section.id === visibleSections[0],
+    ),
   )
   let itemHeight = remToPx(2)
   let height = isPresent
@@ -100,7 +104,7 @@ function ActivePageMarker({ group, pathname }) {
   return (
     <motion.div
       layout
-      className="absolute left-2 h-6 w-px bg-pink-500"
+      className="absolute left-2 h-6 w-px bg-emerald-500"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1, transition: { delay: 0.2 } }}
       exit={{ opacity: 0 }}
@@ -116,7 +120,7 @@ function NavigationGroup({ group, className }) {
   let isInsideMobileNavigation = useIsInsideMobileNavigation()
   let [pathname, sections] = useInitialValue(
     [usePathname(), useSectionStore((s) => s.sections)],
-    isInsideMobileNavigation
+    isInsideMobileNavigation,
   )
 
   let isActiveGroup =
@@ -192,83 +196,22 @@ export const navigation = [
     title: 'Guides',
     links: [
       { title: 'Introduction', href: '/' },
-      { title: 'The init file', href: '/guides/the-init-file' },
-      { title: 'Style tweaks', href: '/guides/style-tweaks' },
-      { title: 'Create a theme', href: '/guides/create-a-theme' },
-      { title: 'Plugin: Word count', href: '/guides/plugin-word-count' },
-      {
-        title: 'Getting & modifying the app state',
-        href: '/guides/flux-architecture',
-      },
-      {
-        title: 'Access the local database',
-        href: '/guides/access-the-local-database',
-      },
-      { title: 'Customize the editor', href: '/guides/customize-the-editor' },
-      { title: 'Extend the UI', href: '/guides/extend-the-ui' },
-      {
-        title: 'Create a note template',
-        href: '/guides/create-a-note-template',
-      },
-      {
-        title: 'Add styles for text annotations',
-        href: '/guides/text-annotations',
-      },
-      {
-        title: 'Create a blog using Astro',
-        href: '/guides/create-a-blog-using-astro',
-      },
-      {
-        title: 'Use ES modules in your plugin',
-        href: '/guides/es-modules',
-      },
+      { title: 'Quickstart', href: '/quickstart' },
+      { title: 'SDKs', href: '/sdks' },
+      { title: 'Authentication', href: '/authentication' },
+      { title: 'Pagination', href: '/pagination' },
+      { title: 'Errors', href: '/errors' },
+      { title: 'Webhooks', href: '/webhooks' },
     ],
   },
   {
-    title: 'Data Access',
+    title: 'Resources',
     links: [
-      { title: 'Notes', href: '/data-access/notes' },
-      { title: 'Notebooks', href: '/data-access/books' },
-      { title: 'Tags', href: '/data-access/tags' },
-      { title: 'Files', href: '/data-access/files' },
-      { title: 'Utilities', href: '/data-access/utils' },
-      { title: 'Events', href: '/data-access/events' },
-      { title: 'Local HTTP Server', href: '/data-access/local-http-server' },
-    ],
-  },
-  {
-    title: 'Core Modules',
-    links: [
-      { title: 'Command Registry', href: '/modules/command-registry' },
-      { title: 'Component Manager', href: '/modules/component-manager' },
-      { title: 'Data Store', href: '/modules/data-store' },
-      { title: 'Inkdrop Application', href: '/modules/inkdrop-application' },
-      { title: 'Layout Manager', href: '/modules/layout-manager' },
-      { title: 'Markdown Renderer', href: '/modules/markdown-renderer' },
-      { title: 'Markdown Editor', href: '/modules/markdown-editor' },
-      { title: 'Notification', href: '/modules/notification' },
-      { title: 'Notification Manager', href: '/modules/notification-manager' },
-    ],
-  },
-  {
-    title: 'App States',
-    links: [
-      { title: 'Notebooks', href: '/states/books' },
-      { title: 'Database', href: '/states/db' },
-      { title: 'Editing note', href: '/states/editing-note' },
-      { title: 'Layouts', href: '/states/layouts' },
-      { title: 'Editor', href: '/states/editor' },
-      { title: 'Main layout', href: '/states/main-layout' },
-      { title: 'Note list bar', href: '/states/note-list-bar' },
-      { title: 'Preview', href: '/states/preview' },
-    ],
-  },
-  {
-    title: 'Event Subscription (event-kit)',
-    links: [
-      { title: 'Disposable', href: '/event-subscription/disposable' },
-      { title: 'Composite Disposable', href: '/event-subscription/composite-disposable' },
-      { title: 'Emitter', href: '/event-subscription/emitter' },
+      { title: 'Contacts', href: '/contacts' },
+      { title: 'Conversations', href: '/conversations' },
+      { title: 'Messages', href: '/messages' },
+      { title: 'Groups', href: '/groups' },
+      { title: 'Attachments', href: '/attachments' },
     ],
   },
 ]
@@ -278,26 +221,18 @@ export function Navigation(props) {
     <nav {...props}>
       <ul role="list">
         <TopLevelNavItem href="/">API</TopLevelNavItem>
-        <TopLevelNavItem href="https://docs.inkdrop.app/">
-          User Manual
-        </TopLevelNavItem>
-        <TopLevelNavItem href="https://forum.inkdrop.app/">
-          Support
-        </TopLevelNavItem>
+        <TopLevelNavItem href="#">Documentation</TopLevelNavItem>
+        <TopLevelNavItem href="#">Support</TopLevelNavItem>
         {navigation.map((group, groupIndex) => (
           <NavigationGroup
             key={group.title}
             group={group}
-            className={groupIndex === 0 && 'md:mt-0'}
+            className={groupIndex === 0 ? 'md:mt-0' : ''}
           />
         ))}
         <li className="sticky bottom-0 z-10 mt-6 min-[416px]:hidden">
-          <Button
-            href="https://my.inkdrop.app/"
-            variant="filled"
-            className="w-full"
-          >
-            Log in
+          <Button href="#" variant="filled" className="w-full">
+            Sign in
           </Button>
         </li>
       </ul>

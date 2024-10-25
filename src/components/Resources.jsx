@@ -7,22 +7,16 @@ import { GridPattern } from '@/components/GridPattern'
 import { Heading } from '@/components/Heading'
 import { ChatBubbleIcon } from '@/components/icons/ChatBubbleIcon'
 import { EnvelopeIcon } from '@/components/icons/EnvelopeIcon'
-import { NoteIcon } from '@/components/icons/NoteIcon'
-import { NotebookIcon } from '@/components/icons/NotebookIcon'
 import { UserIcon } from '@/components/icons/UserIcon'
 import { UsersIcon } from '@/components/icons/UsersIcon'
-import { TagIcon } from '@/components/icons/TagIcon'
-import { ImageFileIcon } from '@/components/icons/FileIcon'
-import { UtilsIcon } from '@/components/icons/UtilsIcon'
-import { DatabaseIcon } from '@/components/icons/DatabaseIcon'
 
 const resources = [
   {
-    href: '/data-access/notes',
-    name: 'Notes',
+    href: '/contacts',
+    name: 'Contacts',
     description:
-      'Learn about the note model and the note class, which provide the core functionality for handling notes.',
-    icon: NoteIcon,
+      'Learn about the contact model and how to create, retrieve, update, delete, and list contacts.',
+    icon: UserIcon,
     pattern: {
       y: 16,
       squares: [
@@ -32,11 +26,11 @@ const resources = [
     },
   },
   {
-    href: '/data-access/books',
-    name: 'Notebooks',
+    href: '/conversations',
+    name: 'Conversations',
     description:
-      'Notebooks are how notes are organized in Inkdrop and are commonly used to separate notes by category, project, or purpose.',
-    icon: NotebookIcon,
+      'Learn about the conversation model and how to create, retrieve, update, delete, and list conversations.',
+    icon: ChatBubbleIcon,
     pattern: {
       y: -6,
       squares: [
@@ -46,11 +40,11 @@ const resources = [
     },
   },
   {
-    href: '/data-access/tags',
-    name: 'Tags',
+    href: '/messages',
+    name: 'Messages',
     description:
-      "Tags let you add keywords to notes, making them easier to find and browse when you've got a lot of them.",
-    icon: TagIcon,
+      'Learn about the message model and how to create, retrieve, update, delete, and list messages.',
+    icon: EnvelopeIcon,
     pattern: {
       y: 32,
       squares: [
@@ -60,33 +54,11 @@ const resources = [
     },
   },
   {
-    href: '/data-access/files',
-    name: 'Files',
+    href: '/groups',
+    name: 'Groups',
     description:
-      'Files in Inkdrop are primarily used as image attachments that can be inserted into notes.',
-    icon: ImageFileIcon,
-    pattern: {
-      y: 22,
-      squares: [[0, 1]],
-    },
-  },
-  {
-    href: '/data-access/utils',
-    name: 'Utilities',
-    description:
-      'Provides convenient methods for managing documents in the local database.',
-    icon: UtilsIcon,
-    pattern: {
-      y: 22,
-      squares: [[0, 1]],
-    },
-  },
-  {
-    href: '/data-access/local-http-server',
-    name: 'Local HTTP server',
-    description:
-      'The Inkdrop client app can open a simple HTTP server so that you can access the data from an external program easily.',
-    icon: DatabaseIcon,
+      'Learn about the group model and how to create, retrieve, update, delete, and list groups.',
+    icon: UsersIcon,
     pattern: {
       y: 22,
       squares: [[0, 1]],
@@ -171,13 +143,13 @@ function Resource({ resource }) {
   )
 }
 
-export function Resources(props) {
+export function Resources() {
   return (
     <div className="my-16 xl:max-w-none">
-      <Heading level={props.level || 2} id="data-access">
-        Data Access
+      <Heading level={2} id="resources">
+        Resources
       </Heading>
-      <div className="not-prose mt-4 grid grid-cols-1 gap-8 border-t border-zinc-900/5 pt-10 dark:border-white/5 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="not-prose mt-4 grid grid-cols-1 gap-8 border-t border-zinc-900/5 pt-10 sm:grid-cols-2 xl:grid-cols-4 dark:border-white/5">
         {resources.map((resource) => (
           <Resource key={resource.href} resource={resource} />
         ))}
