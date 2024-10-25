@@ -230,7 +230,7 @@ export const navigation = [
     ]
   },
   {
-    title: 'Resources',
+    title: 'Data Access',
     links: [
       { title: 'Notes', href: '/data-access/notes' },
       { title: 'Notebooks', href: '/data-access/books' },
@@ -340,7 +340,11 @@ export function Navigation(props) {
           />
         ))}
         <li className="sticky bottom-0 z-10 mt-6 min-[416px]:hidden">
-          <Button href="#" variant="filled" className="w-full">
+          <Button
+            href="https://my.inkdrop.app/"
+            variant="filled"
+            className="w-full"
+          >
             Log in
           </Button>
         </li>

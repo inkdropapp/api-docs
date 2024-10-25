@@ -171,11 +171,11 @@ function Resource({ resource }) {
   )
 }
 
-export function Resources() {
+export function Resources(props) {
   return (
     <div className="my-16 xl:max-w-none">
-      <Heading level={2} id="resources">
-        Resources
+      <Heading level={props.level || 2} id="data-access">
+        Data Access
       </Heading>
       <div className="not-prose mt-4 grid grid-cols-1 gap-8 border-t border-zinc-900/5 pt-10 sm:grid-cols-2 xl:grid-cols-4 dark:border-white/5">
         {resources.map(resource => (

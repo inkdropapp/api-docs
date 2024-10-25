@@ -8,18 +8,18 @@ import '@/styles/tailwind.css'
 
 export const metadata = {
   title: {
-    template: '%s - Protocol API Reference',
-    default: 'Protocol API Reference',
-  },
+    template: '%s - Inkdrop API Reference',
+    default: 'Inkdrop API Reference'
+  }
 }
 
 export default async function RootLayout({ children }) {
   let pages = await glob('**/*.mdx', { cwd: 'src/app' })
   let allSectionsEntries = await Promise.all(
-    pages.map(async (filename) => [
+    pages.map(async filename => [
       '/' + filename.replace(/(^|\/)page\.mdx$/, ''),
-      (await import(`./${filename}`)).sections,
-    ]),
+      (await import(`./${filename}`)).sections
+    ])
   )
   let allSections = Object.fromEntries(allSectionsEntries)
 
