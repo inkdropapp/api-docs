@@ -3,32 +3,27 @@ import { Resources } from '@/components/Resources'
 import { HeroPattern } from '@/components/HeroPattern'
 
 export const metadata = {
-  title: 'API Documentation',
+  title: 'API Documentation - Inkdrop',
   description:
-    'Learn everything there is to know about the Protocol API and integrate Protocol into your product.',
+    'Explore the comprehensive Inkdrop API documentation to customize, enhance, and tailor the app\'s functionalities. From JavaScript tweaks to UI style adjustments, unlock the full potential of Inkdrop.',
 }
 
 export const sections = [
   { title: 'Guides', id: 'guides' },
-  { title: 'Resources', id: 'resources' },
+  { title: 'Data Access', id: 'data-access' },
 ]
 
 <HeroPattern />
 
 ![Hacking Dog](/images/heroimage.png 'heroimage')
 
-<div className="not-prose mb-16 mt-6 flex gap-3">
-  <Button href="/quickstart" arrow="right">
-    <>Quickstart</>
-  </Button>
-  <Button href="/sdks" variant="outline">
-    <>Explore SDKs</>
-  </Button>
-</div>
+# Start building with the Inkdrop API {{ anchor: false }}
+
+The Inkdrop API empowers users to tailor and enhance the app's core functionalities. Whether customizing the editor, tweaking the Markdown renderer, or crafting unique themes and plugins, this API provides the tools you need.
 
 ## Getting started {{ anchor: false }}
 
-To get started, create a new application in your [developer settings](#), then read about how to make requests for the resources you need to access using our HTTP APIs or dedicated client SDKs. When your integration is ready to go live, publish it to our [integrations directory](#) to reach the Protocol community. {{ className: 'lead' }}
+Before diving deep into the API functionalities, it's essential to familiarize yourself with the basics. Here are two essential guides to get you started: {{ className: 'lead' }}
 
 - **[The Init File](/guides/the-init-file)**: Understand how Inkdrop loads and how you can customize its behavior using JavaScript in the `init.js` file. Whether you wish to run custom scripts on startup or add new commands, this guide offers a foundation for using the API with JavaScript.
 - **[Style Tweaks](/guides/style-tweaks)**: Delve into the aesthetic customizations of Inkdrop. Learn how to apply personal style changes and adjustments to the UI using the `styles.less` file, without the need to create an entire theme.
