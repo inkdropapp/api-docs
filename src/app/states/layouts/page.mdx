@@ -1,0 +1,362 @@
+export const metadata = {
+  title: 'layouts',
+  description: 'An app state of component layouts. This section explains how to fetch the `layouts` state.',
+}
+
+# layouts
+
+An [app state](/guides/flux-architecture) of the layouts.
+You can obtain the `layouts` state and integrate it with React components.{{ className: 'lead' }}
+
+You can change the layout components with [Layout Manager](/modules/layout-manager).
+
+---
+
+## Data Structure
+<Row>
+  <Col>
+    A map of `Record<string, LayoutComponents>` where:
+
+    - `string`: The layout name
+    - `LayoutComponents`: An array of React component class names
+  </Col>
+  <Col sticky>
+    Get the `layouts` state manually:
+
+    ```js
+    const { layouts } = inkdrop.store.getState()
+    ```
+
+    Connect the state with your React component:
+
+    ```js
+    import { useSelector } from 'react-redux'
+    const selector = ({ layouts }) => layouts
+    const MyComponent = props => {
+      const layouts = useSelector(selector)
+      // render
+    }
+    ```
+
+    ```js {{ title: 'Example values' }}
+    {
+      "main:full": [
+        "ModalLayout",
+        "SideBarLayout",
+        "NoteListBarLayout",
+        "EditorLayout"
+      ],
+      "main:slim": [
+        "ModalLayout",
+        "NoteListBarLayout",
+        "EditorLayout"
+      ],
+      "main:distraction-free": [
+        "ModalLayout",
+        "EditorLayout"
+      ],
+      "sidebar": [
+        ...
+    }
+    ```
+  </Col>
+</Row>
+
+## Available Layouts
+
+### `main:full`
+<Row>
+  <Col>
+    The main layout that consists of 3 columns.
+  </Col>
+  <Col sticky>
+    ```json {{ title: 'Default values' }}
+    [
+      "ModalLayout",
+      "SideBarLayout",
+      "NoteListBarLayout",
+      "EditorLayout"
+    ]
+    ```
+  </Col>
+</Row>
+
+### `main:slim`
+<Row>
+  <Col>
+    The main layout that consists of 2 columns.
+  </Col>
+  <Col sticky>
+    ```json {{ title: 'Default values' }}
+    [
+      "ModalLayout",
+      "NoteListBarLayout",
+      "EditorLayout"
+    ]
+    ```
+</Col>
+</Row>
+
+### `main:distraction-free`
+<Row>
+  <Col>
+    The main layout for distraction-free mode.
+  </Col>
+  <Col sticky>
+    ```json {{ title: 'Default values' }}
+    [
+      "ModalLayout",
+      "EditorLayout"
+    ]
+    ```
+</Col>
+</Row>
+
+### `sidebar`
+<Row>
+  <Col>
+    The sidebar layout
+  </Col>
+  <Col sticky>
+    ```json {{ title: 'Default values' }}
+    [
+      "SideBarHeader",
+      "SideBarNavigation",
+      "SideBarSyncStatusView",
+      "SideBarPluginUpdatesNotificationView"
+    ]
+    ```
+  </Col>
+</Row>
+
+### `sidebar-menu`
+<Row>
+  <Col>
+    The menu layout of sidebar
+  </Col>
+  <Col sticky>
+    ```json {{ title: 'Default values' }}
+    [
+      "SideBarMenuItemAllNotes",
+      "SideBarMenuSectionNotebooks",
+      "SideBarMenuBookListRoot",
+      "SideBarMenuItemTrash",
+      "SideBarMenuSectionStatus",
+      "SideBarMenuStatusList",
+      "SideBarMenuSectionTags",
+      "SideBarMenuTagList"
+    ]
+    ```
+  </Col>
+</Row>
+
+### `sidebar-workspace-menu`
+<Row>
+  <Col>
+    The menu layout of sidebar workspace menu
+  </Col>
+  <Col sticky>
+    ```json {{ title: 'Default values' }}
+    [
+      "SidebarWorkspaceMenuTitle",
+      "SideBarWorkspaceMenuAllNotes",
+      "SideBarMenuSectionNotebooks",
+      "SideBarWorkspaceMenuBookList",
+      "SideBarMenuSectionStatus",
+      "SidebarWorkspaceMenuStatusList",
+      "SideBarMenuSectionTags",
+      "SidebarWorkspaceMenuTagList"
+    ]
+    ```
+  </Col>
+</Row>
+
+### `note-list-bar`
+<Row>
+  <Col>
+    The menu layout of note list bar
+  </Col>
+  <Col sticky>
+    ```json {{ title: 'Default values' }}
+    [
+      "NoteListHeader",
+      "NoteListSearchBar",
+      "NoteListBarContainer"
+    ]
+    ```
+  </Col>
+</Row>
+
+### `note-list-bar:trash`
+<Row>
+  <Col>
+    The trash menu layout of note list bar
+  </Col>
+  <Col sticky>
+    ```json {{ title: 'Default values' }}
+    [
+      "NoteListHeader",
+      "NoteListBarContainer"
+    ]
+    ```
+  </Col>
+</Row>
+
+### `mde`
+<Row>
+  <Col>
+    The mde layout
+  </Col>
+  <Col sticky>
+    ```json {{ title: 'Default values' }}
+    [
+      "Editor"
+    ]
+    ```
+  </Col>
+</Row>
+
+### `editor`
+<Row>
+  <Col>
+    The editor layout
+  </Col>
+  <Col sticky>
+    ```json {{ title: 'Default values' }}
+    [
+      "EditorDrawer",
+      "EditorFloatingActions",
+      "EditorHeaderLayout",
+      "EditorMetaLayout",
+      "EditorToolbar",
+      "MDELayout",
+      "MDESearchBar",
+      "EditorStatusBarLayout"
+    ]
+    ```
+  </Col>
+</Row>
+
+### `editor-header`
+<Row>
+  <Col>
+    The header layout of the editor
+  </Col>
+  <Col sticky>
+    ```json {{ title: 'Default values' }}
+    [
+      "EditorHeaderTitleInput",
+      "EditorHeaderMore"
+    ]
+    ```
+  </Col>
+</Row>
+
+### `editor-meta`
+<Row>
+  <Col>
+    The meta pane layout of the editor
+  </Col>
+  <Col sticky>
+    ```json {{ title: 'Default values' }}
+    [
+      "EditorMetaNotebook",
+      "EditorMetaStatusPicker",
+      "EditorMetaTags"
+    ]
+    ```
+  </Col>
+</Row>
+
+### `modal`
+<Row>
+  <Col>
+    The layout for modal components
+  </Col>
+  <Col sticky>
+    ```json {{ title: 'Default values' }}
+    [
+      "NewNotebookDialog",
+      "DeleteNotebookDialog",
+      "RenameNotebookDialog",
+      "TagSettingsDialog",
+      "DeleteTagDialog",
+      "AssistiveErrorDialog",
+      "MoveNotesDialog",
+      "MoveNotebookDialog",
+      "EmptyTrashDialog",
+      "ShareNoteDialog",
+      "NoteRevisionsDialog"
+    ]
+    ```
+  </Col>
+</Row>
+
+### `editor-toolbar`
+<Row>
+  <Col>
+    The toolbar layout of the editor
+  </Col>
+  <Col sticky>
+    ```json {{ title: 'Default values' }}
+    []
+    ```
+  </Col>
+</Row>
+
+### `editor-drawer-menu`
+<Row>
+  <Col>
+    The editor drawer menu items
+  </Col>
+  <Col sticky>
+    ```json {{ title: 'Default values' }}
+    [
+      "EditorDrawerSectionHeaderNoteInformation",
+      "EditorDrawerMenuItemNotebook",
+      "EditorDrawerItemStatus",
+      "EditorDrawerItemTags",
+      "EditorDrawerItemCreatedDate",
+      "EditorDrawerItemUpdatedDate",
+      "EditorDrawerSeparator-1",
+      "EditorDrawerSectionHeaderActions",
+      "EditorDrawerActionButtonDuplicate",
+      "EditorDrawerActionButtonCopyNoteLink",
+      "EditorDrawerActionButtonPinToTop",
+      "EditorDrawerActionButtonOpenNoteInSeparateWindow",
+      "EditorDrawerSeparator-2",
+      "EditorDrawerActionButtonDeleteNote",
+      "EditorDrawerActionButtonRevisionHistory",
+      "EditorDrawerSeparator-3",
+      "EditorDrawerActionButtonShare"
+    ]
+    ```
+  </Col>
+</Row>
+
+### `editor-status-bar`
+<Row>
+  <Col>
+    The status bar layout of the editor
+  </Col>
+  <Col sticky>
+    ```json {{ title: 'Default values' }}
+    []
+    ```
+  </Col>
+</Row>
+
+### `editor-floating-actions`
+<Row>
+  <Col>
+    The floating action buttons on the editor
+  </Col>
+  <Col sticky>
+    ```json {{ title: 'Default values' }}
+    [
+      "EditorFloatingActionTogglePreview",
+      "EditorFloatingActionToggleSideBySide"
+    ]
+    ```
+  </Col>
+</Row>

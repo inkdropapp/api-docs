@@ -1,0 +1,263 @@
+export const metadata = {
+  title: 'Events',
+  description:
+    'Provides the ability to subscribe to various events raised by the local database.',
+}
+
+# Events
+
+Provides the ability to subscribe to various events raised by the local database.
+
+---
+
+## All changes {{ label: 'onChange(callback)' }}
+
+<Row>
+  <Col>
+    Invoke the given callback when the database has been changed.
+
+    ### Parameters
+    <Properties>
+      <Property name="callback" type="(PouchDB.Core.ChangesResponseChange<object>) => void">
+        A function which is called with an object indicating the [changes feed](https://pouchdb.com/guides/changes.html#understanding-changes).
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns a [Disposable][disposable] on which `.dispose()` can be called to unsubscribe.
+
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const subscription = db.onChange(changes => {
+      console.log('Database has been changed', changes)
+    });
+
+    // Later, dispose
+    subscription.dispose();
+    ```
+    </CodeGroup>
+
+  </Col>
+</Row>
+
+---
+
+## Note changes {{ label: 'onNoteChange(callback)' }}
+
+<Row>
+  <Col>
+    Invoke the given callback when a note has been added, modified or deleted.
+
+    ### Parameters
+    <Properties>
+      <Property name="callback" type="(PouchDB.Core.ChangesResponseChange<Note>) => void">
+        A function which is called with an object indicating the [changes feed](https://pouchdb.com/guides/changes.html#understanding-changes).
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns a [Disposable][disposable] on which `.dispose()` can be called to unsubscribe.
+
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const subscription = db.onNoteChange(changes => {
+      console.log('Note has been changed', changes)
+    });
+
+    // Later, dispose
+    subscription.dispose();
+    ```
+    </CodeGroup>
+
+  </Col>
+</Row>
+
+---
+
+## Book changes {{ label: 'onBookChange(callback)' }}
+
+<Row>
+  <Col>
+    Invoke the given callback when a notebook has been added, modified or deleted.
+
+    ### Parameters
+    <Properties>
+      <Property name="callback" type="(PouchDB.Core.ChangesResponseChange<Book>) => void">
+        A function which is called with an object indicating the [changes feed](https://pouchdb.com/guides/changes.html#understanding-changes).
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns a [Disposable][disposable] on which `.dispose()` can be called to unsubscribe.
+
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const subscription = db.onBookChange(changes => {
+      console.log('Notebook has been changed', changes)
+    });
+
+    // Later, dispose
+    subscription.dispose();
+    ```
+    </CodeGroup>
+
+  </Col>
+</Row>
+
+---
+
+## Tag changes {{ label: 'onTagChange(callback)' }}
+
+<Row>
+  <Col>
+    Invoke the given callback when a tag has been added, modified or deleted.
+
+    ### Parameters
+    <Properties>
+      <Property name="callback" type="(PouchDB.Core.ChangesResponseChange<Tag>) => void">
+        A function which is called with an object indicating the [changes feed](https://pouchdb.com/guides/changes.html#understanding-changes).
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns a [Disposable][disposable] on which `.dispose()` can be called to unsubscribe.
+
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const subscription = db.onTagChange(changes => {
+      console.log('Tag has been changed', changes)
+    });
+
+    // Later, dispose
+    subscription.dispose();
+    ```
+    </CodeGroup>
+
+  </Col>
+</Row>
+
+---
+
+## Full-text index creation start {{ label: 'onFullTextIndexBuildStart(callback)' }}
+
+<Row>
+  <Col>
+    Invoke the given callback when the app started building full-text search index.
+
+    ### Parameters
+    <Properties>
+      <Property name="callback" type="() => void">
+        A Function to be invoked.
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns a [Disposable][disposable] on which `.dispose()` can be called to unsubscribe.
+
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const subscription = db.onFullTextIndexBuildStart(changes => {
+      console.log('Full-text search index building has been started')
+    });
+
+    // Later, dispose
+    subscription.dispose();
+    ```
+    </CodeGroup>
+
+  </Col>
+</Row>
+
+---
+
+## Full-text index creation end {{ label: 'onFullTextIndexBuildEnd(callback)' }}
+
+<Row>
+  <Col>
+    Invoke the given callback when the app finished building full-text search index.
+
+    ### Parameters
+    <Properties>
+      <Property name="callback" type="() => void">
+        A Function to be invoked.
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns a [Disposable][disposable] on which `.dispose()` can be called to unsubscribe.
+
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const subscription = db.onFullTextIndexBuildStart(changes => {
+      console.log('Full-text search index building has been finished')
+    });
+
+    // Later, dispose
+    subscription.dispose();
+    ```
+    </CodeGroup>
+
+  </Col>
+</Row>
+
+---
+
+## Full-text index creation error {{ label: 'onFullTextIndexBuildError(callback)' }}
+
+<Row>
+  <Col>
+    Invoke the given callback when the app failed to build full-text search index.
+
+    ### Parameters
+    <Properties>
+      <Property name="callback" type="(error: Error) => void">
+        A function which is called with an error.
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns a [Disposable][disposable] on which `.dispose()` can be called to unsubscribe.
+
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    const db = inkdrop.main.dataStore.getLocalDB()
+    const subscription = db.onFullTextIndexBuildStart(changes => {
+      console.log('Full-text search index building has been failed')
+    });
+
+    // Later, dispose
+    subscription.dispose();
+    ```
+    </CodeGroup>
+
+  </Col>
+</Row>
+
+[disposable]: /event-subscription/disposable

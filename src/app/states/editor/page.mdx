@@ -1,0 +1,61 @@
+export const metadata = {
+  title: 'editor',
+  description: 'An app state of the editor. This section explains how to fetch and manipulate the `editor` state.',
+}
+
+# editor
+
+An [app state](/guides/flux-architecture) of the editor.
+You can obtain the `editor` state and integrate it with React components.{{ className: 'lead' }}
+
+
+---
+
+## Data Structure
+
+<Row>
+  <Col>
+    <Properties>
+      <Property name="changed" type="boolean">
+        `true` if the note has been changed. 
+        The editor will save the note if `changed` is true when it is closed.
+      </Property>
+      <Property name="needsUpdatingDate" type="boolean">
+        Whether the note's `updatedAt` field needs to be updated or not.
+      </Property>
+      <Property name="viewMode" type="'preview' | 'sideBySide' | 'edit'">
+        The editor view mode which represents either `'preview'`, `'sideBySide'` or `'edit'`.
+      </Property>
+      <Property name="openingNoteId" type="string | undefined">
+        When the app is trying to open a note, it indicates its' note ID, otherwise `undefined`.
+      </Property>
+      <Property name="readOnly" type="boolean">
+        true if the editor is in read only mode.
+      </Property>
+      <Property name="savingNoteId" type="string | undefined">
+        When the app is saving the note, it indicates its' note ID, otherwise will be `undefined`.
+      </Property>
+      <Property name="lastError" type="AssistiveError | undefined">
+        The last error that occurred.
+      </Property>   
+    </Properties>
+  </Col>
+  <Col sticky>
+    Get the `editor` state manually:
+
+    ```js
+    const { editor } = inkdrop.store.getState()
+    ```
+
+    Connect the state with your React component:
+
+    ```js
+    import { useSelector } from 'react-redux'
+    const selector = ({ editor }) => editor
+    const MyComponent = props => {
+      const editor = useSelector(selector)
+      // render
+    }
+    ```
+  </Col>
+</Row>

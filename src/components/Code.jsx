@@ -24,11 +24,7 @@ const languageNames = {
   python: 'Python',
   ruby: 'Ruby',
   go: 'Go',
-<<<<<<< HEAD
   diff: 'Diff'
-=======
-  diff: 'Diff',
->>>>>>> main
 }
 
 function getPanelTitle({ title, language }) {

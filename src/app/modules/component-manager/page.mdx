@@ -1,0 +1,217 @@
+export const metadata = {
+  title: 'Component Manager',
+  description: 'The Component Manager lets you register React components that you\'d like to display on layouts.',
+}
+
+# Component Manager
+
+Provides a registry for React components that you'd like to display on layouts.
+An instance of this class is always available as the `inkdrop.components` global.
+
+---
+
+## Registering and unregistering a React component
+
+You can register your React component classes to the component registry.
+Then, the registered components can be added to layouts.
+Below example registers `MyDialog` class to the component registry and adds it to `modal` layout so that you can show it as a modal view.
+
+```js
+module.exports = {
+  activate() {
+    inkdrop.components.registerClass(MyDialog)
+    inkdrop.layouts.addComponentToLayout('modal', 'MyDialog')
+  },
+
+  deactivate() {
+    inkdrop.layouts.removeComponentFromLayout('modal', 'MyDialog')
+    inkdrop.components.deleteClass(MyDialog)
+  },
+}
+```
+
+---
+
+## Using a registered component
+
+When using a custom component registered in the component manager, you may want to observe when the component is registered or unregistered.
+It can be accomplished by creating a custom hook as below:
+
+```ts
+import { ComponentType, useEffect, useState } from 'react'
+import { CompositeDisposable } from 'event-kit'
+
+export const useCustomComponent = <T extends ComponentType<any>>(className: string, DefaultComponent: T) => {
+  const { components } = inkdrop
+  const initialComponent = (components.getComponentClass(
+    className
+  ) as T) || DefaultComponent
+  const [{ c: Component }, setComponent] = useState<{ c: T }>({ c: initialComponent })
+
+  useEffect(() => {
+    const disposables = new CompositeDisposable()
+    disposables.add(
+      components.onClassRegistered<T>(className, (klass) => setComponent({ c: klass })),
+      components.onClassDeleted(className, () => setComponent({ c: DefaultComponent }))
+    )
+    return () => disposables.dispose()
+  }, [className, DefaultComponent])
+
+  return Component
+}
+```
+
+---
+
+## Register a component {{ label: 'registerClass(reactComponent, componentName)' }}
+
+<Row>
+  <Col>
+    Registers a given React component class to the component registry.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="reactComponent" type="React.Component" required>
+        A React component class to be added.
+      </Property>
+      <Property name="componentName" type="string">
+        A custom component class name. It is necessary if the given component is HOC ([Higher-Order Component](https://legacy.reactjs.org/docs/higher-order-components.html)).
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    inkdrop.components.registerClass(MyDialog)
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Delete a component {{ label: 'deleteClass(reactComponent, componentName)' }}
+
+<Row>
+  <Col>
+    Unregisters a given React component class from the component registry.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="reactComponent" type="React.Component" required>
+        A React component class to be removed.
+      </Property>
+      <Property name="componentName" type="string">
+        A custom component class name. It is necessary if the given component is HOC ([Higher-Order Component](https://legacy.reactjs.org/docs/higher-order-components.html)).
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    inkdrop.components.deleteClass(MyDialog)
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Get a component {{ label: 'getComponentClass(componentName)' }}
+
+Returns a React component that has a given component name.
+
+<Row>
+  <Col>
+    ### Parameters
+
+    <Properties>
+      <Property name="componentName" type="string" required>
+        A component class name to get.
+      </Property>
+    </Properties>
+
+    ### Returns
+    A React component class that matched the given class name, or undefined if not found.
+
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    inkdrop.components.getComponentClass("MyDialog")
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+### Event: Register {{ label: 'onClassRegistered(componentName, callback)' }}
+
+<Row>
+  <Col>
+    Observe when a component with the given component name is registered.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="componentName" type="string">
+        A custom component class name to observe.
+      </Property>
+      <Property name="callback" type="<T extends ComponentType>(klass: T) => void">
+        Invoked when a component with the given component name is registered.
+      </Property>
+    </Properties>
+
+    ### Returns
+    Returns a [Disposable][disposable].
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    components.onClassRegistered('CustomNoteListItemView', (klass) => {
+      // do something
+    })
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Event: Delete {{ label: 'onClassDeleted(componentName, callback)' }}
+
+<Row>
+  <Col>
+    Observe when a component with the given component name is unregistered.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="componentName" type="string">
+        A custom component class name to observe.
+      </Property>
+      <Property name="callback" type="() => void">
+        Invoked when a component with the given component name is unregistered.
+      </Property>
+    </Properties>
+
+    ### Returns
+    Returns a [Disposable][disposable].
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    components.onClassDeleted('CustomNoteListItemView', (klass) => {
+      // do something
+    })
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+[disposable]: /event-subscription/disposable
