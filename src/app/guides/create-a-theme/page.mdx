@@ -34,8 +34,8 @@ Themes are pretty straightforward but it's still helpful to be familiar with a f
 Let's create your first theme which is called `motif-syntax`.
 To create a syntax theme, do the following:
 
-1. fork the [Inkdrop's sample repository on GitHub](https://github.com/inkdropapp/inkdrop-default-light-syntax-theme)
-2. Clone the forked repository to the directory named `motif-syntax` in the local filesystem
+1. Create a new repository based on [a syntax theme template repository on GitHub](https://github.com/inkdropapp/inkdrop-syntax-theme)
+2. Clone your repository to the directory named `motif-syntax` in the local filesystem
 3. Open a terminal in the forked theme's directory
 4. Let Inkdrop run in **Development Mode** by selecting the menu _Inkdrop > Preferences_ on macOS or _File > Settings_ on Windows and Linux, clicking the _General_ tab on the left hand navigation, and check the "_Development Mode_", then reload the app by pressing `Alt+Cmd+Ctrl+L` / `Alt+Ctrl+L`
 5. Change the name of the theme in the theme's `package.json` file
@@ -45,9 +45,11 @@ To create a syntax theme, do the following:
 
 Now you are ready to make changes!
 
-Open up `styles/colors.less` to change the various color variables which have already been defined. For example, turn `@base00` into `#f4c2c1`.
+Open up `styles/index.css` to change the various color variables which have already been defined.
+For example, turn `--base00` into `#f4c2c1`.
 
-Then open `styles/default.less` and modify the various selectors that have already been defined. These selectors style different parts of code in the editor such as comments, strings and the line numbers in the gutter.
+Then, modify the various selectors that have already been defined.
+These selectors style different parts of code in the editor such as comments, strings and the line numbers in the gutter.
 You may notice that the editor is built based on [CodeMirror](https://codemirror.net/), you can also import various existing theme built for CodeMirror.
 
 After making changes, reload the app to reflected changes.
