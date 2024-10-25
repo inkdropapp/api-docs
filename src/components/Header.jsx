@@ -45,7 +45,7 @@ export const Header = forwardRef(function Header({ className, ...props }, ref) {
           'backdrop-blur-sm lg:left-72 xl:left-80 dark:backdrop-blur',
         isInsideMobileNavigation
           ? 'bg-white dark:bg-zinc-900'
-          : 'bg-white/[var(--bg-opacity-light)] dark:bg-zinc-900/[var(--bg-opacity-dark)]'
+          : 'bg-white/[var(--bg-opacity-light)] dark:bg-zinc-900/[var(--bg-opacity-dark)]',
       )}
       style={{
         '--bg-opacity-light': bgOpacityLight,
@@ -56,7 +56,7 @@ export const Header = forwardRef(function Header({ className, ...props }, ref) {
         className={clsx(
           'absolute inset-x-0 top-full h-px transition',
           (isInsideMobileNavigation || !mobileNavIsOpen) &&
-            'bg-zinc-900/7.5 dark:bg-white/7.5'
+            'bg-zinc-900/7.5 dark:bg-white/7.5',
         )}
       />
       <Search />
