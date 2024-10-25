@@ -64,6 +64,8 @@ export function Heading({
   label,
   level,
   anchor = true,
+  warning,
+  selector,
   ...props
 }) {
   level = level ?? 2
@@ -96,6 +98,19 @@ export function Heading({
           </Anchor>
         ) : (
           children
+        )}
+        {selector && (
+          <span className="ml-2 text-2xs font-normal">
+            <span className="opacity-60">in</span>&nbsp;
+            <code title="Selector" className="text-xs">
+              {selector}
+            </code>
+          </span>
+        )}
+        {warning && (
+          <span className="ml-3 text-2xs font-normal text-orange-400 dark:text-orange-600">
+            {warning}
+          </span>
         )}
       </Component>
     </>

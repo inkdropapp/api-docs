@@ -7,7 +7,7 @@ import { Button } from '@/components/Button'
 import { Logo } from '@/components/Logo'
 import {
   MobileNavigation,
-  useIsInsideMobileNavigation,
+  useIsInsideMobileNavigation
 } from '@/components/MobileNavigation'
 import { useMobileNavigationStore } from '@/components/MobileNavigation'
 import { MobileSearch, Search } from '@/components/Search'
@@ -45,18 +45,18 @@ export const Header = forwardRef(function Header({ className, ...props }, ref) {
           'backdrop-blur-sm lg:left-72 xl:left-80 dark:backdrop-blur',
         isInsideMobileNavigation
           ? 'bg-white dark:bg-zinc-900'
-          : 'bg-white/[var(--bg-opacity-light)] dark:bg-zinc-900/[var(--bg-opacity-dark)]',
+          : 'bg-white/[var(--bg-opacity-light)] dark:bg-zinc-900/[var(--bg-opacity-dark)]'
       )}
       style={{
         '--bg-opacity-light': bgOpacityLight,
-        '--bg-opacity-dark': bgOpacityDark,
+        '--bg-opacity-dark': bgOpacityDark
       }}
     >
       <div
         className={clsx(
           'absolute inset-x-0 top-full h-px transition',
           (isInsideMobileNavigation || !mobileNavIsOpen) &&
-            'bg-zinc-900/7.5 dark:bg-white/7.5',
+            'bg-zinc-900/7.5 dark:bg-white/7.5'
         )}
       />
       <Search />
@@ -64,14 +64,19 @@ export const Header = forwardRef(function Header({ className, ...props }, ref) {
         <MobileNavigation />
         <Link href="/" aria-label="Home">
           <Logo className="h-6" />
+          <div className="ml-2 inline-block font-semibold">Developers</div>
         </Link>
       </div>
       <div className="flex items-center gap-5">
         <nav className="hidden md:block">
           <ul role="list" className="flex items-center gap-8">
             <TopLevelNavItem href="/">API</TopLevelNavItem>
-            <TopLevelNavItem href="#">Documentation</TopLevelNavItem>
-            <TopLevelNavItem href="#">Support</TopLevelNavItem>
+            <TopLevelNavItem href="https://docs.inkdrop.app/">
+              User Manual
+            </TopLevelNavItem>
+            <TopLevelNavItem href="https://forum.inkdrop.app/">
+              Forum
+            </TopLevelNavItem>
           </ul>
         </nav>
         <div className="hidden md:block md:h-5 md:w-px md:bg-zinc-900/10 md:dark:bg-white/15" />
@@ -80,7 +85,7 @@ export const Header = forwardRef(function Header({ className, ...props }, ref) {
           <ThemeToggle />
         </div>
         <div className="hidden min-[416px]:contents">
-          <Button href="#">Sign in</Button>
+          <Button href="#">Log in</Button>
         </div>
       </div>
     </motion.div>

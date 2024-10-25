@@ -31,8 +31,8 @@ function PageLink({ label, page, previous = false }) {
 
 function PageNavigation() {
   let pathname = usePathname()
-  let allPages = navigation.flatMap((group) => group.links)
-  let currentPageIndex = allPages.findIndex((page) => page.href === pathname)
+  let allPages = navigation.flatMap(group => group.links)
+  let currentPageIndex = allPages.findIndex(page => page.href === pathname)
 
   if (currentPageIndex === -1) {
     return null
@@ -81,10 +81,14 @@ function GitHubIcon(props) {
   )
 }
 
-function DiscordIcon(props) {
+function DiscourseIcon(props) {
   return (
-    <svg viewBox="0 0 20 20" aria-hidden="true" {...props}>
-      <path d="M16.238 4.515a14.842 14.842 0 0 0-3.664-1.136.055.055 0 0 0-.059.027 10.35 10.35 0 0 0-.456.938 13.702 13.702 0 0 0-4.115 0 9.479 9.479 0 0 0-.464-.938.058.058 0 0 0-.058-.027c-1.266.218-2.497.6-3.664 1.136a.052.052 0 0 0-.024.02C1.4 8.023.76 11.424 1.074 14.782a.062.062 0 0 0 .024.042 14.923 14.923 0 0 0 4.494 2.272.058.058 0 0 0 .064-.02c.346-.473.654-.972.92-1.496a.057.057 0 0 0-.032-.08 9.83 9.83 0 0 1-1.404-.669.058.058 0 0 1-.029-.046.058.058 0 0 1 .023-.05c.094-.07.189-.144.279-.218a.056.056 0 0 1 .058-.008c2.946 1.345 6.135 1.345 9.046 0a.056.056 0 0 1 .059.007c.09.074.184.149.28.22a.058.058 0 0 1 .023.049.059.059 0 0 1-.028.046 9.224 9.224 0 0 1-1.405.669.058.058 0 0 0-.033.033.056.056 0 0 0 .002.047c.27.523.58 1.022.92 1.495a.056.056 0 0 0 .062.021 14.878 14.878 0 0 0 4.502-2.272.055.055 0 0 0 .016-.018.056.056 0 0 0 .008-.023c.375-3.883-.63-7.256-2.662-10.246a.046.046 0 0 0-.023-.021Zm-9.223 8.221c-.887 0-1.618-.814-1.618-1.814s.717-1.814 1.618-1.814c.908 0 1.632.821 1.618 1.814 0 1-.717 1.814-1.618 1.814Zm5.981 0c-.887 0-1.618-.814-1.618-1.814s.717-1.814 1.618-1.814c.908 0 1.632.821 1.618 1.814 0 1-.71 1.814-1.618 1.814Z" />
+    <svg viewBox="-2 -2 28 28" aria-hidden="true" {...props}>
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M12 0A12 12 0 0 0 0 12v11.5a.5.5 0 0 0 .5.5H12a12 12 0 0 0 0-24Zm4.73 19a6.6 6.6 0 0 1-7.48.13.62.62 0 0 0-.35-.13h-.06l-1.3.14 1-.45a7.79 7.79 0 0 0 8.17-3 6.6 6.6 0 0 0 .54-.87c0-.09.09-.17.13-.26s.22-.48.31-.73c0-.07.06-.15.08-.23a6.33 6.33 0 0 0 .25-.95 1.55 1.55 0 0 0 0-.21c0-.27.07-.53.09-.8a2.81 2.81 0 0 0 0-.29 6.76 6.76 0 0 0 0-.9v-.1a7.37 7.37 0 0 0-.11-.84 3 3 0 0 1 .22.28A6.59 6.59 0 0 1 16.73 19ZM4.84 14.75A6.58 6.58 0 0 1 9.23 4.6a6.8 6.8 0 0 1 1.1-.09 6.54 6.54 0 0 1 3.82 1.23l.29.23a6.33 6.33 0 0 0-.76-.12h-.16a8.24 8.24 0 0 0-.86 0l-.34 0q-.36 0-.72.09l-.28 0c-.32.07-.63.15-.94.25l-.25.1c-.24.09-.48.19-.71.3l-.27.14a8 8 0 0 0-.88.54 7.76 7.76 0 0 0-3 8.18l-.46 1 .13-1.31a.6.6 0 0 0-.1-.39Zm.23 4.18 1.43-3.14a.64.64 0 0 0 0-.43 6.56 6.56 0 0 1 9.58-7.46 6.58 6.58 0 0 1-7.46 9.56.61.61 0 0 0-.42 0Z"
+      />
     </svg>
   )
 }
@@ -105,14 +109,17 @@ function SmallPrint() {
         &copy; Copyright {new Date().getFullYear()}. All rights reserved.
       </p>
       <div className="flex gap-4">
-        <SocialLink href="#" icon={XIcon}>
+        <SocialLink href="https://x.com/inkdrop_app" icon={XIcon}>
           Follow us on X
         </SocialLink>
-        <SocialLink href="#" icon={GitHubIcon}>
+        <SocialLink
+          href="https://github.com/inkdropapp/api-docs/"
+          icon={GitHubIcon}
+        >
           Follow us on GitHub
         </SocialLink>
-        <SocialLink href="#" icon={DiscordIcon}>
-          Join our Discord server
+        <SocialLink href="https://forum.inkdrop.app/" icon={DiscourseIcon}>
+          Join our user forum
         </SocialLink>
       </div>
     </div>

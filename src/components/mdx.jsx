@@ -24,6 +24,10 @@ export const h2 = function H2(props) {
   return <Heading level={2} {...props} />
 }
 
+export const h3 = function H3(props) {
+  return <Heading level={3} {...props} />
+}
+
 function InfoIcon(props) {
   return (
     <svg viewBox="0 0 16 16" aria-hidden="true" {...props}>
@@ -64,7 +68,7 @@ export function Col({ children, sticky = false }) {
     <div
       className={clsx(
         '[&>:first-child]:mt-0 [&>:last-child]:mb-0',
-        sticky && 'xl:sticky xl:top-24',
+        sticky && 'xl:sticky xl:top-24'
       )}
     >
       {children}
@@ -72,13 +76,14 @@ export function Col({ children, sticky = false }) {
   )
 }
 
-export function Properties({ children }) {
+export function Properties({ children, sub, title }) {
   return (
     <div className="my-6">
       <ul
         role="list"
         className="m-0 max-w-[calc(theme(maxWidth.lg)-theme(spacing.8))] list-none divide-y divide-zinc-900/5 p-0 dark:divide-white/5"
       >
+        {title && <div className="mb-1 text-2xs uppercase">{title}</div>}
         {children}
       </ul>
     </div>

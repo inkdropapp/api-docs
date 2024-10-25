@@ -19,7 +19,7 @@ function createSectionStore(sections) {
       set((state) =>
         state.visibleSections.join() === visibleSections.join()
           ? {}
-          : { visibleSections },
+          : { visibleSections }
       ),
     registerHeading: ({ id, ref, offsetRem }) =>
       set((state) => {
@@ -60,7 +60,7 @@ function useVisibleSections(sectionStore) {
         }
 
         let offset = remToPx(offsetRem)
-        let top = headingRef.current.getBoundingClientRect().top + scrollY
+        let top = headingRef?.current.getBoundingClientRect().top + scrollY
 
         if (sectionIndex === 0 && top - offset > scrollY) {
           newVisibleSections.push('_top')

@@ -1,0 +1,62 @@
+export const metadata = {
+  title: 'notes',
+  description: 'An app state of notes currently loaded for the note list bar. This section explains how to fetch and manipulate the `notes` state.',
+}
+
+# notes
+
+An [app state](/guides/flux-architecture) of notes currently loaded for the note list bar.
+You can obtain the `notes` state and integrate it with React components.{{ className: 'lead' }}
+
+---
+
+## Data Structure
+
+<Row>
+  <Col>
+    <Properties>
+      <Property name="items" type="Note[]">
+        An array of [Note](/data-access/notes)s.
+      </Property>
+      <Property name="hashedItems" type="{ [noteId]: Note }">
+        A map where keys are noteIds and values are [Note](/data-access/notes)s.
+      </Property>
+      <Property name="lastQuery" type="NoteQuery | undefined">
+        The last note query to show the list of notes.
+      </Property>
+      <Property name="cursor" type="NoteQueryCursor | null">
+        The current cursor to list the notes.
+      </Property>
+      <Property name="totalRows" type="number">
+        Number of items.
+      </Property>
+      <Property name="timestamp" type="number">
+        Last datetime when the state was changed.
+      </Property>
+      <Property name="viewOptions" type="NotesViewOptions | undefined">
+        The note list view options.
+      </Property>
+      <Property name="loading" type="boolean">
+        `true` while notes are being loaded.
+      </Property>
+    </Properties>
+  </Col>
+  <Col sticky>
+    Get the `notes` state manually:
+
+    ```js
+    const { notes } = inkdrop.store.getState()
+    ```
+
+    Connect the state with your React component:
+
+    ```js
+    import { useSelector } from 'react-redux'
+    const selector = ({ notes }) => notes
+    const MyComponent = props => {
+      const notes = useSelector(selector)
+      // render
+    }
+    ```
+  </Col>
+</Row>

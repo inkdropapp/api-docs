@@ -1,0 +1,90 @@
+export const metadata = {
+  title: 'stats',
+  description: 'An app state that represents the statistics of the database, including the total number of notes, notes in each notebook, notes with each tag, and so on.',
+}
+
+# stats
+
+An [app state](/guides/flux-architecture) that represents the statistics of the database.
+You can obtain the `stats` state and integrate it with React components.{{ className: 'lead' }}
+
+---
+
+## Data Structure
+
+<Row>
+  <Col>
+    <Properties>
+      <Property name="notes" type="number">
+        The total number of notes in the database.
+      </Property>
+      <Property name="pins" type="number">
+        The number of pinned notes.
+      </Property>
+      <Property name="tags" type="{ [tagId]: number }">
+        The number of notes associated with each tag, where keys are `tagId` and values are note counts.
+      </Property>
+      <Property name="books" type="{ [bookId]: number }">
+        The number of notes in each notebook, where keys are `bookId` and values are note counts.
+      </Property>
+      <Property name="status" type="{ [status]: number }">
+        The number of notes with each status, where keys are status types and values are note counts.
+      </Property>
+    </Properties>
+  </Col>
+  <Col sticky>
+    Get the `stats` state manually:
+
+    ```js
+    const { stats } = inkdrop.store.getState()
+    ```
+
+    Connect the state with your React component:
+
+    ```js
+    import { useSelector } from 'react-redux'
+    const selectStats = ({ stats }) => stats
+    const MyComponent = props => {
+      const stats = useSelector(selectStats)
+      // render
+    }
+    ```
+
+    Example stats data:
+
+    ```json
+    {
+      "notes": 141,
+      "pins": 4,
+      "tags": {
+        "tag:HyBgJ94gx": 12,
+        "tag:Hyg5Cyoaz": 1,
+        "tag:ZiQET3lID": 3,
+        "tag:cBDJ4lFfE": 10,
+        "tag:h11OMPbSs": 3,
+        "tag:sxSqVKdRv": 15,
+        "tag:tBELDUITs": 1,
+        "tag:tutorial": 3
+      },
+      "books": {
+        "book:-wDNxxN_a": 28,
+        "book:0cFae6lCc": 6,
+        "book:Bk5Ivk0T": 6,
+        "book:HJWHS7SMZ": 15,
+        "book:SkTsOceR": 9,
+        "book:XxhoCNo8u": 3,
+        "book:first": 66,
+        "book:kKNHqOr6z": 3,
+        "book:tjnPbJakw": 5
+      },
+      "status": {
+        "none": 115,
+        "active": 16,
+        "onHold": 5,
+        "completed": 4,
+        "dropped": 1
+      }
+    }
+    ```
+  </Col>
+</Row>

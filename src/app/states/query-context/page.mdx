@@ -1,0 +1,122 @@
+export const metadata = {
+  title: 'queryContext',
+  description: 'An app state of the query context, representing the currently used query for displaying the content of the note list.',
+}
+
+# queryContext
+
+An [app state](/guides/flux-architecture) of query context which represents currently used query for showing the content of the note list.
+You can obtain the `queryContext` state and integrate it with React components.{{ className: 'lead' }}
+
+---
+
+## Data Structure
+
+<Row>
+  <Col>
+    <Properties>
+      <Property name="mode" type="string">
+        The query mode which takes one of "all", "book", "tag", "status", "trash", and "search".
+
+        Following sections describe data structure for each mode.
+
+        ### `"all"`: All Notes
+
+        <Properties sub>
+          <Property name="filterKeyword" type="string">
+            A filter keyword to filter note list items.
+          </Property>
+        </Properties>
+
+        ### `"book"`: Show notes in a notebook
+
+        <Properties sub>
+          <Property name="bookId" type="string">
+            A notebook ID to query.
+          </Property>
+          <Property name="tagId" type="string" optional>
+            A tag ID to filter.
+          </Property>
+          <Property name="status" type="string" optional>
+            A status to filter.
+          </Property>
+          <Property name="filterKeyword" type="string">
+            A filter keyword to filter note list items.
+          </Property>
+          <Property name="includeChildren" type="boolean">
+            Whether to include notes in child notebooks.
+          </Property>
+        </Properties>
+
+        ### `"tag"`: Show notes with a tag
+
+        <Properties sub>
+          <Property name="tagId" type="string">
+            A tag ID to query.
+          </Property>
+          <Property name="filterKeyword" type="string">
+            A filter keyword to filter note list items.
+          </Property>
+        </Properties>
+
+        ### `"status"`: Show notes with a status
+
+        <Properties sub>
+          <Property name="status" type="string">
+            A status to query.
+          </Property>
+          <Property name="filterKeyword" type="string">
+            A filter keyword to filter note list items.
+          </Property>
+        </Properties>
+
+        ### `"trash"`: Show notes in trash
+
+        <Properties sub>
+          <Property name="bookId" type="string">
+            The trash notebook ID.
+          </Property>
+        </Properties>
+
+        ### `"search"`: Show notes that match keywords and conditions
+
+        <Properties sub>
+          <Property name="searchKeyword" type="string">
+            The search keyword to query.
+          </Property>
+        </Properties>
+
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+    Get the `queryContext` state manually:
+
+    ```js
+    const { queryContext } = inkdrop.store.getState()
+    ```
+
+    Connect the state with your React component:
+
+    ```js
+    import { useSelector } from 'react-redux'
+    const selector = ({ queryContext }) => queryContext
+    const MyComponent = props => {
+      const queryContext = useSelector(selector)
+      // render
+    }
+    ```
+
+    An example state for "book" mode:
+
+    ```js
+    {
+      "mode": "book",
+      "filterKeyword": "",
+      "bookId": "book:uP2kEsahM",
+      "includeChildren": false
+    }
+    ```
+  </Col>
+</Row>

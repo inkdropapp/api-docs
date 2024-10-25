@@ -1,0 +1,206 @@
+export const metadata = {
+  title: 'Environment',
+  description: 'Inkdrop global for dealing with packages, themes, menus, and the window.',
+}
+
+# Environment
+
+Inkdrop global for dealing with packages, themes, menus, and the window.
+An instance of this class is always available as the `inkdrop` global.{{ className: 'lead' }}
+
+---
+
+## Properties
+
+<Properties>
+  <Property name="commands" type="object">
+    A [CommandRegistry](/modules/command-registry) instance.
+  </Property>
+  <Property name="components" type="object">
+    A [ComponentManager](/modules/component-manager) instance.
+  </Property>
+  <Property name="config" type="object">
+    A [Config](/modules/config) instance.
+  </Property>
+  <Property name="contextMenu" type="object">
+    A [ContextMenuManager](/modules/context-menu-manager) instance.
+  </Property>
+  <Property name="devMode" type="boolean">
+    Boolean, true if Development Mode is enabled, false if disabled.
+  </Property>
+  <Property name="element" type="component">
+    A React root component.
+  </Property>
+  <Property name="keymaps" type="object">
+    A [KeymapManager](/modules/keymap-manager) instance.
+  </Property>
+  <Property name="layouts" type="object">
+    A [LayoutManager](/modules/layout-manager) instance.
+  </Property>
+  <Property name="main" type="object">
+    A reference to an [InkdropApplication](/modules/inkdrop-application) instance in the main process.
+  </Property>
+  <Property name="menu" type="object">
+    A [MenuManager](/modules/menu-manager) instance.
+  </Property>
+  <Property name="notifications" type="object">
+    A [NotificationManager](/modules/notification-manager) instance.
+  </Property>
+  <Property name="packages" type="object">
+    A [PackageManager](/modules/package-manager) instance.
+  </Property>
+  <Property name="resourcePath" type="string">
+    A path to the app's bundled resource directory. For example, usually `"/Applications/Inkdrop.app/Contents/Resources/app.asar"` on macOS.
+  </Property>
+  <Property name="themes" type="object">
+    A [ThemeManager](/modules/theme-manager) instance.
+  </Property>
+  <Property name="styles" type="object">
+    A [StyleManager](/modules/style-manager) instance.
+  </Property>
+  <Property name="store" type="object">
+    A [Redux store](https://redux.js.org/api/store).
+  </Property>
+  <Property name="window" type="object">
+    A [BrowserWindow](https://electronjs.org/docs/api/browser-window) instance of the current window.
+  </Property>
+</Properties>
+
+---
+
+## Editor Load Event {{ label: 'onEditorLoad(callback)' }}
+
+Invoke the given callback when the editor has been loaded.
+
+<Row>
+  <Col>
+    ### Parameters
+    <Properties>
+      <Property name="callback(editor)" type="function" required>
+        Function to be called when the editor loads, where `editor` is the instance of [MDE](/modules/markdown-editor) that was loaded.
+      </Property>
+    </Properties>
+
+    ### Returns
+    Returns a [Disposable](/event-subscription/disposable) on which `.dispose()` can be called to unsubscribe.
+  </Col>
+</Row>
+
+---
+
+## Editor Unload Event {{ label: 'onEditorUnload(callback)' }}
+
+Invoke the given callback when the editor has been unloaded.
+
+<Row>
+  <Col>
+    ### Parameters
+    <Properties>
+      <Property name="callback()" type="function" required>
+        Function to be called when the editor unloads.
+      </Property>
+    </Properties>
+
+    ### Returns
+    Returns a [Disposable](/event-subscription/disposable) on which `.dispose()` can be called to unsubscribe.
+  </Col>
+</Row>
+
+---
+
+## App Readiness Event {{ label: 'onAppReady(callback)' }}
+
+Invoke the given callback when the app is ready.
+
+<Row>
+  <Col>
+    ### Parameters
+    <Properties>
+      <Property name="callback()" type="function" required>
+        Function to be called when the app is ready.
+      </Property>
+    </Properties>
+
+    ### Returns
+    Returns a [Disposable](/event-subscription/disposable) on which `.dispose()` can be called to unsubscribe.
+  </Col>
+</Row>
+
+---
+
+## App Quit Event {{ label: 'onAppQuit(callback)' }}
+
+Invoke the given callback when the app is about to quit.
+
+<Row>
+  <Col>
+    ### Parameters
+    <Properties>
+      <Property name="callback()" type="function" required>
+        Function to be called before the app quits.
+      </Property>
+    </Properties>
+
+    ### Returns
+    Returns a [Disposable](/event-subscription/disposable) on which `.dispose()` can be called to unsubscribe.
+  </Col>
+</Row>
+
+---
+
+## Is Editor Active {{ label: 'isEditorActive()' }}
+
+Check if the editor is currently active.
+
+<Row>
+  <Col>
+    ### Returns
+    Returns a Boolean indicating whether the editor is active.
+  </Col>
+</Row>
+
+---
+
+## Get Active Editor {{ label: 'getActiveEditor()' }}
+
+Retrieve the active editor instance.
+
+<Row>
+  <Col>
+    ### Returns
+    Returns an instance of [MDE](/modules/markdown-editor) if the editor is active, otherwise undefined.
+  </Col>
+</Row>
+
+---
+
+## Get Active Editor with Error Handling {{ label: 'getActiveEditorOrThrowError()' }}
+
+Retrieve the active editor instance or throw an error if it's not available.
+
+<Row>
+  <Col>
+    ### Returns
+    Returns an instance of [MDE](/modules/markdown-editor) if the editor is active, otherwise throws an error.
+  </Col>
+</Row>
+
+---
+
+## Set Active Editor {{ label: 'setActiveEditor(editor)' }}
+
+Set the currently active editor instance.
+
+<Row>
+  <Col>
+    ### Parameters
+    <Properties>
+      <Property name="editor" type="MDE" required>
+        The [MDE](/modules/markdown-editor) instance to set as the active editor.
+      </Property>
+    </Properties>
+  </Col>
+</Row>
+
+---
+

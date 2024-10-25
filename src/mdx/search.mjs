@@ -7,6 +7,7 @@ import { remark } from 'remark'
 import remarkMdx from 'remark-mdx'
 import { createLoader } from 'simple-functional-loader'
 import { filter } from 'unist-util-filter'
+import { map } from 'unist-util-map'
 import { SKIP, visit } from 'unist-util-visit'
 import * as url from 'url'
 
@@ -25,15 +26,33 @@ function excludeObjectExpressions(tree) {
   return filter(tree, (node) => !isObjectExpression(node))
 }
 
+function extractLabelTextAsContent(tree) {
+  return map(tree, (node) => {
+    if (node.type === 'mdxTextExpression') {
+      const txtExp = eval(`(${node.value})`)
+      return txtExp?.label ? { type: 'text', value: `: ${txtExp.label}` } : node
+    } else {
+      return node
+    }
+  })
+}
+
 function extractSections() {
-  return (tree, { sections }) => {
+  return (tree, { sections, url }) => {
     slugify.reset()
 
     visit(tree, (node) => {
       if (node.type === 'heading' || node.type === 'paragraph') {
-        let content = toString(excludeObjectExpressions(node))
-        if (node.type === 'heading' && node.depth <= 2) {
-          let hash = node.depth === 1 ? null : slugify(content)
+        let content = toString(
+          excludeObjectExpressions(extractLabelTextAsContent(node)),
+        )
+        if (
+          node.type === 'heading' &&
+          (node.depth <= 2 ||
+            (node.depth === 3 && url === '/guides/list-of-commands'))
+        ) {
+          let title = toString(excludeObjectExpressions(node))
+          let hash = node.depth === 1 ? null : slugify(title)
           sections.push([content, hash, []])
         } else {
           sections.at(-1)?.[2].push(content)
@@ -66,7 +85,7 @@ export default function Search(nextConfig = {}) {
               if (cache.get(file)?.[0] === mdx) {
                 sections = cache.get(file)[1]
               } else {
-                let vfile = { value: mdx, sections }
+                let vfile = { value: mdx, sections, url }
                 processor.runSync(processor.parse(vfile), vfile)
                 cache.set(file, [mdx, sections])
               }

@@ -1,0 +1,96 @@
+export const metadata = {
+  title: 'Theme Manager',
+  description: 'The Theme Manager is responsible for handling the loading and activation of available themes.',
+}
+
+# Theme Manager
+
+Handles loading and activating available themes.
+
+An instance of this class is always available as the `inkdrop.themes` global.
+
+---
+
+## Theme Manager Updates Subscription {{ label: 'onDidChangeActiveThemes(callback)' }}
+
+Invoke the given callback when style sheet changes associated with updating the list of active themes are completed.
+
+<Row>
+  <Col>
+    ### Parameters
+    <Properties>
+      <Property name="callback()" type="function" required>
+        Function to be called after the active themes have been updated.
+      </Property>
+    </Properties>
+
+    ### Returns
+    Returns a [Disposable](/event-subscription/disposable) on which `.dispose()` can be called to unsubscribe.
+  </Col>
+</Row>
+
+---
+
+## Get Loaded Theme Names {{ label: 'getLoadedThemeNames()' }}
+
+Retrieve the names of all loaded themes.
+
+<Row>
+  <Col>
+    ### Returns
+    Returns an Array of Strings with the names of all loaded themes.
+  </Col>
+</Row>
+
+---
+
+## Get Loaded Themes {{ label: 'getLoadedThemes()' }}
+
+Obtain a list of all loaded themes.
+
+<Row>
+  <Col>
+    ### Returns
+    Returns an Array of all the loaded themes.
+  </Col>
+</Row>
+
+---
+
+## Get Active Theme Names {{ label: 'getActiveThemeNames()' }}
+
+Get the names of all active themes.
+
+<Row>
+  <Col>
+    ### Returns
+    Returns an Array of Strings with the names of all active themes.
+  </Col>
+</Row>
+
+---
+
+## Get Active Themes {{ label: 'getActiveThemes()' }}
+
+Retrieve all active themes.
+
+<Row>
+  <Col>
+    ### Returns
+    Returns an Array of all the active themes.
+  </Col>
+</Row>
+
+---
+
+## Get Enabled Theme Names {{ label: 'getEnabledThemeNames()' }}
+
+Get the names of enabled themes from the configuration.
+
+<Row>
+  <Col>
+    ### Returns
+    Returns an array of theme names in the order that they should be activated.
+  </Col>
+</Row>
+

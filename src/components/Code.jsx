@@ -7,7 +7,7 @@ import {
   useContext,
   useEffect,
   useRef,
-  useState,
+  useState
 } from 'react'
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
 import clsx from 'clsx'
@@ -24,6 +24,7 @@ const languageNames = {
   python: 'Python',
   ruby: 'Ruby',
   go: 'Go',
+  diff: 'Diff'
 }
 
 function getPanelTitle({ title, language }) {
@@ -71,12 +72,12 @@ function CopyButton({ code }) {
       className={clsx(
         'group/button absolute right-4 top-3.5 overflow-hidden rounded-full py-1 pl-2 pr-3 text-2xs font-medium opacity-0 backdrop-blur transition focus:opacity-100 group-hover:opacity-100',
         copied
-          ? 'bg-emerald-400/10 ring-1 ring-inset ring-emerald-400/20'
-          : 'bg-white/5 hover:bg-white/7.5 dark:bg-white/2.5 dark:hover:bg-white/5',
+          ? 'bg-pink-400/10 ring-1 ring-inset ring-pink-400/20'
+          : 'bg-white/5 hover:bg-white/7.5 dark:bg-white/2.5 dark:hover:bg-white/5'
       )}
       onClick={() => {
         window.navigator.clipboard.writeText(code).then(() => {
-          setCopyCount((count) => count + 1)
+          setCopyCount(count => count + 1)
         })
       }}
     >
@@ -84,7 +85,7 @@ function CopyButton({ code }) {
         aria-hidden={copied}
         className={clsx(
           'pointer-events-none flex items-center gap-0.5 text-zinc-400 transition duration-300',
-          copied && '-translate-y-1.5 opacity-0',
+          copied && '-translate-y-1.5 opacity-0'
         )}
       >
         <ClipboardIcon className="h-5 w-5 fill-zinc-500/20 stroke-zinc-500 transition-colors group-hover/button:stroke-zinc-400" />
@@ -93,8 +94,8 @@ function CopyButton({ code }) {
       <span
         aria-hidden={!copied}
         className={clsx(
-          'pointer-events-none absolute inset-0 flex items-center justify-center text-emerald-400 transition duration-300',
-          !copied && 'translate-y-1.5 opacity-0',
+          'pointer-events-none absolute inset-0 flex items-center justify-center text-pink-400 transition duration-300',
+          !copied && 'translate-y-1.5 opacity-0'
         )}
       >
         Copied!
@@ -136,7 +137,7 @@ function CodePanel({ children, tag, label, code }) {
 
   if (!code) {
     throw new Error(
-      '`CodePanel` requires a `code` prop, or a child with a `code` prop.',
+      '`CodePanel` requires a `code` prop, or a child with a `code` prop.'
     )
   }
 
@@ -172,8 +173,8 @@ function CodeGroupHeader({ title, children, selectedIndex }) {
               className={clsx(
                 'border-b py-3 transition ui-not-focus-visible:outline-none',
                 childIndex === selectedIndex
-                  ? 'border-emerald-500 text-emerald-400'
-                  : 'border-transparent text-zinc-400 hover:text-zinc-300',
+                  ? 'border-pink-500 text-pink-400'
+                  : 'border-transparent text-zinc-400 hover:text-zinc-300'
               )}
             >
               {getPanelTitle(isValidElement(child) ? child.props : {})}
@@ -191,7 +192,7 @@ function CodeGroupPanels({ children, ...props }) {
   if (hasTabs) {
     return (
       <TabPanels>
-        {Children.map(children, (child) => (
+        {Children.map(children, child => (
           <TabPanel>
             <CodePanel {...props}>{child}</CodePanel>
           </TabPanel>
@@ -231,28 +232,28 @@ function usePreventLayoutShift() {
           positionRef.current?.getBoundingClientRect().top ?? initialTop
         window.scrollBy(0, newTop - initialTop)
       })
-    },
+    }
   }
 }
 
-const usePreferredLanguageStore = create()((set) => ({
+const usePreferredLanguageStore = create()(set => ({
   preferredLanguages: [],
-  addPreferredLanguage: (language) =>
-    set((state) => ({
+  addPreferredLanguage: language =>
+    set(state => ({
       preferredLanguages: [
         ...state.preferredLanguages.filter(
-          (preferredLanguage) => preferredLanguage !== language,
+          preferredLanguage => preferredLanguage !== language
         ),
-        language,
-      ],
-    })),
+        language
+      ]
+    }))
 }))
 
 function useTabGroupProps(availableLanguages) {
   let { preferredLanguages, addPreferredLanguage } = usePreferredLanguageStore()
   let [selectedIndex, setSelectedIndex] = useState(0)
   let activeLanguage = [...availableLanguages].sort(
-    (a, z) => preferredLanguages.indexOf(z) - preferredLanguages.indexOf(a),
+    (a, z) => preferredLanguages.indexOf(z) - preferredLanguages.indexOf(a)
   )[0]
   let languageIndex = availableLanguages.indexOf(activeLanguage)
   let newSelectedIndex = languageIndex === -1 ? selectedIndex : languageIndex
@@ -266,11 +267,11 @@ function useTabGroupProps(availableLanguages) {
     as: 'div',
     ref: positionRef,
     selectedIndex,
-    onChange: (newSelectedIndex) => {
+    onChange: newSelectedIndex => {
       preventLayoutShift(() =>
-        addPreferredLanguage(availableLanguages[newSelectedIndex]),
+        addPreferredLanguage(availableLanguages[newSelectedIndex])
       )
-    },
+    }
   }
 }
 
@@ -278,8 +279,8 @@ const CodeGroupContext = createContext(false)
 
 export function CodeGroup({ children, title, ...props }) {
   let languages =
-    Children.map(children, (child) =>
-      getPanelTitle(isValidElement(child) ? child.props : {}),
+    Children.map(children, child =>
+      getPanelTitle(isValidElement(child) ? child.props : {})
     ) ?? []
   let tabGroupProps = useTabGroupProps(languages)
   let hasTabs = Children.count(children) > 1
@@ -320,7 +321,7 @@ export function Code({ children, ...props }) {
   if (isGrouped) {
     if (typeof children !== 'string') {
       throw new Error(
-        '`Code` children must be a string when nested inside a `CodeGroup`.',
+        '`Code` children must be a string when nested inside a `CodeGroup`.'
       )
     }
     return <code {...props} dangerouslySetInnerHTML={{ __html: children }} />

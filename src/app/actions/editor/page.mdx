@@ -1,0 +1,91 @@
+export const metadata = {
+  title: 'editor',
+  description: 'Actions for managing the [editor](/states/editor) app state.',
+}
+
+# editor
+
+Actions for managing the [editor](/states/editor) app state, including changing, saving, closing, and creating notes, as well as changing the view mode.{{ className: 'lead' }}
+
+---
+
+## Change Action {{ label: 'change(needsUpdatingDate)' }}
+
+<Row>
+  <Col>
+    Flag the editing note as changed, indicating it needs to be saved.
+
+    <Properties>
+      <Property name="needsUpdatingDate" type="boolean" required>
+        Whether the note's `updatedAt` field needs to be updated or not.
+      </Property>
+    </Properties>
+  </Col>
+  <Col>
+    ### Set the Editor State as 'Changed'
+    If you manipulated the note data and want the app to save it:
+
+    ```js
+    import { actions } from 'inkdrop'
+    inkdrop.store.dispatch(actions.editor.change(true))
+    ```
+  </Col>
+</Row>
+
+---
+
+## Save Action {{ label: 'save()' }}
+
+Save the currently editing note.
+
+<Warning>
+Do not use this action in your plugin. Use [`core:save-note` command](/guides/list-of-commands#core-save-note) instead.
+</Warning>
+
+<Row>
+  <Col>
+    <Properties>
+      <Property name="save" type="function">
+        Saves the editing note.
+      </Property>
+    </Properties>
+  </Col>
+</Row>
+
+---
+
+## Close Action {{ label: 'close()' }}
+
+Close the editing note. The changes in the note will be saved.
+
+---
+
+## Create Action {{ label: 'create()' }}
+
+Create a new note and open it.
+
+<Warning>
+Do not use this action in your plugin. Use [`core:new-note` command](/guides/list-of-commands#core-new-note) instead.
+</Warning>
+
+---
+
+## Change View Mode Action {{ label: 'changeViewMode(viewMode)' }}
+
+Change the editor view mode.
+
+<Warning>
+Do not use this action in your plugin. Use [`view:toggle-preview` command](/guides/list-of-commands#view-toggle-preview) or [`view:toggle-side-by-side`](/guides/list-of-commands#view-toggle-side-by-side) instead.
+</Warning>
+
+<Row>
+  <Col>
+    <Properties warning>
+      <Property name="viewMode" type="string" required>
+        The editor view mode.
+      </Property>
+    </Properties>
+  </Col>
+</Row>
+
+---
