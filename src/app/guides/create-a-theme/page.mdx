@@ -105,8 +105,12 @@ To create a UI theme, do the following:
 6. Run `ipm link --dev` to symlink your repository to `<USER_DATA>/inkdrop/dev/packages`. You can find the user data directory as described on [this page](https://docs.inkdrop.app/reference/user-data-directory).
 7. Reload Inkdrop using <kbd>Alt+Cmd+Ctrl+R</kbd> / <kbd>Alt+Ctrl+R</kbd>
 8. Enable the theme via the "_UI Theme_" drop-down in the "Themes" tab of the Preferences
-
-Now you are ready to make changes!
+9. Run `dev-server` to start the development server
+10. Open the URL displayed in your console in a web browser
+11. Edit your theme's `styles/theme.css` file to customize the theme
+12. Run `generate-palette` to generate a `palette.json` file
+13. Commit the generated `palette.json` file to your repository
+14. Publish your theme
 
 ### Customizing Theme Variables
 
@@ -178,6 +182,18 @@ So, you may want to adjust the styles by specifying the platform selector like s
   --page-background: rgb(0 0 0 / 40%);
 }
 ```
+
+### Generating `palette.json`
+
+When you are ready to publish your theme, let's generate a `palette.json` file, which contains the variables in JSON format.
+This file is planned to be used for displaying a preview of your theme and also used for the mobile app in the future.
+Run the following command before publishing in the root theme project directory:
+
+```sh
+generate-palette
+```
+
+You can commit the generated `palette.json` file to your repository.
 
 ### Example UI themes
 
