@@ -4,26 +4,55 @@ export const metadata = {
     'A tutorial on how to create a theme',
 }
 
+<Warning>
+  This guide targets Inkdrop v5.9.0 or later.
+</Warning>
+
 # Creating a theme
 
-Inkdrop's interface is rendered using HTML, and it's styled via Less which is a superset of CSS. Don't worry if you haven't heard of Less before; it's just like CSS, but with a few handy extensions. {{ className: 'lead' }}
+Inkdrop's interface is rendered using HTML and CSS.
+If you already have experience with web development, you're ready to go!{{ className: 'lead' }}
 
-Inkdrop supports three types of themes: UI, Syntax and Preview. UI themes style elements such as the side view, the note list, drop-down lists, and the tool bar. Syntax themes style the note, gutter and other elements inside the editor view. Preview themes style the header, texts, code blocks and other elements inside the preview view.
+Inkdrop supports three types of themes: UI, Syntax and Preview:
+
+- **UI themes** style elements such as the sidebar, the note list, drop-down lists, and the tool bar.
+- **Syntax themes** style the note, gutter and other elements inside the editor view.
+- **Preview themes** style the header, texts, code blocks and other elements inside the preview view.
 
 ![Theme Types](/images/creating-a-theme_types.png)
 
 Themes can be changed from Preferences which you can open by selecting the _Inkdrop > Preferences_ on macOS or _File > Settings_ on Windows and Linux, and clicking the _Themes_ tab on the left hand navigation.
 Themes can be also installed with [Inkdrop Plugin Manager](https://docs.inkdrop.app/manual/extend-inkdrop-with-plugins).
 
+## Prerequisites
+
+- [Bun](https://bun.sh/) - It's an all-in-one TypeScript runtime, which is used in the Inkdrop's toolchain.
+
 ## Getting Started
 
 Themes are pretty straightforward but it's still helpful to be familiar with a few things before starting:
 
 - [CSS Variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_variables) are entities defined by CSS authors which contain specific values to be reused throughout a document.
-- Less is a superset of CSS, but it has some really handy features like variables. If you aren't familiar with its syntax, take a few minutes to [familiarize yourself](https://speakerdeck.com/danmatthews/less-css).
 - You may also want to review the concept of a `package.json` (as covered in Inkdrop `package.json`). This file is used to help distribute your theme to Inkdrop users.
 - Your theme's `package.json` must contain a `theme` key with a value of `ui`, `syntax` or `preview` for Inkdrop to recognize and load it as a theme.
 - You can find existing themes to install or fork in the [Inkdrop themes registry](https://my.inkdrop.app/plugins/theme).
+
+## Enabling Development Mode
+
+**Development Mode** enables the "**Inspect Element**" context menu in Inkdrop, which helps you build your themes easier.
+Select the menu _Inkdrop > Preferences_ on macOS or _File > Settings_ on Windows and Linux, click the _General_ tab on the left hand navigation, and check the "_Development Mode_", then reload the app by pressing <kbd>Alt+Cmd+Ctrl+R</kbd> / <kbd>Alt+Ctrl+R</kbd>
+
+Now you can use Chrome's Developer Tools.
+Right-click an HTML element you can to inspect its styles.
+
+![Inspect Element](/images/creating-a-theme_inspect-element.png)
+
+You can check how it's styled with themes in the Developer Tools like this:
+
+![DevTools](/images/creating-a-theme_devtools.png)
+
+Check out Google's [extensive tutorial](https://developers.google.com/web/tools/chrome-devtools/iterate/inspect-styles/?utm_source=dcc&utm_medium=redirect&utm_campaign=2016q3) for a short introduction.
+
 
 ## Creating a Syntax Theme
 
@@ -31,17 +60,17 @@ Themes are pretty straightforward but it's still helpful to be familiar with a f
   <strong>Tip:</strong> Syntax themes should end with <code>-syntax</code>.
 </Note>
 
-Let's create your first theme which is called `motif-syntax`.
+Let's create your first syntax theme which is called `motif-syntax`.
 To create a syntax theme, do the following:
 
-1. Create a new repository based on [a syntax theme template repository on GitHub](https://github.com/inkdropapp/inkdrop-syntax-theme)
+1. Click **Use this template** on [the syntax theme template repository on GitHub](https://github.com/inkdropapp/inkdrop-default-light-syntax-theme) to create a new repository
+   <img alt="Use this template" srcset="/images/creating-a-theme_create-a-new-repository.png 2x" />
 2. Clone your repository to the directory named `motif-syntax` in the local filesystem
-3. Open a terminal in the forked theme's directory
-4. Let Inkdrop run in **Development Mode** by selecting the menu _Inkdrop > Preferences_ on macOS or _File > Settings_ on Windows and Linux, clicking the _General_ tab on the left hand navigation, and check the "_Development Mode_", then reload the app by pressing `Alt+Cmd+Ctrl+L` / `Alt+Ctrl+L`
-5. Change the name of the theme in the theme's `package.json` file
-6. Run `ipm link --dev` to symlink your repository to `~/Library/Application Support/inkdrop/dev/packages`
-7. Reload Inkdrop using `Alt+Cmd+Ctrl+R` / `Alt+Ctrl+R`
-8. Enable the theme via the "_Syntax Theme_" drop-down in the "Themes" tab of the Preferences
+3. Open a terminal in the theme's directory
+4. Change the name of the theme in the theme's `package.json` file
+5. Run `ipm link --dev` to symlink your repository to `<USER_DATA>/inkdrop/dev/packages`. You can find the user data directory as described on [this page](https://docs.inkdrop.app/reference/user-data-directory).
+6. Reload Inkdrop using <kbd>Alt+Cmd+Ctrl+R</kbd> / <kbd>Alt+Ctrl+R</kbd>
+7. Enable the theme via the "_Syntax Theme_" drop-down in the "Themes" tab of the Preferences
 
 Now you are ready to make changes!
 
@@ -55,7 +84,7 @@ You may notice that the editor is built based on [CodeMirror](https://codemirror
 After making changes, reload the app to reflected changes.
 
 <Warning>
-<strong>Note</strong>: It's advised to not specify a <code>font-family</code> in your syntax theme because it will override the Font Family field in Inkdrop's settings. If you still like to recommend a font that goes well with your theme, we suggest you do so in your README.
+  <strong>Note</strong>: It's advised to not specify a <code>font-family</code> in your syntax theme because it will override the Font Family field in Inkdrop's settings. If you still like to recommend a font that goes well with your theme, we suggest you do so in your README.
 </Warning>
 
 ## Creating a UI Theme
@@ -64,27 +93,96 @@ After making changes, reload the app to reflected changes.
   <strong>Tip:</strong> UI themes should end with <code>-ui</code> or for dark theme<code>-dark-ui</code>.
 </Note>
 
+Let's create your first UI theme which is called `motif-dark-ui`.
 To create a UI theme, do the following:
 
-1. fork the [Inkdrop's default UI theme repository on GitHub](https://github.com/inkdropapp/inkdrop-default-light-ui-theme)
-2. Clone the forked repository to the local filesystem
-3. Open a terminal in the forked theme's directory
-4. Let Inkdrop run in **Development Mode** by selecting the menu _Inkdrop > Preferences_ on macOS or _File > Settings_ on Windows and Linux, clicking the _General_ tab on the left hand navigation, and check the "_Development Mode_", then reload the app by pressing `Alt+Cmd+Ctrl+L` / `Alt+Ctrl+L`
-5. Change the name of the theme in the theme's `package.json` file
-6. Run `npm install` to install dependencies
-7. Run `gulp build` to build theme files
-8. Run `ipm link --dev` to symlink your repository to `~/Library/Application Support/inkdrop/dev/packages`
-9. Reload Inkdrop using `Alt+Cmd+Ctrl+L` / `Alt+Ctrl+L`
-10. Enable the theme via the "_UI Theme_" drop-down in the "Themes" tab of the Preferences
+1. Click **Use this template** on [the UI theme template repository on GitHub](https://github.com/inkdropapp/inkdrop-default-light-ui-theme) to create a new repository
+   <img alt="Use this template" srcset="/images/creating-a-theme_create-a-new-repository.png 2x" />
+2. Clone your repository to the directory named `motif-dark-ui` in the local filesystem
+3. Open a terminal in the theme's directory
+4. Change the name of the theme in the theme's `package.json` file. If your theme is going to be a dark theme, you should also change the `themeAppearance` key to `dark` in the `package.json` file.
+5. Run `bun install` to install dependencies
+6. Run `ipm link --dev` to symlink your repository to `<USER_DATA>/inkdrop/dev/packages`. You can find the user data directory as described on [this page](https://docs.inkdrop.app/reference/user-data-directory).
+7. Reload Inkdrop using <kbd>Alt+Cmd+Ctrl+R</kbd> / <kbd>Alt+Ctrl+R</kbd>
+8. Enable the theme via the "_UI Theme_" drop-down in the "Themes" tab of the Preferences
 
 Now you are ready to make changes!
 
-You may notice that the styling UI is based on [Semantic UI](http://semantic-ui.com/). It's mostly common in customizing the UI elements with it, so [their documentation](http://learnsemantic.com/) is very helpful to learn.
+### Customizing Theme Variables
 
-## Theme Variables
+Most Inkdrop's UI elements can be customized with [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_variables).
+These variables let Inkdrop give meaningful names for styles of the UI components.
+For example, `--note-list-bar-background` variable styles the background of the note list bar.
+This approach saves you from handling CSS selector specificities, making your themes easier to maintain.
 
-Inkdrop's UI elements are styled with [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_variables). You may not be familiar with it because it's new technology. Don't worry, it's mostly same as variables in LESS. The CSS Variables let Inkdrop give meaningful names for styles of the UI components, for example, `--note-list-bar-background` variable styles the background of the note list bar.
-Inkdrop's CSS Variables are defined in `src/definitions/globals/variables.less`, and you can change them by editing `src/themes/default/globals/site.variables`.
+After creating a repository, there is an empty CSS file in `styles/theme.css`.
+You are going to add only the CSS variables that you want to change in this file.
+
+### Running the Development Server
+
+Let's check out what variables are available in Inkdrop.
+Inkdrop provides a helper tool to list all the CSS variables that are used in the app.
+Run the following command in the theme project root directory:
+
+```sh
+dev-server
+#
+#  VITE v5.4.9  ready in 710 ms
+#
+#  ➜  Local:   http://localhost:5173/
+#  ➜  Network: use --host to expose
+#  ➜  press h + enter to show help
+```
+
+The development server will start.
+Open the URL displayed in your console in a web browser.
+
+![Dev server](/images/creating-a-theme_dev-server.png)
+
+There are three tabs in the tool:
+
+- **Variables**: Lists all the CSS variables used in the app. As you can see, it includes not only colors but also border radii, sizes, font weights, and more. However, you don’t need to change every variable for your theme
+- **Color Tokens**: Lists all the primitive color variables
+  - Variables starting with `--color-` can be used as color values
+  - Variables starting with `--hsl-` define HSL color parameters, such as `215deg 28% 17%`, which are useful for adjusting opacity, for example, `hsl(var(----hsl-gray-800 / 30%)`
+- **Components**: Previews some components with the current theme. The tool supports hot reloadig, so it will update colors as you modify the variables.
+
+### Acrylic background support
+
+The app supports acrylic background, which adds a frosted glass effect to the window background.
+It is currently supported on macOS and Windows 11+.
+
+![Acrylic background example](/images/creating-a-theme_acrylic-background-example.png)
+
+If this feature is enabled in the app, the `body` element will have the `acrylic-window` class name.
+So, you can add styles for the acrylic background like this:
+
+```css
+:root:has(body.acrylic-window) {
+  --page-background: transparent;
+  --editor-background: hsl(192deg 100% 10% / 70%);
+  --editor-drawer-background: hsl(var(--hsl-base04));
+  --note-list-bar-background: hsl(var(--hsl-bg-muted-highlight) / 70%);
+  --sidebar-background: hsl(var(--hsl-bg) / 70%);
+  --inline-dropdown-menu-background: hsl(var(--hsl-base04));
+}
+```
+
+It makes the background transparent, and increases transparency of the editor, note list bar, and sidebar.
+
+On Windows, the window background opacity is lower than on macOS.
+So, you may want to adjust the styles by specifying the platform selector like so:
+
+```css
+:root:has(body.acrylic-window.platform-win32) {
+  --page-background: rgb(0 0 0 / 40%);
+}
+```
+
+### Example UI themes
+
+- [Solarized Light UI](https://github.com/inkdropapp/solarized-light-ui/)
+- [Solarized Dark UI](https://github.com/inkdropapp/solarized-dark-ui/)
 
 ## Creating a Preview Theme
 
@@ -92,40 +190,26 @@ Inkdrop's CSS Variables are defined in `src/definitions/globals/variables.less`,
   <strong>Tip:</strong> Preview themes should end with <code>-preview</code>.
 </Note>
 
+<Warning>
+  If you only want to change the preview colors to match your UI theme, make these adjustments in your UI theme rather than creating a new preview theme.
+  Preview themes are meant for customizing document styles, not the app's UI.
+</Warning>
+
 Let's create your first theme which is called `motif-preview`.
 To create a preview theme, do the following:
 
-1. fork the [Inkdrop's sample repository on GitHub](https://github.com/inkdropapp/inkdrop-github-preview-theme)
-2. Clone the forked repository to the directory named `motif-preview` in the local filesystem
-3. Open a terminal in the forked theme's directory
-4. Let Inkdrop run in **Development Mode** by selecting the menu _Inkdrop > Preferences_ on macOS or _File > Settings_ on Windows and Linux, clicking the _General_ tab on the left hand navigation, and check the "_Development Mode_", then reload the app by pressing `Alt+Cmd+Ctrl+L` / `Alt+Ctrl+L`
-5. Change the name of the theme in the theme's `package.json` file
-6. Run `ipm link --dev` to symlink your repository to `~/Library/Application Support/inkdrop/dev/packages`
-7. Reload Inkdrop using `Alt+Cmd+Ctrl+L` / `Alt+Ctrl+L`
-8. Enable the theme via the "_Preview Theme_" drop-down in the "Themes" tab of the Preferences
+1. Click **Use this template** on [the UI theme template repository on GitHub](https://github.com/inkdropapp/inkdrop-github-preview-theme) to create a new repository
+   <img alt="Use this template" srcset="/images/creating-a-theme_create-a-new-repository.png 2x" />
+2. Clone your repository to the directory named `motif-preview` in the local filesystem
+3. Open a terminal in the theme's directory
+4. Change the name of the theme in the theme's `package.json` file
+5. Run `ipm link --dev` to symlink your repository to `<USER_DATA>/inkdrop/dev/packages`. You can find the user data directory as described on [this page](https://docs.inkdrop.app/reference/user-data-directory).
+6. Reload Inkdrop using <kbd>Alt+Cmd+Ctrl+R</kbd> / <kbd>Alt+Ctrl+R</kbd>
+7. Enable the theme via the "_Preview Theme_" drop-down in the "Themes" tab of the Preferences
 
 Now you are ready to make changes!
 
-Highlighting code blocks is built with [CodeMirror](https://codemirror.net/demo/theme.html), and CSS selectors for styling code blocks are compatible with it.
-
 After making changes, reload the app to reflected changes.
-
-## Development workflow
-
-There are a few tools to help make theme development faster and easier.
-
-### Developer Tools
-
-Inkdrop is based on the Chrome browser, and supports Chrome's Developer Tools.
-In Development Mode, _Inspect Element_ menu is available in the context menu. You can right-click anywhere to inspect the HTML element.
-
-![Inspect Element](/images/creating-a-theme_inspect-element.png)
-
-You can check how it's styled with themes in the Developer Tools like this:
-
-![DevTools](/images/creating-a-theme_devtools.png)
-
-Check out Google's [extensive tutorial](https://developers.google.com/web/tools/chrome-devtools/iterate/inspect-styles/?utm_source=dcc&utm_medium=redirect&utm_campaign=2016q3) for a short introduction.
 
 ## Publish your theme
 
