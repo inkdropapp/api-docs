@@ -19,3 +19,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+article kbd {
+  @apply rounded-md border border-b-2 border-neutral-300 bg-neutral-50 px-2 py-1 text-sm text-neutral-700 dark:border-neutral-800 dark:bg-neutral-600 dark:text-neutral-300;
+}
