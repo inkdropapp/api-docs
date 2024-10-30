@@ -37,7 +37,7 @@ Themes are pretty straightforward but it's still helpful to be familiar with a f
 - Your theme's `package.json` must contain a `theme` key with a value of `ui`, `syntax` or `preview` for Inkdrop to recognize and load it as a theme.
 - You can find existing themes to install or fork in the [Inkdrop themes registry](https://my.inkdrop.app/plugins/theme).
 
-## Enabling Development Mode
+### Enabling Development Mode
 
 **Development Mode** enables the "**Inspect Element**" context menu in Inkdrop, which helps you build your themes easier.
 Select the menu _Inkdrop > Preferences_ on macOS or _File > Settings_ on Windows and Linux, click the _General_ tab on the left hand navigation, and check the "_Development Mode_", then reload the app by pressing <kbd>Alt+Cmd+Ctrl+R</kbd> / <kbd>Alt+Ctrl+R</kbd>
@@ -53,6 +53,16 @@ You can check how it's styled with themes in the Developer Tools like this:
 
 Check out Google's [extensive tutorial](https://developers.google.com/web/tools/chrome-devtools/iterate/inspect-styles/?utm_source=dcc&utm_medium=redirect&utm_campaign=2016q3) for a short introduction.
 
+### Installing the dev-tools plugin
+
+There is a plugin called [dev-tools](https://my.inkdrop.app/plugins/dev-tools) that provides a set of useful tools for plugin development.
+
+For theme development, it allows you to enable hot reloading of the current active themes.
+When you made any changes to your theme, it will reload the stylesheets automatically.
+So, you don't have to reload the entire app manually every time you made changes.
+
+To start, select the menu **Plugins → dev-tools → Start hot reloading themes**.
+To stop, select the menu **Plugins → dev-tools → Stop hot reloading themes**.
 
 ## Creating a Syntax Theme
 
@@ -71,6 +81,7 @@ To create a syntax theme, do the following:
 5. Run `ipm link --dev` to symlink your repository to `<USER_DATA>/inkdrop/dev/packages`. You can find the user data directory as described on [this page](https://docs.inkdrop.app/reference/user-data-directory).
 6. Reload Inkdrop using <kbd>Alt+Cmd+Ctrl+R</kbd> / <kbd>Alt+Ctrl+R</kbd>
 7. Enable the theme via the "_Syntax Theme_" drop-down in the "Themes" tab of the Preferences
+8. Enable hot reloading by selecting the menu **Plugins → dev-tools → Start hot reloading themes**
 
 Now you are ready to make changes!
 
@@ -105,12 +116,13 @@ To create a UI theme, do the following:
 6. Run `ipm link --dev` to symlink your repository to `<USER_DATA>/inkdrop/dev/packages`. You can find the user data directory as described on [this page](https://docs.inkdrop.app/reference/user-data-directory).
 7. Reload Inkdrop using <kbd>Alt+Cmd+Ctrl+R</kbd> / <kbd>Alt+Ctrl+R</kbd>
 8. Enable the theme via the "_UI Theme_" drop-down in the "Themes" tab of the Preferences
-9. Run `dev-server` to start the development server
-10. Open the URL displayed in your console in a web browser
-11. Edit your theme's `styles/theme.css` file to customize the theme
-12. Run `generate-palette` to generate a `palette.json` file
-13. Commit the generated `palette.json` file to your repository
-14. Publish your theme
+9. Start hot reloading by selecting the menu **Plugins → dev-tools → Start hot reloading themes**
+10. Run `dev-server` to start the development server
+11. Open the URL displayed in your console in a web browser
+12. Edit your theme's `styles/theme.css` file to customize the theme
+13. Run `generate-palette` to generate a `palette.json` file
+14. Commit the generated `palette.json` file to your repository
+15. Publish your theme
 
 ### Customizing Theme Variables
 
@@ -222,6 +234,7 @@ To create a preview theme, do the following:
 5. Run `ipm link --dev` to symlink your repository to `<USER_DATA>/inkdrop/dev/packages`. You can find the user data directory as described on [this page](https://docs.inkdrop.app/reference/user-data-directory).
 6. Reload Inkdrop using <kbd>Alt+Cmd+Ctrl+R</kbd> / <kbd>Alt+Ctrl+R</kbd>
 7. Enable the theme via the "_Preview Theme_" drop-down in the "Themes" tab of the Preferences
+8. Start hot reloading by selecting the menu **Plugins → dev-tools → Start hot reloading themes**
 
 Now you are ready to make changes!
 
