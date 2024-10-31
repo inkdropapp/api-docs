@@ -117,10 +117,10 @@ To create a UI theme, do the following:
 7. Reload Inkdrop using <kbd>Alt+Cmd+Ctrl+R</kbd> / <kbd>Alt+Ctrl+R</kbd>
 8. Enable the theme via the "_UI Theme_" drop-down in the "Themes" tab of the Preferences
 9. Start hot reloading by selecting the menu **Plugins → dev-tools → Start hot reloading themes**
-10. Run `dev-server` to start the development server
+10. Run `bunx dev-server` to start the development server
 11. Open the URL displayed in your console in a web browser
 12. Edit your theme's `styles/theme.css` file to customize the theme
-13. Run `generate-palette` to generate a `palette.json` file
+13. Run `bunx generate-palette` to generate a `palette.json` file
 14. Commit the generated `palette.json` file to your repository
 15. Publish your theme
 
@@ -141,7 +141,7 @@ Inkdrop provides a helper tool to list all the CSS variables that are used in th
 Run the following command in the theme project root directory:
 
 ```sh
-dev-server
+bunx dev-server
 #
 #  VITE v5.4.9  ready in 710 ms
 #
@@ -202,7 +202,7 @@ This file is planned to be used for displaying a preview of your theme and also 
 Run the following command before publishing in the root theme project directory:
 
 ```sh
-generate-palette
+bunx generate-palette
 ```
 
 You can commit the generated `palette.json` file to your repository.
