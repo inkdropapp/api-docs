@@ -27,6 +27,7 @@ Themes can be also installed with [Inkdrop Plugin Manager](https://docs.inkdrop.
 ## Prerequisites
 
 - [Bun](https://bun.sh/) - It's an all-in-one TypeScript runtime, which is used in the Inkdrop's toolchain.
+- [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) on Windows - It's required to run the development server on Windows.
 
 ## Getting Started
 
@@ -149,6 +150,10 @@ bunx dev-server
 #  ➜  Network: use --host to expose
 #  ➜  press h + enter to show help
 ```
+
+<Warning>
+  <strong>For Windows users:</strong> PowerShell is not supported. You have to run it on WSL.
+</Warning>
 
 The development server will start.
 Open the URL displayed in your console in a web browser.
