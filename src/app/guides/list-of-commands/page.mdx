@@ -25,6 +25,7 @@ inkdrop.commands.dispatch(document.body, 'core:open-note', {
 - [Import commands](#import-commands)
 - [View commands](#view-commands)
 - [Window commands](#window-commands)
+- [Special commands](#special-commands)
 
 ---
 
@@ -1027,3 +1028,22 @@ Toggles the Developer Tools window.
 ### window:toggle-full-screen {{ selector: 'body' }}
 
 Toggles full screen mode.
+
+--
+
+## Special commands
+
+The following commands are special for controlling the key event handler.
+
+### native!
+
+Triggers the default behavior of the key event.
+
+### unset!
+
+Unbinds the existing keybinding.
+
+### abort!
+
+Prevents the default behavior of the key event. It calls `preventDefault` on the event object.
+
