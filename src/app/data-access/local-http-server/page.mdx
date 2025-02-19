@@ -104,13 +104,14 @@ The Inkdrop client app can open a simple HTTP server so that you can access the 
 
 ---
 
-## Create a new note {{ tag: 'POST', label: '/notes' }}
+## Create/update a note {{ tag: 'POST', label: '/notes' }}
 
 <Row>
   <Col>
 
-    The POST method creates a new [Note](/data-access/notes#properties) document, or creates a new revision of the existing document.
-    The document ID `_id` is optional and will be automatically generated.
+    The POST method creates a new [Note](/data-access/notes#properties), or update an existing note.
+    The document ID `_id` is optional and will be automatically generated for new note. 
+    If the note already exists, you must specify its revision `_rev`, otherwise a conflict will occur.
 
     ### Response JSON Object
 
@@ -210,13 +211,14 @@ The Inkdrop client app can open a simple HTTP server so that you can access the 
 
 ---
 
-## Create a new notebook {{ tag: 'POST', label: '/books' }}
+## Create/update a notebook {{ tag: 'POST', label: '/books' }}
 
 <Row>
   <Col>
 
-    The POST method creates a new [Book](/data-access/books#properties) document, or creates a new revision of the existing document.
+    The POST method creates a new [Book](/data-access/books#properties) document, or update an existing document.
     The document ID `_id` is optional and will be automatically generated.
+    If the notebook already exists, you must specify its revision `_rev`, otherwise a conflict will occur.
 
     ### Response JSON Object
 
@@ -310,13 +312,14 @@ The Inkdrop client app can open a simple HTTP server so that you can access the 
 
 ---
 
-## Create a new tag {{ tag: 'POST', label: '/tags' }}
+## Create/update a tag {{ tag: 'POST', label: '/tags' }}
 
 <Row>
   <Col>
 
-    The POST method creates a new [Tag](/data-access/tags#properties) document, or creates a new revision of the existing document.
+    The POST method creates a new [Tag](/data-access/tags#properties) document, or update an existing tag.
     The document ID `_id` is optional and will be automatically generated.
+    If the tag already exists, you must specify its revision `_rev`, otherwise a conflict will occur.
 
     ### Response JSON Object
 
