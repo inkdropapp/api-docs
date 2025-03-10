@@ -75,6 +75,13 @@ Quit Inkdrop, then edit it like so:
 
 Now, launch the app.
 
+Check if the local server is running correctly with `curl`:
+
+```sh
+curl -v -u foo:bar http://localhost:19840/
+# -> {"version":"5.10.0","ok":true}
+```
+
 ### Configurations
 
 - `core.server.enabled` - Specify `true` to enable the HTTP server. Default is `false`.
