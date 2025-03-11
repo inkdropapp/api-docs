@@ -75,11 +75,25 @@ Quit Inkdrop, then edit it like so:
 
 Now, launch the app.
 
+### Troubleshooting
+
 Check if the local server is running correctly with `curl`:
 
 ```sh
 curl -v -u foo:bar http://localhost:19840/
 # -> {"version":"5.10.0","ok":true}
+```
+
+Run the app with `--enable-logging` flag to see the server logs. See [the documentation](https://docs.inkdrop.app/manual/troubleshooting#enable-logging) for more detail.
+
+```sh
+/Applications/Inkdrop.app/Contents/MacOS/Inkdrop --enable-logging
+```
+
+If the server is running correctly, you should see logs like this:
+
+```
+  app:info Starting server on 127.0.0.1:19840
 ```
 
 ### Configurations
