@@ -4,6 +4,7 @@ import clsx from 'clsx'
 import { Feedback } from '@/components/Feedback'
 import { Heading } from '@/components/Heading'
 import { Prose } from '@/components/Prose'
+import { MarkdownSourceLink } from '@/components/MarkdownSourceLink'
 
 function ExternalIcon(props) {
   return (
@@ -51,6 +52,15 @@ export function wrapper({ children }) {
         <Feedback />
       </footer>
     </article>
+  )
+}
+
+export const h1 = function H1(props) {
+  return (
+    <div className="flex items-start justify-between gap-4">
+      <h1 {...props} className="flex-1" />
+      <MarkdownSourceLink />
+    </div>
   )
 }
 
