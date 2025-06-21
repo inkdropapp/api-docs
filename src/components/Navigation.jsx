@@ -1,16 +1,17 @@
 'use client'
 
-import { useRef } from 'react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import clsx from 'clsx'
 import { AnimatePresence, motion, useIsPresent } from 'framer-motion'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { useRef } from 'react'
 
 import { Button } from '@/components/Button'
 import { useIsInsideMobileNavigation } from '@/components/MobileNavigation'
 import { useSectionStore } from '@/components/SectionProvider'
 import { Tag } from '@/components/Tag'
 import { remToPx } from '@/lib/remToPx'
+import { CloseButton } from '@headlessui/react'
 
 function useInitialValue(value, condition = true) {
   let initialValue = useRef(value).current
@@ -20,12 +21,13 @@ function useInitialValue(value, condition = true) {
 function TopLevelNavItem({ href, children }) {
   return (
     <li className="md:hidden">
-      <Link
+      <CloseButton
+        as={Link}
         href={href}
         className="block py-1 text-sm text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
       >
         {children}
-      </Link>
+      </CloseButton>
     </li>
   )
 }
@@ -38,7 +40,8 @@ function NavLink({
   isAnchorLink = false,
 }) {
   return (
-    <Link
+    <CloseButton
+      as={Link}
       href={href}
       aria-current={active ? 'page' : undefined}
       className={clsx(
@@ -55,7 +58,7 @@ function NavLink({
           {tag}
         </Tag>
       )}
-    </Link>
+    </CloseButton>
   )
 }
 

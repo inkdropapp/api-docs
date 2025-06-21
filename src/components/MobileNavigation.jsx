@@ -1,14 +1,13 @@
 'use client'
 
-import { createContext, Suspense, useContext, useEffect, useRef } from 'react'
-import { usePathname, useSearchParams } from 'next/navigation'
 import {
   Dialog,
-  DialogPanel,
   DialogBackdrop,
+  DialogPanel,
   TransitionChild,
 } from '@headlessui/react'
 import { motion } from 'framer-motion'
+import { Suspense, createContext, useContext } from 'react'
 import { create } from 'zustand'
 
 import { Header } from '@/components/Header'
@@ -45,53 +44,27 @@ function XIcon(props) {
 const IsInsideMobileNavigationContext = createContext(false)
 
 function MobileNavigationDialog({ isOpen, close }) {
-  let pathname = usePathname()
-  let searchParams = useSearchParams()
-  let initialPathname = useRef(pathname).current
-  let initialSearchParams = useRef(searchParams).current
-
-  useEffect(() => {
-    if (pathname !== initialPathname || searchParams !== initialSearchParams) {
-      close()
-    }
-  }, [pathname, searchParams, close, initialPathname, initialSearchParams])
-
-  function onClickDialog(event) {
-    if (!(event.target instanceof HTMLElement)) {
-      return
-    }
-
-    let link = event.target.closest('a')
-    if (
-      link &&
-      link.pathname + link.search + link.hash ===
-        window.location.pathname + window.location.search + window.location.hash
-    ) {
-      close()
-    }
-  }
-
   return (
     <Dialog
+      transition
       open={isOpen}
-      onClickCapture={onClickDialog}
       onClose={close}
       className="fixed inset-0 z-50 lg:hidden"
     >
       <DialogBackdrop
         transition
-        className="fixed inset-0 top-14 bg-zinc-400/20 backdrop-blur-sm data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in dark:bg-black/40"
+        className="fixed inset-0 top-14 bg-zinc-400/20 backdrop-blur-xs data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in dark:bg-black/40"
       />
 
       <DialogPanel>
         <TransitionChild>
-          <Header className="data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in" />
+          <Header className="data-closed:opacity-0 data-enter:duration-300 data-enter:ease-out data-leave:duration-200 data-leave:ease-in" />
         </TransitionChild>
 
         <TransitionChild>
           <motion.div
             layoutScroll
-            className="fixed bottom-0 left-0 top-14 w-full overflow-y-auto bg-white px-4 pb-4 pt-6 shadow-lg shadow-zinc-900/10 ring-1 ring-zinc-900/7.5 duration-500 ease-in-out data-[closed]:-translate-x-full min-[416px]:max-w-sm sm:px-6 sm:pb-10 dark:bg-zinc-900 dark:ring-zinc-800"
+            className="fixed top-14 bottom-0 left-0 w-full overflow-y-auto bg-white px-4 pt-6 pb-4 shadow-lg ring-1 shadow-zinc-900/10 ring-zinc-900/7.5 duration-500 ease-in-out data-closed:-translate-x-full min-[416px]:max-w-sm sm:px-6 sm:pb-10 dark:bg-zinc-900 dark:ring-zinc-800"
           >
             <Navigation />
           </motion.div>
@@ -121,10 +94,11 @@ export function MobileNavigation() {
     <IsInsideMobileNavigationContext.Provider value={true}>
       <button
         type="button"
-        className="flex h-6 w-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5 dark:hover:bg-white/5"
+        className="relative flex size-6 items-center justify-center rounded-md transition hover:bg-zinc-900/5 dark:hover:bg-white/5"
         aria-label="Toggle navigation"
         onClick={toggle}
       >
+        <span className="absolute size-12 pointer-fine:hidden" />
         <ToggleIcon className="w-2.5 stroke-zinc-900 dark:stroke-white" />
       </button>
       {!isInsideMobileNavigation && (
