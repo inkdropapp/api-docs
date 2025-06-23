@@ -6,7 +6,41 @@ import { Heading } from '@/components/Heading'
 import { MarkdownSourceLink } from '@/components/MarkdownSourceLink'
 import { Prose } from '@/components/Prose'
 
-export const a = Link
+function ExternalIcon(props) {
+  return (
+    <svg strokeWidth="1.5" viewBox="0 0 24 24" {...props}>
+      <path
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M9.25 14.523L23.25.75M23.25 8.621V.75h-8M12.125 5.75h-10.5a.875.875 0 00-.875.875v15.75a.875.875 0 00.875.875h15.75a.875.875 0 00.875-.875v-10.5"
+      ></path>
+    </svg>
+  )
+}
+
+export const a = function a(props) {
+  const { href, ...rest } = props
+  const isInternal = href && !href.startsWith('https:')
+
+  if (isInternal) {
+    return <Link {...props} />
+  } else {
+    return (
+      <Link
+        target="_blank"
+        rel="noopener noreferrer"
+        {...props}
+        className={`${props.className || ''} my-0 inline-flex items-center`}
+      >
+        {props.children}
+        <ExternalIcon className="ml-1 inline-block h-3 w-3" />
+      </Link>
+    )
+  }
+}
+
 export { Button } from '@/components/Button'
 export { Code as code, CodeGroup, Pre as pre } from '@/components/Code'
 
@@ -90,32 +124,6 @@ export function Warning({ children }) {
         {children}
       </div>
     </div>
-  )
-}
-
-export function ExternalIcon(props) {
-  return (
-    <svg
-      viewBox="0 0 20 20"
-      fill="none"
-      aria-hidden="true"
-      {...props}
-    >
-      <path
-        d="M10.5 8.5L15.5 3.5M15.5 3.5H11M15.5 3.5V8"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M15.5 11.5V14.5C15.5 15.0523 15.0523 15.5 14.5 15.5H5.5C4.94772 15.5 4.5 15.0523 4.5 14.5V5.5C4.5 4.94772 4.94772 4.5 5.5 4.5H8.5"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
   )
 }
 
