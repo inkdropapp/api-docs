@@ -1,0 +1,153 @@
+export const metadata = {
+  title: 'Composite Disposable',
+  description: 'An object that aggregates multiple Disposable instances together into a single disposable, so they can all be disposed as a group.',
+}
+
+# Composite Disposable
+
+An object that aggregates multiple [Disposable][disposable] instances together into a single disposable, so they can all be disposed as a group.
+
+These are very useful when subscribing to multiple events.
+
+```js
+import { CompositeDisposable } from 'event-kit'
+
+class Something {
+  constructor() {
+    this.disposables = new CompositeDisposable();
+    const db = inkdrop.main.dataStore.getLocalDB();
+
+    this.disposables.add(db.onChange(() => {}));
+    this.disposables.add(db.onNoteChange(() => {}));
+  }
+
+  destroy() {
+    this.disposables.dispose();
+  }
+}
+```
+
+
+
+---
+
+## Construction {{ label: 'constructor()' }}
+
+<Row>
+  <Col>
+    Construct an instance, optionally with one or more disposables.
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    const subscriptions = new CompositeDisposable();
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Destruction {{ label: 'dispose()' }}
+
+<Row>
+  <Col>
+    Dispose all disposables added to this composite disposable.
+    If this object has already been disposed, this method has no effect.
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    const subscriptions = new CompositeDisposable();
+
+    // Later, dispose all
+    subscriptions.dispose();
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Add multiple Disposables {{ label: 'add(...disposables)' }}
+
+<Row>
+  <Col>
+    Add disposables to be disposed when the composite is disposed.
+    If this object has already been disposed, this method has no effect.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="disposables" type="DisposableLike[]" required>
+        [Disposable][disposable] instances or any objects with `.dispose()`
+      </Property>
+    </Properties>
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    const subscriptions = new CompositeDisposable()
+
+    const db = inkdrop.main.dataStore.getLocalDB();
+    subscriptions.add(db.onChange(() => {}));
+    subscriptions.add(db.onNoteChange(() => {}));
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Remove a Disposable {{ label: 'remove(disposable)' }}
+
+<Row>
+  <Col>
+    Remove a previously added disposable.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="disposable" type="DisposableLike" required>
+        [Disposable][disposable] instances or any objects with `.dispose()`
+      </Property>
+    </Properties>
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    const subscriptions = new CompositeDisposable()
+
+    const db = inkdrop.main.dataStore.getLocalDB();
+    const disposable = db.onNoteChange(() => {});
+    subscriptions.add(disposable);
+
+    // Later, remove the disposable
+    subscriptions.remove(disposable);
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Clear all disposables {{ label: 'clear()' }}
+
+<Row>
+  <Col>
+    Clear all disposables. They will not be disposed by the next call to dispose.
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    const subscriptions = new CompositeDisposable()
+
+    // ...
+
+    subscriptions.clear();
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+[disposable]: /event-subscription/disposable
