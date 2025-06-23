@@ -65,6 +65,29 @@ export function Note({ children }) {
   )
 }
 
+function WarningIcon(props) {
+  return (
+    <svg viewBox="0 0 16 16" aria-hidden="true" {...props}>
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 0 0 0 1.001c.193.31.53.501.886.501h13.964c.357 0 .693-.19.886-.5a1.03 1.03 0 0 0 0-1.002L8.893 1.5zM7.002 5h2v5h-2V5zm0 6h2v2h-2v-2z"
+      />
+    </svg>
+  )
+}
+
+export function Warning({ children }) {
+  return (
+    <div className="my-6 flex gap-2.5 rounded-2xl border border-amber-500/20 bg-amber-50/50 p-4 text-sm/6 text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/5 dark:text-amber-200 dark:[--tw-prose-links-hover:var(--color-amber-300)] dark:[--tw-prose-links:var(--color-white)]">
+      <WarningIcon className="mt-1 h-4 w-4 flex-none fill-amber-500 stroke-white dark:fill-amber-200/20 dark:stroke-amber-200" />
+      <div className="[&>:first-child]:mt-0 [&>:last-child]:mb-0">
+        {children}
+      </div>
+    </div>
+  )
+}
+
 export function Row({ children }) {
   return (
     <div className="grid grid-cols-1 items-start gap-x-16 gap-y-10 xl:max-w-none xl:grid-cols-2">
