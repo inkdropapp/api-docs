@@ -1,16 +1,17 @@
 'use client'
 
-import { useRef } from 'react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import clsx from 'clsx'
 import { AnimatePresence, motion, useIsPresent } from 'framer-motion'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { useRef } from 'react'
 
 import { Button } from '@/components/Button'
 import { useIsInsideMobileNavigation } from '@/components/MobileNavigation'
 import { useSectionStore } from '@/components/SectionProvider'
 import { Tag } from '@/components/Tag'
 import { remToPx } from '@/lib/remToPx'
+import { CloseButton } from '@headlessui/react'
 
 function useInitialValue(value, condition = true) {
   let initialValue = useRef(value).current
@@ -20,12 +21,13 @@ function useInitialValue(value, condition = true) {
 function TopLevelNavItem({ href, children }) {
   return (
     <li className="md:hidden">
-      <Link
+      <CloseButton
+        as={Link}
         href={href}
         className="block py-1 text-sm text-zinc-600 transition hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
       >
         {children}
-      </Link>
+      </CloseButton>
     </li>
   )
 }
@@ -35,10 +37,11 @@ function NavLink({
   children,
   tag,
   active = false,
-  isAnchorLink = false
+  isAnchorLink = false,
 }) {
   return (
-    <Link
+    <CloseButton
+      as={Link}
       href={href}
       aria-current={active ? 'page' : undefined}
       className={clsx(
@@ -46,7 +49,7 @@ function NavLink({
         isAnchorLink ? 'pl-7' : 'pl-4',
         active
           ? 'text-zinc-900 dark:text-white'
-          : 'text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white'
+          : 'text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white',
       )}
     >
       <span className="truncate">{children}</span>
@@ -55,22 +58,25 @@ function NavLink({
           {tag}
         </Tag>
       )}
-    </Link>
+    </CloseButton>
   )
 }
 
 function VisibleSectionHighlight({ group, pathname }) {
   let [sections, visibleSections] = useInitialValue(
-    [useSectionStore(s => s.sections), useSectionStore(s => s.visibleSections)],
-    useIsInsideMobileNavigation()
+    [
+      useSectionStore((s) => s.sections),
+      useSectionStore((s) => s.visibleSections),
+    ],
+    useIsInsideMobileNavigation(),
   )
 
   let isPresent = useIsPresent()
   let firstVisibleSectionIndex = Math.max(
     0,
     [{ id: '_top' }, ...sections].findIndex(
-      section => section.id === visibleSections[0]
-    )
+      (section) => section.id === visibleSections[0],
+    ),
   )
   let itemHeight = remToPx(2)
   let height = isPresent
@@ -101,7 +107,7 @@ function ActivePageMarker({ group, pathname }) {
   return (
     <motion.div
       layout
-      className="absolute left-2 h-6 w-px bg-pink-500"
+      className="absolute left-2 h-6 w-px bg-emerald-500"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1, transition: { delay: 0.2 } }}
       exit={{ opacity: 0 }}
@@ -116,8 +122,8 @@ function NavigationGroup({ group, className }) {
   // The state will still update when we re-open (re-render) the navigation.
   let isInsideMobileNavigation = useIsInsideMobileNavigation()
   let [pathname, sections] = useInitialValue(
-    [usePathname(), useSectionStore(s => s.sections)],
-    isInsideMobileNavigation
+    [usePathname(), useSectionStore((s) => s.sections)],
+    isInsideMobileNavigation,
   )
 
   let isActiveGroup =
@@ -199,38 +205,38 @@ export const navigation = [
       { title: 'Plugin: Word count', href: '/guides/plugin-word-count' },
       {
         title: 'Getting & modifying the app state',
-        href: '/guides/flux-architecture'
+        href: '/guides/flux-architecture',
       },
       {
         title: 'Access the local database',
-        href: '/guides/access-the-local-database'
+        href: '/guides/access-the-local-database',
       },
       { title: 'Customize the editor', href: '/guides/customize-the-editor' },
       { title: 'Extend the UI', href: '/guides/extend-the-ui' },
       {
         title: 'Create a note template',
-        href: '/guides/create-a-note-template'
+        href: '/guides/create-a-note-template',
       },
       {
         title: 'Add styles for text annotations',
-        href: '/guides/text-annotations'
+        href: '/guides/text-annotations',
       },
       {
         title: 'Create a blog using Astro',
-        href: '/guides/create-a-blog-using-astro'
+        href: '/guides/create-a-blog-using-astro',
       },
       {
         title: 'Use ES modules in your plugin',
-        href: '/guides/es-modules'
+        href: '/guides/es-modules',
       },
       {
         title: 'List of commands',
-        href: '/guides/list-of-commands'
-      }
-    ]
+        href: '/guides/list-of-commands',
+      },
+    ],
   },
   {
-    title: 'Data Access',
+    title: 'Resources',
     links: [
       { title: 'Notes', href: '/data-access/notes' },
       { title: 'Notebooks', href: '/data-access/books' },
@@ -238,8 +244,8 @@ export const navigation = [
       { title: 'Files', href: '/data-access/files' },
       { title: 'Utilities', href: '/data-access/utils' },
       { title: 'Events', href: '/data-access/events' },
-      { title: 'Local HTTP Server', href: '/data-access/local-http-server' }
-    ]
+      { title: 'Local HTTP Server', href: '/data-access/local-http-server' },
+    ],
   },
   {
     title: 'Core Modules',
@@ -262,8 +268,8 @@ export const navigation = [
       { title: 'Package', href: '/modules/package' },
       { title: 'Package Manager', href: '/modules/package-manager' },
       { title: 'Style Manager', href: '/modules/style-manager' },
-      { title: 'Theme Manager', href: '/modules/theme-manager' }
-    ]
+      { title: 'Theme Manager', href: '/modules/theme-manager' },
+    ],
   },
   {
     title: 'App States',
@@ -281,23 +287,23 @@ export const navigation = [
       { title: 'Preview', href: '/states/preview' },
       { title: 'Query context', href: '/states/query-context' },
       { title: 'Tags', href: '/states/tags' },
-      { title: 'Stats', href: '/states/stats' }
-    ]
+      { title: 'Stats', href: '/states/stats' },
+    ],
   },
   {
     title: 'App Actions',
     link: '/actions',
     links: [
       { title: 'Editing note', href: '/actions/editing-note' },
-      { title: 'Editor', href: '/actions/editor' }
-    ]
+      { title: 'Editor', href: '/actions/editor' },
+    ],
   },
   {
     title: 'Components',
     links: [
       { title: 'Dialog', href: '/components/dialog' },
-      { title: 'MessageDialog', href: '/components/message-dialog' }
-    ]
+      { title: 'MessageDialog', href: '/components/message-dialog' },
+    ],
   },
   {
     title: 'Event Subscription (event-kit)',
@@ -305,10 +311,10 @@ export const navigation = [
       { title: 'Disposable', href: '/event-subscription/disposable' },
       {
         title: 'Composite Disposable',
-        href: '/event-subscription/composite-disposable'
+        href: '/event-subscription/composite-disposable',
       },
-      { title: 'Emitter', href: '/event-subscription/emitter' }
-    ]
+      { title: 'Emitter', href: '/event-subscription/emitter' },
+    ],
   },
   {
     title: 'Appendix',
@@ -340,12 +346,8 @@ export function Navigation(props) {
           />
         ))}
         <li className="sticky bottom-0 z-10 mt-6 min-[416px]:hidden">
-          <Button
-            href="https://my.inkdrop.app/"
-            variant="filled"
-            className="w-full"
-          >
-            Log in
+          <Button href="#" variant="filled" className="w-full">
+            Sign in
           </Button>
         </li>
       </ul>

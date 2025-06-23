@@ -1,8 +1,8 @@
 'use client'
 
+import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { motion } from 'framer-motion'
 
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
