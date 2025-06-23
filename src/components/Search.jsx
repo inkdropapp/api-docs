@@ -12,7 +12,7 @@ import {
   useEffect,
   useId,
   useRef,
-  useState,
+  useState
 } from 'react'
 import Highlighter from 'react-highlight-words'
 
@@ -44,7 +44,7 @@ function useAutocomplete({ onNavigate }) {
         return state.query !== ''
       },
       navigator: {
-        navigate,
+        navigate
       },
       getSources({ query }) {
         return import('@/mdx/search.mjs').then(({ search }) => {
@@ -57,12 +57,12 @@ function useAutocomplete({ onNavigate }) {
               getItemUrl({ item }) {
                 return item.url
               },
-              onSelect: navigate,
-            },
+              onSelect: navigate
+            }
           ]
         })
-      },
-    }),
+      }
+    })
   )
 
   return { autocomplete, autocompleteState }
@@ -124,7 +124,7 @@ function LoadingIcon(props) {
 function HighlightQuery({ text, query }) {
   return (
     <Highlighter
-      highlightClassName="underline bg-transparent text-emerald-500"
+      highlightClassName="underline bg-transparent text-pink-500"
       searchWords={[query]}
       autoEscape={true}
       textToHighlight={text}
@@ -137,33 +137,33 @@ function SearchResult({
   resultIndex,
   autocomplete,
   collection,
-  query,
+  query
 }) {
   let id = useId()
 
-  let sectionTitle = navigation.find((section) =>
-    section.links.find((link) => link.href === result.url.split('#')[0]),
+  let sectionTitle = navigation.find(section =>
+    section.links.find(link => link.href === result.url.split('#')[0])
   )?.title
   let hierarchy = [sectionTitle, result.pageTitle].filter(
-    (x) => typeof x === 'string',
+    x => typeof x === 'string'
   )
 
   return (
     <li
       className={clsx(
         'group block cursor-default px-4 py-3 aria-selected:bg-zinc-50 dark:aria-selected:bg-zinc-800/50',
-        resultIndex > 0 && 'border-t border-zinc-100 dark:border-zinc-800',
+        resultIndex > 0 && 'border-t border-zinc-100 dark:border-zinc-800'
       )}
       aria-labelledby={`${id}-hierarchy ${id}-title`}
       {...autocomplete.getItemProps({
         item: result,
-        source: collection.source,
+        source: collection.source
       })}
     >
       <div
         id={`${id}-title`}
         aria-hidden="true"
-        className="text-sm font-medium text-zinc-900 group-aria-selected:text-emerald-500 dark:text-white"
+        className="text-sm font-medium text-zinc-900 group-aria-selected:text-pink-500 dark:text-white"
       >
         <HighlightQuery text={result.title} query={query} />
       </div>
@@ -227,7 +227,7 @@ function SearchResults({ autocomplete, query, collection }) {
 
 const SearchInput = forwardRef(function SearchInput(
   { autocomplete, autocompleteState, onClose },
-  inputRef,
+  inputRef
 ) {
   let inputProps = autocomplete.getInputProps({ inputElement: null })
 
@@ -239,10 +239,10 @@ const SearchInput = forwardRef(function SearchInput(
         data-autofocus
         className={clsx(
           'flex-auto appearance-none bg-transparent pl-10 text-zinc-900 outline-hidden placeholder:text-zinc-500 focus:w-full focus:flex-none sm:text-sm dark:text-white [&::-webkit-search-cancel-button]:hidden [&::-webkit-search-decoration]:hidden [&::-webkit-search-results-button]:hidden [&::-webkit-search-results-decoration]:hidden',
-          autocompleteState.status === 'stalled' ? 'pr-11' : 'pr-4',
+          autocompleteState.status === 'stalled' ? 'pr-11' : 'pr-4'
         )}
         {...inputProps}
-        onKeyDown={(event) => {
+        onKeyDown={event => {
           if (
             event.key === 'Escape' &&
             !autocompleteState.isOpen &&
@@ -262,7 +262,7 @@ const SearchInput = forwardRef(function SearchInput(
       />
       {autocompleteState.status === 'stalled' && (
         <div className="absolute inset-y-0 right-3 flex items-center">
-          <LoadingIcon className="h-5 w-5 animate-spin stroke-zinc-200 text-zinc-900 dark:stroke-zinc-800 dark:text-emerald-400" />
+          <LoadingIcon className="h-5 w-5 animate-spin stroke-zinc-200 text-zinc-900 dark:stroke-zinc-800 dark:text-pink-400" />
         </div>
       )}
     </div>
@@ -277,7 +277,7 @@ function SearchDialog({ open, setOpen, className, onNavigate = () => {} }) {
     onNavigate() {
       onNavigate()
       setOpen(false)
-    },
+    }
   })
   let pathname = usePathname()
   let searchParams = useSearchParams()
@@ -328,7 +328,7 @@ function SearchDialog({ open, setOpen, className, onNavigate = () => {} }) {
             <form
               ref={formRef}
               {...autocomplete.getFormProps({
-                inputElement: inputRef.current,
+                inputElement: inputRef.current
               })}
             >
               <SearchInput
@@ -367,21 +367,21 @@ function useSearchProps() {
       ref: buttonRef,
       onClick() {
         setOpen(true)
-      },
+      }
     },
     dialogProps: {
       open,
       setOpen: useCallback(
-        (open) => {
+        open => {
           let { width = 0, height = 0 } =
             buttonRef.current?.getBoundingClientRect() ?? {}
           if (!open || (width !== 0 && height !== 0)) {
             setOpen(open)
           }
         },
-        [setOpen],
-      ),
-    },
+        [setOpen]
+      )
+    }
   }
 }
 
@@ -391,7 +391,7 @@ export function Search() {
 
   useEffect(() => {
     setModifierKey(
-      /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform) ? '⌘' : 'Ctrl ',
+      /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform) ? '⌘' : 'Ctrl '
     )
   }, [])
 

@@ -8,7 +8,7 @@ import { Logo } from '@/components/Logo'
 import {
   MobileNavigation,
   useIsInsideMobileNavigation,
-  useMobileNavigationStore,
+  useMobileNavigationStore
 } from '@/components/MobileNavigation'
 import { MobileSearch, Search } from '@/components/Search'
 import { ThemeToggle } from '@/components/ThemeToggle'
@@ -46,7 +46,7 @@ export const Header = forwardRef(function Header({ className, ...props }, ref) {
           'backdrop-blur-xs lg:left-72 xl:left-80 dark:backdrop-blur-sm',
         isInsideMobileNavigation
           ? 'bg-white dark:bg-zinc-900'
-          : 'bg-white/(--bg-opacity-light) dark:bg-zinc-900/(--bg-opacity-dark)',
+          : 'bg-white/(--bg-opacity-light) dark:bg-zinc-900/(--bg-opacity-dark)'
       )}
       style={{
         '--bg-opacity-light': bgOpacityLight,
@@ -57,7 +57,7 @@ export const Header = forwardRef(function Header({ className, ...props }, ref) {
         className={clsx(
           'absolute inset-x-0 top-full h-px transition',
           (isInsideMobileNavigation || !mobileNavIsOpen) &&
-            'bg-zinc-900/7.5 dark:bg-white/7.5',
+            'bg-zinc-900/7.5 dark:bg-white/7.5'
         )}
       />
       <Search />
@@ -86,7 +86,7 @@ export const Header = forwardRef(function Header({ className, ...props }, ref) {
           <ThemeToggle />
         </div>
         <div className="hidden min-[416px]:contents">
-          <Button href="#">Sign in</Button>
+          <Button href="https://my.inkdrop.app/">Log in</Button>
         </div>
       </div>
     </motion.div>
