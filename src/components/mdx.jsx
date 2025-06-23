@@ -93,6 +93,32 @@ export function Warning({ children }) {
   )
 }
 
+export function ExternalIcon(props) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="none"
+      aria-hidden="true"
+      {...props}
+    >
+      <path
+        d="M10.5 8.5L15.5 3.5M15.5 3.5H11M15.5 3.5V8"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M15.5 11.5V14.5C15.5 15.0523 15.0523 15.5 14.5 15.5H5.5C4.94772 15.5 4.5 15.0523 4.5 14.5V5.5C4.5 4.94772 4.94772 4.5 5.5 4.5H8.5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
 export function Row({ children }) {
   return (
     <div className="grid grid-cols-1 items-start gap-x-16 gap-y-10 xl:max-w-none xl:grid-cols-2">
