@@ -5,10 +5,12 @@ import Link from 'next/link'
 
 import { GridPattern } from '@/components/GridPattern'
 import { Heading } from '@/components/Heading'
-import { DocumentIcon } from '@/components/icons/DocumentIcon'
-import { FolderIcon } from '@/components/icons/FolderIcon'
+import { DatabaseIcon } from '@/components/icons/DatabaseIcon'
+import { ImageFileIcon } from '@/components/icons/FileIcon'
+import { NoteIcon } from '@/components/icons/NoteIcon'
+import { NotebookIcon } from '@/components/icons/NotebookIcon'
 import { TagIcon } from '@/components/icons/TagIcon'
-import { PaperClipIcon } from '@/components/icons/PaperClipIcon'
+import { UtilsIcon } from '@/components/icons/UtilsIcon'
 
 const resources = [
   {
@@ -16,28 +18,28 @@ const resources = [
     name: 'Notes',
     description:
       'Learn about the note model and how to create, retrieve, update, delete, and list notes.',
-    icon: DocumentIcon,
+    icon: NoteIcon,
     pattern: {
       y: 16,
       squares: [
         [0, 1],
-        [1, 3],
-      ],
-    },
+        [1, 3]
+      ]
+    }
   },
   {
     href: '/data-access/books',
     name: 'Notebooks',
     description:
       'Learn about the notebook model and how to organize your notes with notebooks.',
-    icon: FolderIcon,
+    icon: NotebookIcon,
     pattern: {
       y: -6,
       squares: [
         [-1, 2],
-        [1, 3],
-      ],
-    },
+        [1, 3]
+      ]
+    }
   },
   {
     href: '/data-access/tags',
@@ -49,21 +51,43 @@ const resources = [
       y: 32,
       squares: [
         [0, 2],
-        [1, 4],
-      ],
-    },
+        [1, 4]
+      ]
+    }
   },
   {
     href: '/data-access/files',
     name: 'Files',
     description:
       'Files in Inkdrop are primarily used as image attachments that can be inserted into notes.',
-    icon: PaperClipIcon,
+    icon: ImageFileIcon,
     pattern: {
       y: 22,
-      squares: [[0, 1]],
-    },
+      squares: [[0, 1]]
+    }
   },
+  {
+    href: '/data-access/utils',
+    name: 'Utilities',
+    description:
+      'Provides convenient methods for managing documents in the local database.',
+    icon: UtilsIcon,
+    pattern: {
+      y: 22,
+      squares: [[0, 1]]
+    }
+  },
+  {
+    href: '/data-access/local-http-server',
+    name: 'Local HTTP server',
+    description:
+      'The Inkdrop client app can open a simple HTTP server so that you can access the data from an external program easily.',
+    icon: DatabaseIcon,
+    pattern: {
+      y: 22,
+      squares: [[0, 1]]
+    }
+  }
 ]
 
 function ResourceIcon({ icon: Icon }) {
@@ -150,7 +174,7 @@ export function Resources() {
         Resources
       </Heading>
       <div className="not-prose mt-4 grid grid-cols-1 gap-8 border-t border-zinc-900/5 pt-10 sm:grid-cols-2 xl:grid-cols-4 dark:border-white/5">
-        {resources.map((resource) => (
+        {resources.map(resource => (
           <Resource key={resource.href} resource={resource} />
         ))}
       </div>
