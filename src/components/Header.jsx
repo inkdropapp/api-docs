@@ -63,7 +63,7 @@ export const Header = forwardRef(function Header({ className, ...props }, ref) {
       <Search />
       <div className="flex items-center gap-5 lg:hidden">
         <MobileNavigation />
-        <CloseButton as={Link} href="/" aria-label="Home">
+        <CloseButton as={Link} href="/" aria-label="Home" className="flex">
           <Logo className="h-6" />
           <div className="ml-2 inline-block font-semibold">Developers</div>
         </CloseButton>
