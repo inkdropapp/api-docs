@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is the Inkdrop API documentation website built with Next.js 14, providing comprehensive guides and API references for developers customizing the Inkdrop application.
+This is the Inkdrop API documentation website built with Next.js 14, providing comprehensive guides and API references for developers customizing the Inkdrop application. The site serves as the primary developer documentation for the Inkdrop note-taking app's extensibility features.
 
 ## Development Commands
 
@@ -30,9 +30,10 @@ npm start
 - **Content**: MDX (Markdown + JSX) for documentation pages
 - **Styling**: Tailwind CSS with custom typography
 - **Search**: FlexSearch for client-side fuzzy search
-- **Syntax Highlighting**: Shiki
+- **Syntax Highlighting**: Shiki for code blocks
 - **State Management**: Zustand
 - **UI Components**: Headless UI, Framer Motion
+- **Build Process**: MDX compilation with custom remark/rehype/recma plugins
 
 ### Directory Structure
 
@@ -43,9 +44,14 @@ npm start
   - `/states/` - State management docs
   - `/actions/` - Editor actions reference
   - `/components/` - UI component documentation
+  - `/appendix/` - Additional reference material
 - `/src/components/` - React components for the site
 - `/src/mdx/` - MDX processing plugins and search implementation
-- `/public/images/` - Documentation images
+  - `search.mjs` - Search indexing logic
+  - `rehype.mjs` - HTML processing (external links, etc.)
+  - `remark.mjs` - Markdown processing
+  - `recma.mjs` - JavaScript/JSX processing
+- `/public/images/` - Documentation images and screenshots
 
 ### Search System
 
@@ -136,6 +142,38 @@ External links automatically:
 
 Code blocks support language-specific highlighting via Shiki. Common languages: javascript, jsx, json, bash, css.
 
+## High-Level Architecture
+
+### MDX Processing Pipeline
+
+The documentation site uses a sophisticated MDX processing pipeline:
+
+1. **Build Time**: MDX files in `/src/app/` are processed through Next.js's MDX loader
+2. **Plugins Chain**: 
+   - Remark plugins handle Markdown transformations
+   - Rehype plugins process HTML (adding external link icons, etc.)
+   - Recma plugins handle JavaScript/JSX transformations
+3. **Search Indexing**: The `withSearch` wrapper in `next.config.mjs` ensures all MDX content is indexed for search
+4. **Section Extraction**: Each MDX file exports a `sections` array used for in-page navigation
+
+### Navigation System
+
+The navigation is centrally managed through several interconnected components:
+
+1. **Navigation Data**: Defined in `/src/components/Navigation.jsx` as a static structure
+2. **Dynamic Sections**: The `layout.jsx` file extracts sections from all MDX files at build time
+3. **Section Provider**: Uses Zustand to manage active section state for smooth scrolling
+4. **Mobile/Desktop Split**: Separate navigation components for responsive design
+
+### Content Organization
+
+Documentation follows a hierarchical structure:
+
+1. **Categories**: Top-level groupings (Guides, Data Access, Core Modules, etc.)
+2. **Pages**: Individual MDX files within categories
+3. **Sections**: Headings within pages that appear in the sidebar
+4. **Anchors**: Auto-generated from heading text for deep linking
+
 ## Common Tasks
 
 ### Adding API Documentation
@@ -166,6 +204,9 @@ Code blocks support language-specific highlighting via Shiki. Common languages: 
 - All documentation should follow the established MDX patterns for consistency
 - Lead paragraphs (with `{{ className: 'lead' }}`) should summarize key concepts
 - Keep code examples practical and directly runnable in Inkdrop
+- The site is deployed at https://developers.inkdrop.app/
+- All MDX files are automatically indexed for search during the build process
+- Navigation is centrally managed in `/src/components/Navigation.jsx`
 
 ## Journaling workflow
 

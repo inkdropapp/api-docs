@@ -7,5 +7,6 @@ module.exports = {
   semi: false,
   tabWidth: 2,
   trailingComma: 'none',
-  plugins: ['prettier-plugin-tailwindcss'],
+  plugins: ['prettier-plugin-organize-imports', 'prettier-plugin-tailwindcss'],
+  tailwindStylesheet: './src/styles/tailwind.css',
 }
