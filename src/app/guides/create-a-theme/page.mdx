@@ -41,7 +41,7 @@ Themes are pretty straightforward but it's still helpful to be familiar with a f
 ### Enabling Development Mode
 
 **Development Mode** enables the "**Inspect Element**" context menu in Inkdrop, which helps you build your themes easier.
-Select the menu _Inkdrop > Preferences_ on macOS or _File > Settings_ on Windows and Linux, click the _General_ tab on the left hand navigation, and check the "_Development Mode_", then reload the app by pressing <kbd>Alt+Cmd+Shift+R</kbd> / <kbd>Alt+Shift+R</kbd>
+Select the menu _Inkdrop > Preferences_ on macOS or _File > Settings_ on Windows and Linux, click the _General_ tab on the left hand navigation, and check the "_Development Mode_", then reload the app by pressing <kbd>Alt+Cmd+Shift+R</kbd> / <kbd>Alt+Ctrl+R</kbd>
 
 Now you can use Chrome's Developer Tools.
 Right-click an HTML element you can to inspect its styles.
@@ -80,7 +80,7 @@ To create a syntax theme, do the following:
 3. Open a terminal in the theme's directory
 4. Change the name of the theme in the theme's `package.json` file
 5. Run `ipm link --dev` to symlink your repository to `<USER_DATA>/inkdrop/dev/packages`. You can find the user data directory as described on [this page](https://docs.inkdrop.app/reference/user-data-directory).
-6. Reload Inkdrop using <kbd>Alt+Cmd+Shift+R</kbd> / <kbd>Alt+Shift+R</kbd>
+6. Reload Inkdrop using <kbd>Alt+Cmd+Shift+R</kbd> / <kbd>Alt+Ctrl+R</kbd>
 7. Enable the theme via the "_Syntax Theme_" drop-down in the "Themes" tab of the Preferences
 8. Enable hot reloading by selecting the menu **Plugins → dev-tools → Start hot reloading themes**
 
@@ -115,7 +115,7 @@ To create a UI theme, do the following:
 4. Change the name of the theme in the theme's `package.json` file. If your theme is going to be a dark theme, you should also change the `themeAppearance` key to `dark` in the `package.json` file.
 5. Run `bun install` to install dependencies
 6. Run `ipm link --dev` to symlink your repository to `<USER_DATA>/inkdrop/dev/packages`. You can find the user data directory as described on [this page](https://docs.inkdrop.app/reference/user-data-directory).
-7. Reload Inkdrop using <kbd>Alt+Cmd+Shift+R</kbd> / <kbd>Alt+Shift+R</kbd>
+7. Reload Inkdrop using <kbd>Alt+Cmd+Shift+R</kbd> / <kbd>Alt+Ctrl+R</kbd>
 8. Enable the theme via the "_UI Theme_" drop-down in the "Themes" tab of the Preferences
 9. Start hot reloading by selecting the menu **Plugins → dev-tools → Start hot reloading themes**
 10. Run `bunx dev-server` to start the development server
@@ -237,7 +237,7 @@ To create a preview theme, do the following:
 3. Open a terminal in the theme's directory
 4. Change the name of the theme in the theme's `package.json` file
 5. Run `ipm link --dev` to symlink your repository to `<USER_DATA>/inkdrop/dev/packages`. You can find the user data directory as described on [this page](https://docs.inkdrop.app/reference/user-data-directory).
-6. Reload Inkdrop using <kbd>Alt+Cmd+Shift+R</kbd> / <kbd>Alt+Shift+R</kbd>
+6. Reload Inkdrop using <kbd>Alt+Cmd+Shift+R</kbd> / <kbd>Alt+Ctrl+R</kbd>
 7. Enable the theme via the "_Preview Theme_" drop-down in the "Themes" tab of the Preferences
 8. Start hot reloading by selecting the menu **Plugins → dev-tools → Start hot reloading themes**
 
