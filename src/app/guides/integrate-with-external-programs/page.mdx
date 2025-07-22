@@ -1,0 +1,69 @@
+import { Resources } from '@/components/Resources'
+
+export const metadata = {
+  title: 'Integrate with External Programs',
+  description:
+    'Learn how to configure the local HTTP server to integrate with external programs'
+}
+
+# Integrate with External Programs via Local HTTP Server
+
+If you want to access your notes from external programs, you can use the local HTTP server.
+The Inkdrop client app can run a simple HTTP server locally.
+It is useful for automating tasks such as generating static sites by exporting notes with a tool like [live-export](https://github.com/inkdropapp/inkdrop-live-export).
+It also allows you to integrate with external programs such as [Web clipper](https://docs.inkdrop.app/reference/clip-web-pages-from-browser), launcher apps like [Raycast](https://docs.inkdrop.app/reference/integrate-with-raycast) and [Alfred](https://docs.inkdrop.app/reference/integrate-with-alfred), [the official MCP server](https://github.com/inkdropapp/mcp-server), [static site generators like Astro](https://github.com/inkdropapp/inkdrop-blog-template), etc.{{ className: 'lead' }}
+
+## How it works
+
+![Local REST API endpoint](/images/accessing-the-local-database_local-rest-api-endpoint.png)
+
+By default, the Inkdrop client app declines requests from external networks for security reasons.
+It only accepts requests from the loopback network (`localhost` or `127.0.0.1`).
+Also, you will set up the authentication credentials to protect unwanted access.
+
+## API reference
+
+See [the local HTTP server reference](/data-access/local-http-server) for more details.
+
+## How to configure the local HTTP server
+
+![Preferences](/images/integrate-with-external-programs_preferences.png)
+
+Open the Preferences window and click the **Local Server** section in the sidebar.
+
+- **Enabled** - Check this box to enable the local HTTP server. Default is unchecked.
+- **Port number** - Defines the port number to listen. Default is `19840`.
+- **Bind Address** - Defines the IP address to listen. Default is `127.0.0.1`.
+- **Username** - Defines username of the Basic auth credentials.
+- **Password** - Defines password of the Basic auth credentials.
+
+Click the **Apply** button to apply the changes.
+The auth info will be encrypted and stored safely in `config.json` in [the user data directory](https://docs.inkdrop.app/manual/basic-usage#user-data-directory).
+
+![Server logs](/images/integrate-with-external-programs_server-logs.png)
+
+By pressing the **View Server Logs** button, you can check the server access logs updated in real-time.
+The path to the log file is `USER_DATA_DIRECTORY/server.log`.
+
+
+### Troubleshooting
+
+Check if the local server is running correctly with `curl`:
+
+```sh
+curl -v -u foo:bar http://localhost:19840/
+# -> {"version":"5.10.0","ok":true}
+```
+
+Run the app with `--enable-logging` flag to see the server logs. See [the documentation](https://docs.inkdrop.app/manual/troubleshooting#enable-logging) for more detail.
+
+```sh
+/Applications/Inkdrop.app/Contents/MacOS/Inkdrop --enable-logging
+```
+
+If the server is running correctly, you should see logs like this:
+
+```
+  app:info Starting server on 127.0.0.1:19840
+```
+

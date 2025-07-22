@@ -50,62 +50,9 @@ console.log('Search result:', docs)
 
 ## Accessing via HTTP (Advanced)
 
-![Local REST API endpoint](/images/accessing-the-local-database_local-rest-api-endpoint.png)
-
-The Inkdrop client app can open a simple HTTP server so that you can access the data from an external program easily, which gives you a flexible ability to import/export your notes.
-
-You can configure the HTTP server settings by editing `config.json` in [the user data directory](https://docs.inkdrop.app/manual/basic-usage#user-data-directory).
-
-Quit Inkdrop, then edit it like so:
-
-```json
-{
-  "*": {
-    "core": {
-      "server": {
-        "enabled": true,
-        "port": 19840,
-        "bindAddress": "127.0.0.1",
-        "auth": { "username": "foo", "password": "bar" }
-      }
-    }
-  }
-}
-```
-
-Now, launch the app.
-
-### Troubleshooting
-
-Check if the local server is running correctly with `curl`:
-
-```sh
-curl -v -u foo:bar http://localhost:19840/
-# -> {"version":"5.10.0","ok":true}
-```
-
-Run the app with `--enable-logging` flag to see the server logs. See [the documentation](https://docs.inkdrop.app/manual/troubleshooting#enable-logging) for more detail.
-
-```sh
-/Applications/Inkdrop.app/Contents/MacOS/Inkdrop --enable-logging
-```
-
-If the server is running correctly, you should see logs like this:
-
-```
-  app:info Starting server on 127.0.0.1:19840
-```
-
-### Configurations
-
-- `core.server.enabled` - Specify `true` to enable the HTTP server. Default is `false`.
-- `core.server.port` - Defines the port number to listen. Default is `19840`.
-- `core.server.bindAddress` - Defines the IP address to listen. Default is `127.0.0.1`.
-- `core.server.auth.{username,password}` - Defines Basic auth credentials.
-
-### API reference
-
-See [the local HTTP server reference](/data-access/local-http-server) for more details.
+<Note>
+  Moved to the <a href="/guides/integrate-with-external-programs">Integrate with External Programs</a> guide.
+</Note>
 
 ## Accessing the PouchDB instance (Advanced, not recommended)
 
