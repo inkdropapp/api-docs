@@ -208,6 +208,10 @@ export const navigation = [
         title: 'Access the local database',
         href: '/guides/access-the-local-database'
       },
+      {
+        title: 'Integrate with external programs',
+        href: '/guides/integrate-with-external-programs'
+      },
       { title: 'Customize the editor', href: '/guides/customize-the-editor' },
       { title: 'Extend the UI', href: '/guides/extend-the-ui' },
       {
