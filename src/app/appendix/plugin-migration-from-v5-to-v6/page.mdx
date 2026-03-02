@@ -6,6 +6,19 @@ export const metadata = {
 
 # Plugin Migration Guide from v5 to v6
 
+## New `ipm` CLI tool
+
+In v6, there is a new CLI tool named `ipm` (Inkdrop Plugin Manager) for publishing plugins.
+
+```sh
+npm install -g @inkdropapp/ipm-cli
+
+ipm configure
+```
+
+Check out [the repository](https://github.com/inkdropapp/ipm-cli) for more details.
+
+
 ## `@electron/remote` is deprecated
 
 ### `remote.dialog` → `inkdrop.dialog`
