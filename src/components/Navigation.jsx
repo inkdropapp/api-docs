@@ -321,7 +321,11 @@ export const navigation = [
     title: 'Appendix',
     links: [
       {
-        title: 'Plugin Migration Guide from v3 to v4',
+        title: 'Migration Guide from v5 to v6',
+        href: '/appendix/plugin-migration-from-v5-to-v6'
+      },
+      {
+        title: 'Migration Guide from v3 to v4',
         href: '/appendix/plugin-migration-from-v3-to-v4'
       }
     ]

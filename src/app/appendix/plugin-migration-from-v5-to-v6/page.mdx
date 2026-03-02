@@ -1,0 +1,56 @@
+export const metadata = {
+  title: 'Plugin Migration Guide from v5 to v6',
+  description:
+    'How to migrate your plugin to support v6',
+}
+
+# Plugin Migration Guide from v5 to v6
+
+## `@electron/remote` is deprecated
+
+### `remote.dialog` → `inkdrop.dialog`
+
+Before:
+
+```js
+const remote = require('@electron/remote')
+const { dialog } = remote
+
+return dialog.showOpenDialog(
+  inkdrop.window,
+  {
+  ...
+})
+```
+
+After:
+
+```js
+return inkdrop.dialog.showOpenDialog({
+  ...
+})
+```
+
+<Note>
+The `inkdrop.window` argument is no longer required.
+</Note>
+
+### `inkdrop.window.on()`
+
+Before:
+
+```js
+inkdrop.window.on('focus', this.handleAppFocus)
+```
+
+After:
+
+```js
+const sub = inkdrop.window.onFocus(this.handleAppFocus)
+
+// Unsubscribe
+sub.dispose()
+```
+
+## `inkdrop.main.dataStore.getLocalDB()` → `inkdrop.localDB`
+
