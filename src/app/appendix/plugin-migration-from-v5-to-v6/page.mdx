@@ -71,3 +71,34 @@ sub.dispose()
 
 - `.mde-preview` → `.mde-preview-container`
 
+
+## LESS is deprecated
+
+The necessity of LESS has been less and less over the years, since CSS supports nested selectors and variables.
+In v6, the app has dropped support for LESS.
+
+- Rename `.less` to `.css`
+
+Before:
+
+```less
+@primary-color: #ff0000;
+.my-plugin {
+  .component {
+    color: @primary-color;
+  }
+}
+```
+After:
+
+```css
+:root {
+  --primary-color: #ff0000;
+}
+.my-plugin {
+  .component {
+    color: var(--primary-color);
+  }
+}
+```
+
