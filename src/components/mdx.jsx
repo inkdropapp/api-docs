@@ -21,24 +21,24 @@ function ExternalIcon(props) {
 }
 
 export const a = function a(props) {
-  const { href, ...rest } = props
+  const { href, children, className, ...rest } = props
   const isInternal = href && !href.startsWith('https:')
 
   if (isInternal) {
-    return <Link {...props} />
-  } else {
-    return (
-      <Link
-        target="_blank"
-        rel="noopener noreferrer"
-        {...props}
-        className={`${props.className || ''} my-0 inline-flex items-center`}
-      >
-        {props.children}
-        <ExternalIcon className="ml-1 inline-block h-3 w-3" />
-      </Link>
-    )
+    return <Link href={href} className={className} {...rest}>{children}</Link>
   }
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      {...rest}
+      className={`${className || ''} my-0 inline-flex items-center`}
+    >
+      {children}
+      <ExternalIcon className="ml-1 inline-block h-3 w-3" />
+    </a>
+  )
 }
 
 export { Button } from '@/components/Button'

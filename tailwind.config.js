@@ -1,4 +1,3 @@
-const headlessuiPlugin = require('@headlessui/tailwindcss')
 const typographyPlugin = require('@tailwindcss/typography')
 
 const typographyStyles = require('./typography')
@@ -43,5 +42,5 @@ module.exports = {
       },
     },
   },
-  plugins: [typographyPlugin, headlessuiPlugin],
+  plugins: [typographyPlugin],
 }
