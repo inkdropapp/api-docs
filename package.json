@@ -39,12 +39,16 @@
     "shiki": "^0.14.7",
     "simple-functional-loader": "^1.2.1",
     "tailwindcss": "^4.1.7",
+    "typescript": "^5.8.3",
     "unist-util-filter": "^5.0.1",
     "unist-util-visit": "^5.0.0",
     "unist-util-map": "^4.0.0",
     "zustand": "^4.3.2"
   },
   "devDependencies": {
+    "@types/mdx": "^2.0.13",
+    "@types/node": "^24.1.0",
+    "@types/react-highlight-words": "^0.20.0",
     "eslint": "^8.56.0",
     "eslint-config-next": "^14.0.4",
     "prettier": "^3.3.2",
