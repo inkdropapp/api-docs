@@ -42,7 +42,7 @@
     "unist-util-filter": "^5.0.1",
     "unist-util-visit": "^5.0.0",
     "unist-util-map": "^4.0.0",
-    "zustand": "^4.3.2"
+    "zustand": "^5.0.6"
   },
   "devDependencies": {
     "@types/mdx": "^2.0.13",
