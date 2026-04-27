@@ -22,7 +22,7 @@
     "clsx": "^2.1.0",
     "fast-glob": "^3.3.0",
     "fathom-client": "^3.7.2",
-    "flexsearch": "^0.7.31",
+    "flexsearch": "^0.8.205",
     "framer-motion": "^12.23.11",
     "mdast-util-to-string": "^4.0.0",
     "mdx-annotations": "^0.1.1",
