@@ -16,7 +16,6 @@ const config = [
       // be revisited against React 19 guidance.
       'react-hooks/set-state-in-effect': 'off',
       'react-hooks/refs': 'off',
-      'react-hooks/immutability': 'off',
     },
   },
 ]

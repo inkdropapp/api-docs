@@ -30,7 +30,9 @@ function extractLabelTextAsContent(tree) {
   return map(tree, (node) => {
     if (node.type === 'mdxTextExpression') {
       const txtExp = eval(`(${node.value})`)
-      return txtExp?.label ? { type: 'text', value: `: ${txtExp.label}` } : node
+      return txtExp?.label
+        ? { type: 'text', value: `: ${txtExp.label}` }
+        : node
     } else {
       return node
     }
@@ -44,7 +46,7 @@ function extractSections() {
     visit(tree, (node) => {
       if (node.type === 'heading' || node.type === 'paragraph') {
         let content = toString(
-          excludeObjectExpressions(extractLabelTextAsContent(node)),
+          excludeObjectExpressions(extractLabelTextAsContent(node))
         )
         if (
           node.type === 'heading' &&
@@ -93,8 +95,6 @@ export default function Search(nextConfig = {}) {
               return { url, sections }
             })
 
-            // When this file is imported within the application
-            // the following module is loaded:
             return `
               import FlexSearch from 'flexsearch'
 
@@ -140,8 +140,8 @@ export default function Search(nextConfig = {}) {
                 }))
               }
             `
-          }),
-        ],
+          })
+        ]
       })
 
       if (typeof nextConfig.webpack === 'function') {
@@ -149,6 +149,6 @@ export default function Search(nextConfig = {}) {
       }
 
       return config
-    },
+    }
   })
 }

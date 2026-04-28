@@ -1,6 +1,6 @@
 import nextMDX from '@next/mdx'
-import { fileURLToPath } from 'node:url'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 import { recmaPlugins } from './src/mdx/recma.mjs'
 import { rehypePlugins } from './src/mdx/rehype.mjs'
@@ -13,8 +13,8 @@ const withMDX = nextMDX({
   options: {
     remarkPlugins,
     rehypePlugins,
-    recmaPlugins,
-  },
+    recmaPlugins
+  }
 })
 
 /** @type {import('next').NextConfig} */
@@ -22,8 +22,8 @@ const nextConfig = {
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'mdx'],
   outputFileTracingRoot: __dirname,
   outputFileTracingIncludes: {
-    '/**/*': ['./src/app/**/*.mdx'],
-  },
+    '/**/*': ['./src/app/**/*.mdx']
+  }
 }
 
 export default withSearch(withMDX(nextConfig))

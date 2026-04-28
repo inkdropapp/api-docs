@@ -34,15 +34,15 @@ function rehypeShiki() {
         if (node.properties.language) {
           let tokens = highlighter.codeToThemedTokens(
             textNode.value,
-            node.properties.language,
+            node.properties.language
           )
 
           textNode.value = shiki.renderToHtml(tokens, {
             elements: {
               pre: ({ children }) => children,
               code: ({ children }) => children,
-              line: ({ children }) => `<span>${children}</span>`,
-            },
+              line: ({ children }) => `<span>${children}</span>`
+            }
           })
         }
       }
@@ -86,9 +86,9 @@ function rehypeAddMDXExports(getExports) {
         data: {
           estree: acorn.parse(exportStr, {
             sourceType: 'module',
-            ecmaVersion: 'latest',
-          }),
-        },
+            ecmaVersion: 'latest'
+          })
+        }
       })
     }
   }
@@ -120,7 +120,7 @@ export const rehypePlugins = [
   [
     rehypeAddMDXExports,
     (tree) => ({
-      sections: `[${getSections(tree).join()}]`,
-    }),
-  ],
+      sections: `[${getSections(tree).join()}]`
+    })
+  ]
 ]
