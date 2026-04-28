@@ -6,7 +6,7 @@ import shiki from 'shiki'
 import { visit } from 'unist-util-visit'
 
 function rehypeParseCodeBlocks() {
-  return (tree) => {
+  return tree => {
     visit(tree, 'element', (node, _nodeIndex, parentNode) => {
       if (node.tagName === 'code') {
         parentNode.properties.language = node.properties.className
@@ -20,11 +20,11 @@ function rehypeParseCodeBlocks() {
 let highlighter
 
 function rehypeShiki() {
-  return async (tree) => {
+  return async tree => {
     highlighter =
       highlighter ?? (await shiki.getHighlighter({ theme: 'solarized-dark' }))
 
-    visit(tree, 'element', (node) => {
+    visit(tree, 'element', node => {
       if (node.tagName === 'pre' && node.children[0]?.tagName === 'code') {
         let codeNode = node.children[0]
         let textNode = codeNode.children[0]
@@ -51,9 +51,9 @@ function rehypeShiki() {
 }
 
 function rehypeSlugify() {
-  return (tree) => {
+  return tree => {
     let slugify = slugifyWithCounter()
-    visit(tree, 'element', (node) => {
+    visit(tree, 'element', node => {
       if (
         (node.tagName === 'h2' || node.tagName === 'h3') &&
         !node.properties.id
@@ -65,7 +65,7 @@ function rehypeSlugify() {
 }
 
 function rehypeAddMDXExports(getExports) {
-  return (tree) => {
+  return tree => {
     let exports = Object.entries(getExports(tree))
 
     for (let [name, value] of exports) {
@@ -119,7 +119,7 @@ export const rehypePlugins = [
   rehypeSlugify,
   [
     rehypeAddMDXExports,
-    (tree) => ({
+    tree => ({
       sections: `[${getSections(tree).join()}]`
     })
   ]

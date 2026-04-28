@@ -1,5 +1,5 @@
 export function MagnifyingGlassIcon(
-  props: React.ComponentPropsWithoutRef<'svg'>,
+  props: React.ComponentPropsWithoutRef<'svg'>
 ) {
   return (
     <svg viewBox="0 0 20 20" aria-hidden="true" {...props}>

@@ -5,7 +5,7 @@ import {
   useContext,
   useEffect,
   useLayoutEffect,
-  useState,
+  useState
 } from 'react'
 import { createStore, useStore, type StoreApi } from 'zustand'
 
@@ -26,7 +26,7 @@ interface SectionState {
   registerHeading: ({
     id,
     ref,
-    offsetRem,
+    offsetRem
   }: {
     id: string
     ref: React.RefObject<HTMLHeadingElement | null>
@@ -35,36 +35,36 @@ interface SectionState {
 }
 
 function createSectionStore(sections: Array<Section>) {
-  return createStore<SectionState>()((set) => ({
+  return createStore<SectionState>()(set => ({
     sections,
     visibleSections: [],
-    setVisibleSections: (visibleSections) =>
-      set((state) =>
+    setVisibleSections: visibleSections =>
+      set(state =>
         state.visibleSections.join() === visibleSections.join()
           ? {}
-          : { visibleSections },
+          : { visibleSections }
       ),
     registerHeading: ({ id, ref, offsetRem }) =>
-      set((state) => {
+      set(state => {
         return {
-          sections: state.sections.map((section) => {
+          sections: state.sections.map(section => {
             if (section.id === id) {
               return {
                 ...section,
                 headingRef: ref,
-                offsetRem,
+                offsetRem
               }
             }
             return section
-          }),
+          })
         }
-      }),
+      })
   }))
 }
 
 function useVisibleSections(sectionStore: StoreApi<SectionState>) {
-  let setVisibleSections = useStore(sectionStore, (s) => s.setVisibleSections)
-  let sections = useStore(sectionStore, (s) => s.sections)
+  let setVisibleSections = useStore(sectionStore, s => s.setVisibleSections)
+  let sections = useStore(sectionStore, s => s.sections)
 
   useEffect(() => {
     function checkVisibleSections() {
@@ -127,7 +127,7 @@ const useIsomorphicLayoutEffect =
 
 export function SectionProvider({
   sections,
-  children,
+  children
 }: {
   sections: Array<Section>
   children: React.ReactNode

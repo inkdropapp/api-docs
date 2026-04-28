@@ -169,8 +169,8 @@ function SearchResult({
 }) {
   let id = useId()
 
-  let sectionTitle = navigation.find((section) =>
-    section.links.find((link) => link.href === result.url.split('#')[0])
+  let sectionTitle = navigation.find(section =>
+    section.links.find(link => link.href === result.url.split('#')[0])
   )?.title
   let hierarchy = [sectionTitle, result.pageTitle].filter(
     (x): x is string => typeof x === 'string'
@@ -268,10 +268,7 @@ const SearchInput = forwardRef<
     autocompleteState: AutocompleteState<Result> | EmptyObject
     onClose: () => void
   }
->(function SearchInput(
-  { autocomplete, autocompleteState, onClose },
-  inputRef
-) {
+>(function SearchInput({ autocomplete, autocompleteState, onClose }, inputRef) {
   let inputProps = autocomplete.getInputProps({ inputElement: null })
 
   return (
@@ -285,7 +282,7 @@ const SearchInput = forwardRef<
           autocompleteState.status === 'stalled' ? 'pr-11' : 'pr-4'
         )}
         {...inputProps}
-        onKeyDown={(event) => {
+        onKeyDown={event => {
           if (
             event.key === 'Escape' &&
             !autocompleteState.isOpen &&

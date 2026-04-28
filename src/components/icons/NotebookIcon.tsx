@@ -1,7 +1,7 @@
 export function NotebookIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true" {...props}>
-      <g transform="scale(0.8)"{...{ transformOrigin: "12 12" } as any}>
+      <g transform="scale(0.8)" {...({ transformOrigin: '12 12' } as any)}>
         <path d="M4.5 1.5h13s1 0 1 1v19s0 1-1 1h-13s-1 0-1-1v-19s0-1 1-1"></path>
         <path d="M14.5 9a.5.5 0 01-.5.5H9a.5.5 0 01-.5-.5V6a.5.5 0 01.5-.5h5a.5.5 0 01.5.5z"></path>
         <path

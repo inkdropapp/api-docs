@@ -3,7 +3,7 @@ import nextCoreWebVitals from 'eslint-config-next/core-web-vitals'
 const config = [
   ...nextCoreWebVitals,
   {
-    ignores: ['.next/**', 'node_modules/**', 'public/**'],
+    ignores: ['.next/**', 'node_modules/**', 'public/**']
   },
   {
     rules: {
@@ -15,9 +15,9 @@ const config = [
       // Keep them off until Phase 6 when components are rewritten in TS and can
       // be revisited against React 19 guidance.
       'react-hooks/set-state-in-effect': 'off',
-      'react-hooks/refs': 'off',
-    },
-  },
+      'react-hooks/refs': 'off'
+    }
+  }
 ]
 
 export default config

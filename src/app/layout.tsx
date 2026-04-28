@@ -1,10 +1,10 @@
 import glob from 'fast-glob'
 import { type Metadata } from 'next'
 
+import { Providers } from '@/app/providers'
 import Fathom from '@/components/Fathom'
 import { Layout } from '@/components/Layout'
 import { type Section } from '@/components/SectionProvider'
-import { Providers } from '@/app/providers'
 
 import '@/styles/tailwind.css'
 
@@ -22,7 +22,7 @@ export default async function RootLayout({
 }) {
   let pages = await glob('**/*.mdx', { cwd: 'src/app' })
   let allSectionsEntries = (await Promise.all(
-    pages.map(async (filename) => [
+    pages.map(async filename => [
       '/' + filename.replace(/(^|\/)page\.mdx$/, ''),
       (await import(`./${filename}`)).sections
     ])

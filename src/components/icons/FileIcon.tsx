@@ -1,7 +1,7 @@
 export function ImageFileIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true" {...props}>
-      <g transform="scale(0.8)"{...{ transformOrigin: "12 12" } as any}>
+      <g transform="scale(0.8)" {...({ transformOrigin: '12 12' } as any)}>
         <path d="M21.207 4.5a1 1 0 01.293.707V22.5a1 1 0 01-1 1h-17a1 1 0 01-1-1v-21a1 1 0 011-1h13.293a1 1 0 01.707.293z"></path>
         <path
           fill="none"

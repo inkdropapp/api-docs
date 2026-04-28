@@ -87,7 +87,7 @@ export function Heading<Level extends 2 | 3>({
   const resolvedLevel = level ?? (2 as Level)
   let Component = `h${resolvedLevel}` as 'h2' | 'h3'
   let ref = useRef<HTMLHeadingElement>(null)
-  let registerHeading = useSectionStore((s) => s.registerHeading)
+  let registerHeading = useSectionStore(s => s.registerHeading)
 
   let inView = useInView(ref, {
     margin: `${remToPx(-3.5)}px 0px 0px 0px`,

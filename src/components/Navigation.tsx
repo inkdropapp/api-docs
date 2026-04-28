@@ -91,10 +91,7 @@ function VisibleSectionHighlight({
   pathname: string
 }) {
   let [sections, visibleSections] = useInitialValue(
-    [
-      useSectionStore((s) => s.sections),
-      useSectionStore((s) => s.visibleSections)
-    ],
+    [useSectionStore(s => s.sections), useSectionStore(s => s.visibleSections)],
     useIsInsideMobileNavigation()
   )
 
@@ -102,7 +99,7 @@ function VisibleSectionHighlight({
   let firstVisibleSectionIndex = Math.max(
     0,
     [{ id: '_top' }, ...sections].findIndex(
-      (section) => section.id === visibleSections[0]
+      section => section.id === visibleSections[0]
     )
   )
   let itemHeight = remToPx(2)
@@ -110,7 +107,7 @@ function VisibleSectionHighlight({
     ? Math.max(1, visibleSections.length) * itemHeight
     : itemHeight
   let top =
-    group.links.findIndex((link) => link.href === pathname) * itemHeight +
+    group.links.findIndex(link => link.href === pathname) * itemHeight +
     firstVisibleSectionIndex * itemHeight
 
   return (
@@ -134,7 +131,7 @@ function ActivePageMarker({
 }) {
   let itemHeight = remToPx(2)
   let offset = remToPx(0.25)
-  let activePageIndex = group.links.findIndex((link) => link.href === pathname)
+  let activePageIndex = group.links.findIndex(link => link.href === pathname)
   let top = offset + activePageIndex * itemHeight
 
   return (
@@ -158,12 +155,12 @@ function NavigationGroup({
 }) {
   let isInsideMobileNavigation = useIsInsideMobileNavigation()
   let [pathname, sections] = useInitialValue(
-    [usePathname(), useSectionStore((s) => s.sections)],
+    [usePathname(), useSectionStore(s => s.sections)],
     isInsideMobileNavigation
   )
 
   let isActiveGroup =
-    group.links.findIndex((link) => link.href === pathname) !== -1
+    group.links.findIndex(link => link.href === pathname) !== -1
 
   return (
     <li className={clsx('relative mt-6', className)}>
@@ -189,7 +186,7 @@ function NavigationGroup({
           )}
         </AnimatePresence>
         <ul role="list" className="border-l border-transparent">
-          {group.links.map((link) => (
+          {group.links.map(link => (
             <motion.li key={link.href} layout="position" className="relative">
               <NavLink href={link.href} active={link.href === pathname}>
                 {link.title}
@@ -208,7 +205,7 @@ function NavigationGroup({
                       transition: { duration: 0.15 }
                     }}
                   >
-                    {sections.map((section) => (
+                    {sections.map(section => (
                       <li key={section.id}>
                         <NavLink
                           href={`${link.href}#${section.id}`}

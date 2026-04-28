@@ -83,7 +83,7 @@ function CopyButton({ code }: { code: string }) {
       )}
       onClick={() => {
         window.navigator.clipboard.writeText(code).then(() => {
-          setCopyCount((count) => count + 1)
+          setCopyCount(count => count + 1)
         })
       }}
     >
@@ -147,7 +147,7 @@ function CodePanel({
   // mdx-annotations + rehype pipeline can produce; using Children.only here
   // throws on certain pages (see Phase 3 execution log).
   let childArray = Children.toArray(children)
-  let child = childArray.find((c) => isValidElement(c)) ?? childArray[0]
+  let child = childArray.find(c => isValidElement(c)) ?? childArray[0]
 
   if (isValidElement(child)) {
     const props = child.props as { tag?: string; label?: string; code?: string }
@@ -207,9 +207,7 @@ function CodeGroupHeader({
               )}
             >
               {getPanelTitle(
-                isValidElement(child)
-                  ? (child.props as { title?: string })
-                  : {}
+                isValidElement(child) ? (child.props as { title?: string }) : {}
               )}
             </Tab>
           ))}
@@ -228,7 +226,7 @@ function CodeGroupPanels({
   if (hasTabs) {
     return (
       <TabPanels>
-        {Children.map(children, (child) => (
+        {Children.map(children, child => (
           <TabPanel>
             <CodePanel {...props}>{child}</CodePanel>
           </TabPanel>
@@ -275,13 +273,13 @@ function usePreventLayoutShift() {
 const usePreferredLanguageStore = create<{
   preferredLanguages: Array<string>
   addPreferredLanguage: (language: string) => void
-}>()((set) => ({
+}>()(set => ({
   preferredLanguages: [],
-  addPreferredLanguage: (language) =>
-    set((state) => ({
+  addPreferredLanguage: language =>
+    set(state => ({
       preferredLanguages: [
         ...state.preferredLanguages.filter(
-          (preferredLanguage) => preferredLanguage !== language
+          preferredLanguage => preferredLanguage !== language
         ),
         language
       ]
@@ -322,7 +320,7 @@ export function CodeGroup({
   ...props
 }: React.ComponentPropsWithoutRef<typeof CodeGroupPanels> & { title: string }) {
   let languages =
-    Children.map(children, (child) =>
+    Children.map(children, child =>
       getPanelTitle(
         isValidElement(child) ? (child.props as { title?: string }) : {}
       )

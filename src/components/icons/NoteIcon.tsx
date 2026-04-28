@@ -1,7 +1,7 @@
 export function NoteIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true" {...props}>
-      <g transform="scale(0.7)"{...{ transformOrigin: "12 12" } as any}>
+      <g transform="scale(0.7)" {...({ transformOrigin: '12 12' } as any)}>
         <path d="M21.5.5a2 2 0 012 2v15.025a5.975 5.975 0 01-5.975 5.975H2.5a2 2 0 01-2-2v-19a2 2 0 012-2z"></path>
         <path
           fill="none"

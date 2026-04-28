@@ -4,7 +4,7 @@ import {
   Dialog,
   DialogBackdrop,
   DialogPanel,
-  TransitionChild,
+  TransitionChild
 } from '@headlessui/react'
 import { motion } from 'framer-motion'
 import { Suspense, createContext, useContext } from 'react'
@@ -45,7 +45,7 @@ const IsInsideMobileNavigationContext = createContext(false)
 
 function MobileNavigationDialog({
   isOpen,
-  close,
+  close
 }: {
   isOpen: boolean
   close: () => void
@@ -89,11 +89,11 @@ export const useMobileNavigationStore = create<{
   open: () => void
   close: () => void
   toggle: () => void
-}>()((set) => ({
+}>()(set => ({
   isOpen: false,
   open: () => set({ isOpen: true }),
   close: () => set({ isOpen: false }),
-  toggle: () => set((state) => ({ isOpen: !state.isOpen })),
+  toggle: () => set(state => ({ isOpen: !state.isOpen }))
 }))
 
 export function MobileNavigation() {

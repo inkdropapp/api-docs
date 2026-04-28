@@ -39,8 +39,8 @@ function PageLink({
 
 function PageNavigation() {
   let pathname = usePathname()
-  let allPages = navigation.flatMap((group) => group.links)
-  let currentPageIndex = allPages.findIndex((page) => page.href === pathname)
+  let allPages = navigation.flatMap(group => group.links)
+  let currentPageIndex = allPages.findIndex(page => page.href === pathname)
 
   if (currentPageIndex === -1) {
     return null
