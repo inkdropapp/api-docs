@@ -7,13 +7,15 @@ const config = [
   },
   {
     rules: {
-      // New strict rules in react-hooks@7 (shipped with eslint-config-next@16)
-      // flag patterns that are standard in the upstream Protocol template:
-      //   setMounted(true) / setModifierKey(...) in useEffect for hydration gates,
-      //   accessing ref.current during render when forwarding to imperative APIs,
-      //   reassigning destructured props parameters.
-      // Keep them off until Phase 6 when components are rewritten in TS and can
-      // be revisited against React 19 guidance.
+      // Disabled to preserve patterns inherited from the upstream Tailwind UI
+      // Protocol template:
+      //   - setMounted(true) / setModifierKey(...) in useEffect for SSR/CSR
+      //     hydration gates (ThemeToggle, Search)
+      //   - inputElement: inputRef.current passed during render to autocomplete
+      //     getFormProps (Search)
+      // Both are upstream's chosen patterns; refactoring would diverge from the
+      // template without functional benefit. Revisit if upstream itself migrates
+      // these to useSyncExternalStore / ref-as-prop.
       'react-hooks/set-state-in-effect': 'off',
       'react-hooks/refs': 'off'
     }
