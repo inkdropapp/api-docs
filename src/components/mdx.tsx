@@ -61,7 +61,16 @@ export function wrapper({ children }: { children: React.ReactNode }) {
   )
 }
 
-export const h1 = function H1(props: React.ComponentPropsWithoutRef<'h1'>) {
+export const h1 = function H1({
+  anchor: _anchor,
+  tag: _tag,
+  label: _label,
+  ...props
+}: React.ComponentPropsWithoutRef<'h1'> & {
+  anchor?: boolean
+  tag?: string
+  label?: string
+}) {
   return (
     <div className="flex items-start justify-between gap-4">
       <h1 {...props} className="flex-1" />
