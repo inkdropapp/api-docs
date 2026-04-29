@@ -6,7 +6,7 @@ import shiki from 'shiki'
 import { visit } from 'unist-util-visit'
 
 function rehypeParseCodeBlocks() {
-  return (tree) => {
+  return tree => {
     visit(tree, 'element', (node, _nodeIndex, parentNode) => {
       if (node.tagName === 'code') {
         parentNode.properties.language = node.properties.className
@@ -20,11 +20,11 @@ function rehypeParseCodeBlocks() {
 let highlighter
 
 function rehypeShiki() {
-  return async (tree) => {
+  return async tree => {
     highlighter =
       highlighter ?? (await shiki.getHighlighter({ theme: 'solarized-dark' }))
 
-    visit(tree, 'element', (node) => {
+    visit(tree, 'element', node => {
       if (node.tagName === 'pre' && node.children[0]?.tagName === 'code') {
         let codeNode = node.children[0]
         let textNode = codeNode.children[0]
@@ -34,15 +34,15 @@ function rehypeShiki() {
         if (node.properties.language) {
           let tokens = highlighter.codeToThemedTokens(
             textNode.value,
-            node.properties.language,
+            node.properties.language
           )
 
           textNode.value = shiki.renderToHtml(tokens, {
             elements: {
               pre: ({ children }) => children,
               code: ({ children }) => children,
-              line: ({ children }) => `<span>${children}</span>`,
-            },
+              line: ({ children }) => `<span>${children}</span>`
+            }
           })
         }
       }
@@ -51,9 +51,9 @@ function rehypeShiki() {
 }
 
 function rehypeSlugify() {
-  return (tree) => {
+  return tree => {
     let slugify = slugifyWithCounter()
-    visit(tree, 'element', (node) => {
+    visit(tree, 'element', node => {
       if (
         (node.tagName === 'h2' || node.tagName === 'h3') &&
         !node.properties.id
@@ -65,7 +65,7 @@ function rehypeSlugify() {
 }
 
 function rehypeAddMDXExports(getExports) {
-  return (tree) => {
+  return tree => {
     let exports = Object.entries(getExports(tree))
 
     for (let [name, value] of exports) {
@@ -86,9 +86,9 @@ function rehypeAddMDXExports(getExports) {
         data: {
           estree: acorn.parse(exportStr, {
             sourceType: 'module',
-            ecmaVersion: 'latest',
-          }),
-        },
+            ecmaVersion: 'latest'
+          })
+        }
       })
     }
   }
@@ -119,8 +119,8 @@ export const rehypePlugins = [
   rehypeSlugify,
   [
     rehypeAddMDXExports,
-    (tree) => ({
-      sections: `[${getSections(tree).join()}]`,
-    }),
-  ],
+    tree => ({
+      sections: `[${getSections(tree).join()}]`
+    })
+  ]
 ]

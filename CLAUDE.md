@@ -149,7 +149,7 @@ Code blocks support language-specific highlighting via Shiki. Common languages: 
 The documentation site uses a sophisticated MDX processing pipeline:
 
 1. **Build Time**: MDX files in `/src/app/` are processed through Next.js's MDX loader
-2. **Plugins Chain**: 
+2. **Plugins Chain**:
    - Remark plugins handle Markdown transformations
    - Rehype plugins process HTML (adding external link icons, etc.)
    - Recma plugins handle JavaScript/JSX transformations
@@ -238,4 +238,3 @@ Update this note at each end of the task with the following format:
 ```
 
 - **IMPORTANT**: Do not forget to update the note at the end of each task!!!
-
