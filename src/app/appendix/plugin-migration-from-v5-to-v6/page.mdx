@@ -73,6 +73,35 @@ const sub = inkdrop.window.onFocus(this.handleAppFocus)
 sub.dispose()
 ```
 
+## `activate()` receives the `inkdrop` environment
+
+In v6, the plugin's `activate()` function is called with the `inkdrop` environment instance as the first argument, followed by the persisted package state.
+
+Before:
+
+```js
+module.exports = {
+  activate() {
+    inkdrop.components.registerClass(MyComponent)
+  }
+}
+```
+
+After:
+
+```js
+module.exports = {
+  activate(inkdrop) {
+    inkdrop.components.registerClass(MyComponent)
+  }
+}
+```
+
+<Note>
+A future release will deprecate the global `inkdrop` reference for sandboxing, so please update your plugin to use the argument form.
+The global `inkdrop` reference still works for backward compatibility at the moment.
+</Note>
+
 ## `inkdrop.main.dataStore.getLocalDB()` → `inkdrop.localDB`
 
 ## CSS selectors for keymaps and commands
