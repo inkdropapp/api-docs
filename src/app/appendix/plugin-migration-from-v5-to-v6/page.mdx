@@ -89,10 +89,12 @@ module.exports = {
 
 After:
 
-```js
+```ts
+import type { Environment } from '@inkdropapp/types'
+
 module.exports = {
-  activate(inkdrop) {
-    inkdrop.components.registerClass(MyComponent)
+  activate(env: Environment) {
+    env.components.registerClass(MyComponent)
   }
 }
 ```
@@ -101,6 +103,82 @@ module.exports = {
 A future release will deprecate the global `inkdrop` reference for sandboxing, so please update your plugin to use the argument form.
 The global `inkdrop` reference still works for backward compatibility at the moment.
 </Note>
+
+Since the `inkdrop` environment is now passed as an argument rather than read from the global scope, you need a way to share it across the other modules of your plugin. A common pattern is to capture the instance in a dedicated module that exposes a getter and setter:
+
+```ts
+import type { Environment } from '@inkdropapp/types'
+
+/**
+ * Captures the `Environment` instance handed to `activate()` so the plugin's
+ * other modules can reach it without touching the (discouraged) global
+ * `inkdrop` variable.
+ */
+let captured: Environment | undefined
+
+export function setEnv(env: Environment | undefined): void {
+  captured = env
+}
+
+export function getEnv(): Environment {
+  if (!captured) {
+    throw new Error('env accessed before activate()')
+  }
+  return captured
+}
+```
+
+Then call `setEnv` from `activate()` so the rest of your plugin can retrieve the environment via `getEnv()`, and clear it in `deactivate()` to avoid holding a stale reference:
+
+```ts
+import type { Environment, IInkdropPlugin } from '@inkdropapp/types'
+import { setEnv } from './env'
+
+class YourPlugin implements IInkdropPlugin {
+  activate(env: Environment) {
+    setEnv(env)
+    // initialize your plugin
+  }
+
+  deactivate(env: Environment) {
+    // cleanup
+    setEnv(undefined)
+  }
+}
+
+export default new YourPlugin()
+```
+
+
+## `onEditorLoad` → `ensureEditorLoaded`
+
+In v6, you can use `ensureEditorLoaded` instead of `onEditorLoad` to run code with the active editor.
+`onEditorLoad` only fires when the editor component loads, so if the editor was already loaded by the time your plugin subscribed, you had to check for an active editor yourself and then also subscribe for future loads.
+`ensureEditorLoaded` handles both cases: it invokes the callback immediately if an editor is already loaded, and otherwise waits for the next one to load.
+
+Before:
+
+```js
+function extendEditor() {
+  // ...
+}
+
+const editor = inkdrop.getActiveEditor()
+if (editor) extendEditor()
+inkdrop.onEditorLoad(() => {
+  extendEditor()
+})
+```
+
+After:
+
+```js
+inkdrop.ensureEditorLoaded((editor: EditorView) => {
+  // extend the editor
+})
+```
+
+You no longer have to do the same dance of checking for an already-active editor before subscribing.
 
 ## `inkdrop.main.dataStore.getLocalDB()` → `inkdrop.localDB`
 
