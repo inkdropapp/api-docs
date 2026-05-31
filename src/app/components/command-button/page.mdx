@@ -1,0 +1,59 @@
+export const metadata = {
+  title: 'CommandButton',
+  description: 'A built-in React component of Inkdrop that dispatches a command when clicked and shows its keybinding in a tooltip',
+}
+
+# CommandButton
+
+A built-in React [component](/modules/component-manager) of Inkdrop that extends [Button](/components/button).
+When clicked, it dispatches an Inkdrop [command](/modules/command-registry), and its tooltip automatically
+shows the command's keybinding.
+
+To get the class of the `CommandButton` component:
+
+```tsx
+import type { CommandButtonProps } from '@inkdropapp/types'
+
+const CommandButton =
+  inkdrop.components.getComponentClass<CommandButtonProps>('CommandButton')
+```
+
+## Props
+
+`CommandButton` accepts all [Button](/components/button) props in addition to the following:
+
+```typescript
+type CommandButtonProps = ButtonProps & {
+  // The command to dispatch when the button is clicked.
+  command?: string
+  // The DOM element to dispatch the command on. Defaults to document.body.
+  commandTarget?: HTMLElement
+  // The detail payload passed with the dispatched command.
+  commandDetail?: any
+}
+```
+
+## Example
+
+```tsx
+import React from 'react'
+import type { CommandButtonProps } from '@inkdropapp/types'
+
+const SaveButton: React.FC = () => {
+  const CommandButton =
+    inkdrop.components.getComponentClass<CommandButtonProps>('CommandButton')
+
+  return (
+    <CommandButton primary command="core:save-note">
+      Save
+    </CommandButton>
+  )
+}
+
+export default SaveButton
+```
+
+## See also
+
+- [Button](/components/button) — the base button component.
+- [Command Registry](/modules/command-registry) — how Inkdrop commands are registered and dispatched.

@@ -1,0 +1,70 @@
+export const metadata = {
+  title: 'Button',
+  description: 'A built-in styled React button component of Inkdrop with optional icon and tooltip support',
+}
+
+# Button
+
+A built-in React [component](/modules/component-manager) of Inkdrop that renders a styled button
+with optional icon and tooltip support.
+In addition to the props below, `Button` accepts all standard
+[`<button>` attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/button#attributes)
+such as `onClick`, `disabled`, and `type`.
+
+To get the class of the `Button` component:
+
+```tsx
+import type { ButtonProps } from '@inkdropapp/types'
+
+const Button = inkdrop.components.getComponentClass<ButtonProps>('Button')
+```
+
+## Props
+
+```typescript
+type ButtonProps = {
+  // The element type to render as. Defaults to 'button'.
+  as?: React.ElementType
+  // The name of a Streamline icon to render before the children.
+  icon?: string
+  // Render with primary styling.
+  primary?: boolean
+  // Render with negative (destructive) styling.
+  negative?: boolean
+  // Render with basic styling.
+  basic?: boolean
+  // Render without the default `ui button` classes.
+  bare?: boolean
+  // Tooltip content shown while hovering the button.
+  tooltip?: React.ReactNode
+  // Additional class name applied to the tooltip.
+  tooltipClassName?: string
+} & React.ButtonHTMLAttributes<HTMLButtonElement>
+```
+
+## Example
+
+```tsx
+import React, { useCallback } from 'react'
+import type { ButtonProps } from '@inkdropapp/types'
+
+const SaveButton: React.FC = () => {
+  const Button = inkdrop.components.getComponentClass<ButtonProps>('Button')
+
+  const onClick = useCallback(() => {
+    inkdrop.commands.dispatch(document.body, 'core:save-note')
+  }, [])
+
+  return (
+    <Button primary tooltip="Save the note" onClick={onClick}>
+      Save
+    </Button>
+  )
+}
+
+export default SaveButton
+```
+
+## See also
+
+- [CommandButton](/components/command-button) — a `Button` that dispatches an Inkdrop command when clicked.

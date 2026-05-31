@@ -16,18 +16,22 @@ You can register your React component classes to the component registry.
 Then, the registered components can be added to layouts.
 Below example registers `MyDialog` class to the component registry and adds it to `modal` layout so that you can show it as a modal view.
 
-```js
-module.exports = {
-  activate() {
-    inkdrop.components.registerClass(MyDialog)
-    inkdrop.layouts.addComponentToLayout('modal', 'MyDialog')
-  },
+```ts
+import type { Environment, IInkdropPlugin } from '@inkdropapp/types'
 
-  deactivate() {
-    inkdrop.layouts.removeComponentFromLayout('modal', 'MyDialog')
-    inkdrop.components.deleteClass(MyDialog)
-  },
+class YourPlugin implements IInkdropPlugin {
+  activate(env: Environment) {
+    env.components.registerClass(MyDialog)
+    env.layouts.addComponentToLayout('modal', 'MyDialog')
+  }
+
+  deactivate(env: Environment) {
+    env.layouts.removeComponentFromLayout('modal', 'MyDialog')
+    env.components.deleteClass(MyDialog)
+  }
 }
+
+export default new YourPlugin()
 ```
 
 ---

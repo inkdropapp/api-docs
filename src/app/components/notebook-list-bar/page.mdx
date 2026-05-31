@@ -1,0 +1,62 @@
+export const metadata = {
+  title: 'NotebookListBar',
+  description: 'A built-in searchable React component of Inkdrop for selecting a notebook',
+}
+
+# NotebookListBar
+
+A built-in React [component](/modules/component-manager) of Inkdrop that renders a searchable list of
+notebooks, letting the user pick one.
+
+To get the class of the `NotebookListBar` component:
+
+```tsx
+import type { NotebookListBarProps } from '@inkdropapp/types'
+
+const NotebookListBar =
+  inkdrop.components.getComponentClass<NotebookListBarProps>('NotebookListBar')
+```
+
+## Props
+
+```typescript
+type NotebookListBarProps = {
+  // Placeholder text for the search input. Defaults to 'Search'.
+  placeholder?: string
+  // Icon name for the search input. Defaults to 'book-close-2'.
+  icon?: string
+  // Whether to show a "(Root)" option at the top.
+  showRoot?: boolean
+  // Book IDs to hide from the list.
+  hiddenBooks?: string[]
+  // Called when a notebook is selected. `bookId` is null if "(Root)" was selected.
+  onItemSelect: (bookId: string | null) => any
+}
+```
+
+## Example
+
+```tsx
+import React, { useCallback } from 'react'
+import { logger } from 'inkdrop'
+import type { NotebookListBarProps } from '@inkdropapp/types'
+
+const NotebookPicker: React.FC = () => {
+  const NotebookListBar =
+    inkdrop.components.getComponentClass<NotebookListBarProps>('NotebookListBar')
+
+  const onItemSelect = useCallback((bookId: string | null) => {
+    logger.debug('Selected notebook:', bookId)
+  }, [])
+
+  return (
+    <NotebookListBar
+      placeholder="Move to notebook"
+      showRoot
+      onItemSelect={onItemSelect}
+    />
+  )
+}
+
+export default NotebookPicker
+```
