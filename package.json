@@ -9,6 +9,7 @@
     "lint": "eslint ."
   },
   "browserslist": "defaults, not ie <= 11",
+  "packageManager": "pnpm@11.5.2",
   "dependencies": {
     "@algolia/autocomplete-core": "^1.19.2",
     "@headlessui/react": "^2.2.6",
