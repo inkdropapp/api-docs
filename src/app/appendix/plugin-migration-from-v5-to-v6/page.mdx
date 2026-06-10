@@ -1,7 +1,6 @@
 export const metadata = {
   title: 'Plugin Migration Guide from v5 to v6',
-  description:
-    'How to migrate your plugin to support v6',
+  description: 'How to migrate your plugin to support v6'
 }
 
 # Plugin Migration Guide from v5 to v6
@@ -17,7 +16,6 @@ ipm configure
 ```
 
 Check out [the repository](https://github.com/inkdropapp/ipm-cli) for more details.
-
 
 ## New TypeScript definitions
 
@@ -52,9 +50,7 @@ return inkdrop.dialog.showOpenDialog({
 })
 ```
 
-<Note>
-The `inkdrop.window` argument is no longer required.
-</Note>
+<Note>The `inkdrop.window` argument is no longer required.</Note>
 
 ### `inkdrop.window.on()`
 
@@ -100,8 +96,9 @@ module.exports = {
 ```
 
 <Note>
-A future release will deprecate the global `inkdrop` reference for sandboxing, so please update your plugin to use the argument form.
-The global `inkdrop` reference still works for backward compatibility at the moment.
+  A future release will deprecate the global `inkdrop` reference for sandboxing,
+  so please update your plugin to use the argument form. The global `inkdrop`
+  reference still works for backward compatibility at the moment.
 </Note>
 
 Since the `inkdrop` environment is now passed as an argument rather than read from the global scope, you need a way to share it across the other modules of your plugin. A common pattern is to capture the instance in a dedicated module that exposes a getter and setter:
@@ -149,7 +146,6 @@ class YourPlugin implements IInkdropPlugin {
 export default new YourPlugin()
 ```
 
-
 ## `onEditorLoad` → `ensureEditorLoaded`
 
 In v6, you can use `ensureEditorLoaded` instead of `onEditorLoad` to run code with the active editor.
@@ -186,7 +182,6 @@ You no longer have to do the same dance of checking for an already-active editor
 
 - `.mde-preview` → `.mde-preview-container`
 
-
 ## LESS is deprecated
 
 The necessity of LESS has been less and less over the years, since CSS supports nested selectors and variables.
@@ -204,6 +199,7 @@ Before:
   }
 }
 ```
+
 After:
 
 ```css
@@ -241,3 +237,92 @@ env.clipboard.writeText('Hello, Inkdrop!')
 `env.clipboard` also provides `readHTML()`, `readImageAsDataURL()`, `writeImage(dataUrl)`, `availableFormats()`, `write({ text, html })`, and `saveAsImageAttachment()`. See the `clipboard` property on the [Environment](https://github.com/inkdropapp/types/blob/main/src/environment.d.ts) for details.
 </Note>
 
+## Syntax themes
+
+Syntax themes (packages with `"theme": "syntax"` in `package.json`) styled **CodeMirror 5** in v5. Inkdrop 6 runs on [CodeMirror 6](https://codemirror.net/), so a theme moves from styling CodeMirror's DOM directly to setting **CSS variables**, and from CodeMirror 5 mode tokens (`.cm-*`) to CodeMirror 6 / [Lezer](https://lezer.codemirror.net/) highlight classes (`.tok-*`).
+
+The stock [`default-light`](https://github.com/inkdropapp/cm6-themes/tree/main/packages/default-light) and [`default-dark`](https://github.com/inkdropapp/cm6-themes/tree/main/packages/default-dark) themes are maintained as reference implementations. Like every other plugin, themes also [drop LESS for plain CSS](#less-is-deprecated), and should bump `engines.inkdrop` to `^6.x`.
+
+### Editor chrome: DOM selectors → CSS variables
+
+You no longer style CodeMirror's DOM. Replace the old `.CodeMirror-*` rules with the corresponding `--editor-*` variable, set in `:root`:
+
+| v5 (CodeMirror 5)                          | v6 (CSS variable)                                                                 |
+| ------------------------------------------ | --------------------------------------------------------------------------------- |
+| `.CodeMirror { background }`               | `--editor-background-color`                                                       |
+| `.CodeMirror { color }`                    | `--editor-foreground-color`                                                       |
+| `.CodeMirror-cursor` border / fat cursor   | `--editor-caret-color`                                                            |
+| `.CodeMirror-selected`                     | `--editor-selection-background`                                                   |
+| `.CodeMirror-focused .CodeMirror-selected` | `--editor-focused-selection-background`                                           |
+| `.CodeMirror-gutters`                      | `--editor-gutter-background-color`, `--editor-gutter-border-right`                |
+| `.CodeMirror-linenumber`                   | `--editor-gutter-color`                                                           |
+| `.CodeMirror-activeline-background`        | `--editor-active-line-background-color`                                           |
+| `.CodeMirror-matchingbracket`              | `--editor-matching-bracket-outline`, `--editor-matching-bracket-background-color` |
+
+See the full list of `--editor-*` and `--md-*` variables at the top of the reference theme's [`styles/index.css`](https://github.com/inkdropapp/cm6-themes/blob/main/packages/default-light/styles/index.css).
+
+### Syntax tokens: `.cm-*` → `.tok-*`
+
+CodeMirror 5 mode tokens become CodeMirror 6 / Lezer highlight classes, scoped under `.cm-editor` (and `.mde-preview .codeblock` for rendered preview code blocks):
+
+| v5 (CodeMirror 5) | v6 (Lezer highlight class)                                    |
+| ----------------- | ------------------------------------------------------------- |
+| `.cm-keyword`     | `.tok-keyword`                                                |
+| `.cm-string`      | `.tok-string`                                                 |
+| `.cm-comment`     | `.tok-comment`                                                |
+| `.cm-number`      | `.tok-number`                                                 |
+| `.cm-variable`    | `.tok-variable-name`                                          |
+| `.cm-def`         | `.tok-name.tok-definition`, `.tok-variable-name.tok-function` |
+| `.cm-type`        | `.tok-type-name`, `.tok-class-name`                           |
+| `.cm-operator`    | `.tok-operator`                                               |
+| `.cm-tag`         | `.tok-tag-name`                                               |
+| `.cm-attribute`   | `.tok-attribute-name`                                         |
+| `.cm-atom`        | `.tok-atom`, `.tok-bool`                                      |
+| `.cm-meta`        | `.tok-meta`                                                   |
+
+Before:
+
+```less
+.cm-s-default {
+  .cm-keyword {
+    color: #c678dd;
+  }
+  .cm-string {
+    color: #98c379;
+  }
+}
+```
+
+After:
+
+```css
+.cm-editor,
+.mde-preview .codeblock {
+  .tok-keyword {
+    color: #c678dd;
+  }
+  .tok-string {
+    color: #98c379;
+  }
+}
+```
+
+<Note>
+  The `.tok-*` classes are finer-grained than CodeMirror 5's modes, so combine
+  them for specificity — e.g. `.tok-variable-name.tok-function` for function
+  identifiers. Copy the full set from a reference theme as a starting point.
+</Note>
+
+### Use the shared color tokens (recommended)
+
+Inkdrop ships a primitive color palette — Tailwind-style `--hsl-<family>-<scale>` HSL triplets — in the shared `@inkdropapp/css` package, loaded before your theme. Instead of hard-coding `hsl(...)` values, reference these tokens so your theme stays consistent with the rest of the app:
+
+```css
+:root {
+  --editor-background-color: hsl(var(--hsl-white));
+  --editor-foreground-color: hsl(var(--hsl-slate-800));
+  --editor-selection-background: hsl(var(--hsl-slate-500) / 40%);
+}
+```
+
+The full list of primitive tokens is defined in [`tokens.css`](https://github.com/inkdropapp/css/blob/main/tokens.css).
