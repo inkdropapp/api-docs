@@ -217,3 +217,27 @@ After:
 }
 ```
 
+## Electron's `clipboard` is deprecated
+
+Accessing the system clipboard through Electron's `clipboard` module is no longer supported. Use `env.clipboard` instead, which proxies the system clipboard over IPC.
+
+Before:
+
+```js
+const { clipboard } = require('electron')
+
+const text = clipboard.readText()
+clipboard.writeText('Hello, Inkdrop!')
+```
+
+After:
+
+```js
+const text = env.clipboard.readText()
+env.clipboard.writeText('Hello, Inkdrop!')
+```
+
+<Note>
+`env.clipboard` also provides `readHTML()`, `readImageAsDataURL()`, `writeImage(dataUrl)`, `availableFormats()`, `write({ text, html })`, and `saveAsImageAttachment()`. See the `clipboard` property on the [Environment](https://github.com/inkdropapp/types/blob/main/src/environment.d.ts) for details.
+</Note>
+
