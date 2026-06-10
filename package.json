@@ -2,7 +2,6 @@
   "name": "inkdrop-api-docs",
   "version": "0.2.0",
   "private": true,
-  "packageManager": "pnpm@11.1.3",
   "scripts": {
     "dev": "next dev --webpack",
     "build": "next build --webpack",
@@ -10,6 +9,7 @@
     "lint": "eslint ."
   },
   "browserslist": "defaults, not ie <= 11",
+  "packageManager": "pnpm@11.5.2",
   "dependencies": {
     "@algolia/autocomplete-core": "^1.19.2",
     "@headlessui/react": "^2.2.6",
