@@ -8,7 +8,11 @@ import { visit } from 'unist-util-visit'
 function rehypeParseCodeBlocks() {
   return tree => {
     visit(tree, 'element', (node, _nodeIndex, parentNode) => {
-      if (node.tagName === 'code') {
+      // Only fenced code blocks (`pre > code`) carry a language for rehypeShiki.
+      // Inline code can sit directly inside a JSX element (e.g. a single-line
+      // `<Note>…`code`…</Note>`), whose mdxJsxFlowElement node has no
+      // `properties` — guard on the parent being a <pre> to avoid crashing.
+      if (node.tagName === 'code' && parentNode?.tagName === 'pre') {
         parentNode.properties.language = node.properties.className
           ? node.properties?.className[0]?.replace(/^language-/, '')
           : 'txt'
