@@ -1,9 +1,9 @@
 import clsx from 'clsx'
 import Link from 'next/link'
 
+import { CopyMarkdownButton } from '@/components/CopyMarkdownButton'
 import { Feedback } from '@/components/Feedback'
 import { Heading } from '@/components/Heading'
-import { MarkdownSourceLink } from '@/components/MarkdownSourceLink'
 import { Prose } from '@/components/Prose'
 
 function ExternalIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
@@ -74,7 +74,9 @@ export const h1 = function H1({
   return (
     <div className="flex items-start justify-between gap-4">
       <h1 {...props} className="flex-1" />
-      <MarkdownSourceLink />
+      <div className="flex items-center gap-1">
+        <CopyMarkdownButton />
+      </div>
     </div>
   )
 }
@@ -111,9 +113,7 @@ export function Note({ children }: { children: React.ReactNode }) {
   return (
     <div className="my-6 flex gap-2.5 rounded-2xl border border-emerald-500/20 bg-emerald-50/50 p-4 text-sm/6 text-emerald-900 dark:border-emerald-500/30 dark:bg-emerald-500/5 dark:text-emerald-200 dark:[--tw-prose-links-hover:var(--color-emerald-300)] dark:[--tw-prose-links:var(--color-white)]">
       <InfoIcon className="mt-1 h-4 w-4 flex-none fill-emerald-500 stroke-white dark:fill-emerald-200/20 dark:stroke-emerald-200" />
-      <div className="*:first:mt-0 *:last:mb-0">
-        {children}
-      </div>
+      <div className="*:first:mt-0 *:last:mb-0">{children}</div>
     </div>
   )
 }
@@ -139,9 +139,7 @@ export function Warning({ children }: { children: React.ReactNode }) {
   return (
     <div className="my-6 flex gap-2.5 rounded-2xl border border-orange-500/20 bg-orange-50/50 p-4 leading-6 text-orange-900 dark:border-orange-500/30 dark:bg-orange-500/5 dark:text-orange-200 dark:[--tw-prose-links-hover:var(--color-orange-300)] dark:[--tw-prose-links:var(--color-white)]">
       <WarnIcon className="mt-1 h-5 w-5 flex-none" />
-      <div className="*:first:mt-0 *:last:mb-0">
-        {children}
-      </div>
+      <div className="*:first:mt-0 *:last:mb-0">{children}</div>
     </div>
   )
 }
