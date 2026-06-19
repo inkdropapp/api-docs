@@ -1,0 +1,73 @@
+export const metadata = {
+  title: 'Modal',
+  description: 'A built-in React component of Inkdrop that renders a modal overlay with backdrop, focus management, and animations',
+}
+
+# Modal
+
+A built-in React [component](/modules/component-manager) of Inkdrop that renders a modal overlay.
+It handles backdrop clicks, the <kbd>Esc</kbd> key, focus management, and enter/exit animations.
+For a higher-level dialog with a title, content, and actions, use the [Dialog](/components/dialog) component.
+
+To get the class of the `Modal` component:
+
+```tsx
+import type { ModalProps } from '@inkdropapp/types'
+
+const Modal = inkdrop.components.getComponentClass<ModalProps>('Modal')
+```
+
+## Props
+
+```typescript
+type ModalProps = {
+  className?: string
+  children: React.ReactNode
+  // Whether the modal is visible.
+  visible: boolean
+  // Called when the backdrop is clicked.
+  onBackdropClick?: () => any
+  // Called when the Esc key is pressed.
+  onEscKeyDown?: () => any
+  // Move focus into the modal when it opens. Defaults to true.
+  autofocus?: boolean
+  // Restore focus to the previously focused element when it closes.
+  autoRestoreFocus?: boolean
+  // Play enter/exit animations. Defaults to true.
+  animate?: boolean
+}
+```
+
+## Example
+
+```tsx
+import React, { useCallback, useEffect } from 'react'
+import { useModal } from 'inkdrop'
+import type { ModalProps } from '@inkdropapp/types'
+
+const MyOverlay: React.FC = () => {
+  const modal = useModal()
+  const Modal = inkdrop.components.getComponentClass<ModalProps>('Modal')
+
+  const toggle = useCallback(() => modal.show(), [])
+
+  useEffect(() => {
+    const sub = inkdrop.commands.add(document.body, {
+      'yourplugin:toggle': toggle
+    })
+    return () => sub.dispose()
+  }, [toggle])
+
+  return (
+    <Modal {...modal.state} onBackdropClick={modal.close}>
+      <div className="my-overlay">Hello, world!</div>
+    </Modal>
+  )
+}
+
+export default MyOverlay
+```
+
+## See also
+
+- [Dialog](/components/dialog) — a higher-level dialog built on top of `Modal`.

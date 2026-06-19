@@ -1,6 +1,6 @@
 export const metadata = {
   title: 'Dialog',
-  description: 'A built-in React component of Inkdrop that allows you to display a simple modal dialog with buttons',
+  description: 'A built-in React component of Inkdrop that allows you to display a modal dialog with a title, content, and actions',
 }
 
 # Dialog
@@ -9,37 +9,88 @@ export const metadata = {
 Available since v3.5.1.
 </Note>
 
-A built-in React [component](/modules/component-manager) of Inkdrop that allows you to display a simple modal dialog with buttons.
-To get the class of `Dialog` component:
+A built-in React [component](/modules/component-manager) of Inkdrop that displays a modal dialog.
+It is built on top of the [Modal](/components/modal) component and provides
+`Title`, `Content`, and `Actions` sub-components for laying out a dialog.
 
-```js
-const Dialog = inkdrop.components.getComponentClass('Dialog')
+To get the class of the `Dialog` component:
+
+```tsx
+import type { Dialog } from '@inkdropapp/types'
+
+const Dialog = inkdrop.components.getComponentClass('Dialog') as Dialog
 ```
+
+<Note>
+`Dialog` is cast to its type so that the `Dialog.Title`, `Dialog.Content`, and
+`Dialog.Actions` sub-components are typed. A plain
+`getComponentClass<DialogProps>('Dialog')` only types the props.
+</Note>
 
 ## Props
 
+`Dialog` accepts all [Modal](/components/modal) props in addition to the following:
+
 ```typescript
-type Props = {
-  className?: string,
-  children?: React.Node,
-  visible: boolean,
-  hiding: boolean,
-  onBackdropClick?: () => any,
-  autofocus?: boolean
+type DialogProps = ModalProps & {
+  className?: string
+  children?: React.ReactNode
+  // Render the dialog at a larger width.
+  large?: boolean
 }
 ```
 
+### Sub-components
+
+<Properties>
+  <Property name="Dialog.Title" type="React.FC<DialogTitleProps>">
+    The header of the dialog.
+
+    ```typescript
+    type DialogTitleProps = {
+      className?: string
+      children?: React.ReactNode
+    }
+    ```
+  </Property>
+  <Property name="Dialog.Content" type="React.FC<DialogContentProps>">
+    The main body of the dialog.
+
+    ```typescript
+    type DialogContentProps = {
+      className?: string
+      // Lay out the content as a flex container.
+      flex?: boolean
+      // Remove the default padding.
+      noPadding?: boolean
+      children?: React.ReactNode
+      // The CSS `overflow` value applied to the content.
+      overflow?: React.CSSProperties['overflow']
+    }
+    ```
+  </Property>
+  <Property name="Dialog.Actions" type="React.FC<DialogActionsProps>">
+    The footer of the dialog, typically containing buttons.
+
+    ```typescript
+    type DialogActionsProps = {
+      className?: string
+      children?: React.ReactNode
+    }
+    ```
+  </Property>
+</Properties>
+
 ## Example
 
-```js
-'use babel'
-
+```tsx
 import React, { useEffect, useCallback } from 'react'
 import { logger, useModal } from 'inkdrop'
+import type { Dialog as DialogType } from '@inkdropapp/types'
 
-const HelloMessageDialog = props => {
+const HelloMessageDialog: React.FC = () => {
   const modal = useModal()
-  const { Dialog } = inkdrop.components.classes
+  const Dialog = inkdrop.components.getComponentClass('Dialog') as DialogType
 
   const toggle = useCallback(() => {
     modal.show()
@@ -75,4 +126,5 @@ It produces:
 
 ## See also
 
+- [Modal](/components/modal) — the lower-level overlay component that `Dialog` builds on.
 - [The plugin tutorial](/guides/plugin-word-count#understanding-the-generated-code) that uses the `Dialog` component.

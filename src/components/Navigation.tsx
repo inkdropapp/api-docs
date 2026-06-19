@@ -338,7 +338,11 @@ export const navigation: Array<NavGroup> = [
   {
     title: 'Components',
     links: [
+      { title: 'Modal', href: '/components/modal' },
       { title: 'Dialog', href: '/components/dialog' },
+      { title: 'Button', href: '/components/button' },
+      { title: 'CommandButton', href: '/components/command-button' },
+      { title: 'NotebookListBar', href: '/components/notebook-list-bar' },
       { title: 'MessageDialog', href: '/components/message-dialog' }
     ]
   },

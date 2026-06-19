@@ -114,16 +114,16 @@ const config = {
             marginTop: theme('spacing.3'),
             marginBottom: theme('spacing.3')
           },
-          '> ul > li > *:first-child': {
+          '> ul > li > *:first-child:not(a)': {
             marginTop: theme('spacing.5')
           },
-          '> ul > li > *:last-child': {
+          '> ul > li > *:last-child:not(a)': {
             marginBottom: theme('spacing.5')
           },
-          '> ol > li > *:first-child': {
+          '> ol > li > *:first-child:not(a)': {
             marginTop: theme('spacing.5')
           },
-          '> ol > li > *:last-child': {
+          '> ol > li > *:last-child:not(a)': {
             marginBottom: theme('spacing.5')
           },
           'ul ul, ul ol, ol ul, ol ol': {
