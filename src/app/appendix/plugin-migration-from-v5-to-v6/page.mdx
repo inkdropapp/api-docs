@@ -241,7 +241,7 @@ env.clipboard.writeText('Hello, Inkdrop!')
 
 Syntax themes (packages with `"theme": "syntax"` in `package.json`) styled **CodeMirror 5** in v5. Inkdrop 6 runs on [CodeMirror 6](https://codemirror.net/), so a theme moves from styling CodeMirror's DOM directly to setting **CSS variables**, and from CodeMirror 5 mode tokens (`.cm-*`) to CodeMirror 6 / [Lezer](https://lezer.codemirror.net/) highlight classes (`.tok-*`).
 
-The stock [`default-light`](https://github.com/inkdropapp/cm6-themes/tree/main/packages/default-light) and [`default-dark`](https://github.com/inkdropapp/cm6-themes/tree/main/packages/default-dark) themes are maintained as reference implementations. Like every other plugin, themes also [drop LESS for plain CSS](#less-is-deprecated), and should bump `engines.inkdrop` to `^6.x`.
+The stock [`default-light`](https://github.com/inkdropapp/default-light-syntax-theme) and [`default-dark`](https://github.com/inkdropapp/default-dark-syntax-theme) themes are maintained as reference implementations. Like every other plugin, themes also [drop LESS for plain CSS](#less-is-deprecated), and should bump `engines.inkdrop` to `^6.x`.
 
 ### Editor chrome: DOM selectors → CSS variables
 
@@ -259,7 +259,7 @@ You no longer style CodeMirror's DOM. Replace the old `.CodeMirror-*` rules with
 | `.CodeMirror-activeline-background`        | `--editor-active-line-background-color`                                           |
 | `.CodeMirror-matchingbracket`              | `--editor-matching-bracket-outline`, `--editor-matching-bracket-background-color` |
 
-See the full list of `--editor-*` and `--md-*` variables at the top of the reference theme's [`styles/index.css`](https://github.com/inkdropapp/cm6-themes/blob/main/packages/default-light/styles/index.css).
+See the full list of `--editor-*` and `--md-*` variables at the top of the reference theme's [`styles/index.css`](https://github.com/inkdropapp/default-light-syntax-theme/blob/master/styles/index.css).
 
 ### Syntax tokens: `.cm-*` → `.tok-*`
 
