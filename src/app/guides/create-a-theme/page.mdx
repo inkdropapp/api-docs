@@ -168,9 +168,7 @@ To create a UI theme, do the following:
 8. Run `npx dev-server` to start the development server
 9. Open the URL displayed in your console in a web browser
 10. Edit your theme's `styles/theme.css` file to customize the theme
-11. Run `npx generate-palette` to generate a `palette.json` file
-12. Commit the generated `palette.json` file to your repository
-13. Publish your theme
+11. Publish your theme — `palette.json` is generated for you on publish (see [Generating `palette.json`](#generating-palette-json))
 
 ### Customizing Theme Variables
 
@@ -258,18 +256,6 @@ So, you may want to adjust the styles by specifying the platform selector like s
 }
 ```
 
-### Generating `palette.json`
-
-When you are ready to publish your theme, let's generate a `palette.json` file, which contains the variables in JSON format.
-This file is planned to be used for displaying a preview of your theme and also used for the mobile app in the future.
-Run the following command before publishing in the root theme project directory:
-
-```sh
-npx generate-palette
-```
-
-You can commit the generated `palette.json` file to your repository.
-
 ### Example UI themes
 
 - [Solarized Light UI](https://github.com/inkdropapp/solarized-light-ui/)
@@ -299,6 +285,28 @@ After making changes, reload the app to reflected changes.
 
 - [Solarized Light Preview](https://github.com/inkdropapp/solarized-light-preview/)
 - [Solarized Dark Preview](https://github.com/inkdropapp/solarized-dark-preview/)
+
+## Generating `palette.json`
+
+Every theme — UI, syntax, and preview alike — ships a `palette.json` next to its stylesheets. It's a JSON snapshot of the theme's resolved CSS variables, used to render theme previews and (in the future) by the mobile app.
+
+You don't have to generate or commit it by hand. Every theme scaffolded with `ipm` includes a `prepublishOnly` script:
+
+```json
+{
+  "scripts": {
+    "prepublishOnly": "generate-palette"
+  }
+}
+```
+
+so `ipm publish` runs `generate-palette` for you and bundles a fresh `palette.json` into the published package.
+
+If you'd like to inspect the file before publishing, run the generator yourself at any time from the theme's root directory:
+
+```sh
+npx generate-palette
+```
 
 ## Publish your theme
 

@@ -268,7 +268,7 @@ After:
     "prepublishOnly": "generate-palette"
   },
   "devDependencies": {
-    "@inkdropapp/theme-dev-helpers": "^0.4.0"
+    "@inkdropapp/theme-dev-helpers": "^0.5.0"
   },
   "engines": {
     "inkdrop": "^6.0.0"
@@ -337,13 +337,13 @@ If your v5 UI theme styled preview content directly (e.g. `.mde-preview h1`, `.m
 
 ### Generate `palette.json`
 
-v6 themes ship a `palette.json` — a JSON dump of the theme's variables, used for theme previews and (in the future) the mobile app. Generate it with the `generate-palette` binary from `@inkdropapp/theme-dev-helpers`:
+All v6 themes — UI, syntax, and preview — ship a `palette.json`: a JSON dump of the theme's variables, used for theme previews and (in the future) the mobile app. The `prepublishOnly` script above runs the `generate-palette` binary from `@inkdropapp/theme-dev-helpers` on every publish, so you don't need to generate or commit the file by hand. To inspect it beforehand, run it yourself:
 
 ```sh
 npx generate-palette
 ```
 
-Commit the result, and the `prepublishOnly` script above keeps it in sync on every publish. See [Creating a UI Theme](/guides/create-a-theme#creating-a-ui-theme) for the full dev loop (`npx dev-server`, hot reloading, and the component preview).
+See [Creating a UI Theme](/guides/create-a-theme#creating-a-ui-theme) for the full dev loop (`npx dev-server`, hot reloading, and the component preview).
 
 ## Syntax themes
 
@@ -351,7 +351,7 @@ Syntax themes (packages with `"theme": "syntax"` in `package.json`) styled **Cod
 Inkdrop 6 runs on [CodeMirror 6](https://codemirror.net/), and the theme model shifts in two ways: a theme now (1) sets **CSS variables** instead of styling CodeMirror's DOM, and (2) sets **`--syntax-*` color variables** instead of writing per-token rules. The rules that paint the tokens — the CodeMirror 6 / [Lezer](https://lezer.codemirror.net/) `.tok-*` classes — now live in the shared [`@inkdropapp/css`](https://github.com/inkdropapp/css) package and read your variables. So a v6 syntax theme is a single `:root { … }` block with no selectors of its own.
 
 The base syntax theme now lives in [`@inkdropapp/css`'s `syntax.css`](https://github.com/inkdropapp/css/blob/main/syntax.css): it defines every `--editor-*`, `--syntax-*`, and `--md-*` variable with a default value (the built-in light and dark themes merged via `light-dark()`). The app loads it before your theme, so the stock [`default-syntax`](https://github.com/inkdropapp/default-syntax-theme) theme is now essentially empty — its `styles/index.css` just points back at `syntax.css`. Browse that file to know which variables to override; set only the ones you want to change.
-Like every other plugin, themes also [drop LESS for plain CSS](#less-is-deprecated), and should bump `engines.inkdrop` to `^6.x`.
+Like every other plugin, themes also [drop LESS for plain CSS](#less-is-deprecated), and should bump `engines.inkdrop` to `^6.x`. Add a `"prepublishOnly": "generate-palette"` script too (and the `@inkdropapp/theme-dev-helpers` dev-dependency that provides it), so a syntax theme ships a [`palette.json`](#generate-palette-json) just like UI themes.
 
 ### Editor chrome: DOM selectors → CSS variables
 
@@ -441,7 +441,7 @@ The stock [`default-preview`](https://github.com/inkdropapp/default-preview) and
 
 ### Update the manifest and tooling
 
-Bump the engine, collapse the multiple stylesheets into one, and — like every other plugin — [drop LESS for plain CSS](#less-is-deprecated):
+Bump the engine, collapse the multiple stylesheets into one, add a `prepublishOnly` script (and the `@inkdropapp/theme-dev-helpers` dev-dependency that provides `generate-palette`) so the theme ships a [`palette.json`](#generate-palette-json), and — like every other plugin — [drop LESS for plain CSS](#less-is-deprecated):
 
 Before:
 
@@ -466,13 +466,19 @@ After:
 {
   "theme": "preview",
   "styleSheets": ["index.css"],
+  "scripts": {
+    "prepublishOnly": "generate-palette"
+  },
+  "devDependencies": {
+    "@inkdropapp/theme-dev-helpers": "^0.5.0"
+  },
   "engines": {
     "inkdrop": "^6.0.0"
   }
 }
 ```
 
-The `theme: "preview"` field is unchanged. The old `gfm-alerts.css` and `metadata-section.css` are now part of the embedded base, so you can drop them. Preview themes have no `themeAppearance` and — unlike UI themes — don't ship a `palette.json`.
+The `theme: "preview"` field is unchanged. The old `gfm-alerts.css` and `metadata-section.css` are now part of the embedded base, so you can drop them. Preview themes have no `themeAppearance`, but — like UI and syntax themes — they now ship a [`palette.json`](#generate-palette-json), generated on publish by the `prepublishOnly` script above.
 
 ### Ship full stylesheets → override variables
 
