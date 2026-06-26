@@ -103,15 +103,37 @@ To create a syntax theme, do the following:
 
 Now you are ready to make changes!
 
-Open up `styles/index.css`. The scaffold ships the same complete, commented stylesheet as the stock [`default-light`](https://github.com/inkdropapp/default-light-syntax-theme) theme, so every variable and class you might customize is already there for reference. What Inkdrop actually reads is three groups of declarations:
+Open up `styles/index.css`. A syntax theme is **just a set of CSS variables** you set in a single `:root { … }` block with no selectors of its own. It starts essentially empty — like the stock [`default-syntax`](https://github.com/inkdropapp/default-syntax-theme) theme, whose `styles/index.css` now just points back at the base variables — because the full catalog of variables, each with its default value, lives in [`@inkdropapp/css`'s `syntax.css`](https://github.com/inkdropapp/css/blob/main/syntax.css). Browse that file to see every variable you can override, then copy the ones you want to change into your `:root` block. The rules that actually paint the highlighting (`.tok-*`, `.md-*`) live in the same [`@inkdropapp/css`](https://github.com/inkdropapp/css) package and read your variables, so recoloring the theme means changing variable _values_, not writing CSS rules.
 
-- The **editor chrome** — `--editor-*` variables for the background, gutter, cursor, selection, tooltips, brackets, and more.
-- The **syntax tokens** — [Lezer](https://lezer.codemirror.net/) highlight classes named `.tok-*` (`.tok-keyword`, `.tok-string`, `.tok-comment`, …), scoped under `.cm-editor` and `.mde-preview .codeblock` (the latter styles rendered preview code blocks).
+The variables fall into three families:
+
+- The **editor chrome** — `--editor-*` variables for the background, foreground, gutter, cursor, selection, tooltips, brackets, and more.
+- The **syntax tokens** — one `--syntax-*` variable per [Lezer](https://lezer.codemirror.net/) highlight token (`--syntax-keyword-color`, `--syntax-string-color`, `--syntax-comment-color`, …), plus `-font-style` / `-font-weight` / `-text-decoration` variants where relevant. `@inkdropapp/css` maps these onto the `.tok-*` classes it emits inside `.cm-editor` and `.mde-preview .codeblock` (the latter styles rendered preview code blocks).
 - The **Markdown-specific tokens** — `--md-*` variables that style Markdown-specific syntax, such as fenced (triple-backtick) code blocks, inline code, highlight marks, and tables.
 
-Set those to whatever colors you like — for example, reference [`@inkdropapp/css`](https://github.com/inkdropapp/css) primitives such as `hsl(var(--hsl-slate-800))` directly. The default theme also defines a base16-style palette at the top (`--hsl-base00`–`--hsl-base0F` and their `--bd-*` aliases) and points its other variables at it, which is a handy way to recolor everything from one place — but that's a convention specific to the default theme, not something your theme has to follow.
+Set those to whatever colors you like — for example, the values reference the primitive color tokens from [`@inkdropapp/css`](https://github.com/inkdropapp/css), which come in two forms:
 
-The editor runs on [CodeMirror 6](https://codemirror.net/), so these `--editor-*` variables and `.tok-*` classes replace the old CodeMirror 5 `.CodeMirror-*` / `.cm-*` selectors. See [Syntax themes](/appendix/plugin-migration-from-v5-to-v6#syntax-themes) in the migration guide for the full reference and the v5 → v6 selector mapping.
+- **`--color-<family>-<scale>`** — finished, opaque colors, e.g. `var(--color-violet-600)`.
+- **`--hsl-<family>-<scale>`** — the underlying HSL triplets, e.g. `hsl(var(--hsl-violet-600) / 13%)`, for when you need an alpha channel.
+
+Reaching for these design tokens is optional, though. Each `--editor-*` / `--syntax-*` / `--md-*` variable accepts any CSS color, so a custom syntax theme is free to define its own palette — raw `#hex`, `rgb()`, `oklch()`, or whatever you prefer — instead of building on the `@inkdropapp/css` ramps.
+
+```css
+:root {
+  --editor-foreground-color: var(--color-gray-800);
+  --editor-caret-color: var(--color-violet-600);
+  --editor-selection-background: hsl(var(--hsl-violet-600) / 13%);
+
+  --syntax-keyword-color: var(--color-violet-600);
+  --syntax-string-color: var(--color-green-600);
+  --syntax-comment-color: var(--color-slate-400);
+  --syntax-comment-font-style: italic;
+}
+```
+
+A couple of conventions keep this easy to fill in: modifier variants default to their base token (so `--syntax-name-function-color` falls back to `--syntax-name-color` unless you override it), and tokens you don't color fall back to `--editor-foreground-color`. You only need to set what differs.
+
+The editor runs on [CodeMirror 6](https://codemirror.net/), so these `--editor-*` variables and `.tok-*` classes replace the old CodeMirror 5 `.CodeMirror-*` / `.cm-*` selectors. See [Syntax themes](/appendix/plugin-migration-from-v5-to-v6#syntax-themes) in the migration guide for the full reference and the v5 → v6 selector mapping — in Inkdrop 6 you drive the highlighting by setting `--syntax-*` variables rather than writing `.tok-*` rules.
 After making changes, the app automatically reflects changes via the dev-tools hot-reloading.
 
 <Warning>

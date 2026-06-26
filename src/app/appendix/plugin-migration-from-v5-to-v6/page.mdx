@@ -348,9 +348,9 @@ Commit the result, and the `prepublishOnly` script above keeps it in sync on eve
 ## Syntax themes
 
 Syntax themes (packages with `"theme": "syntax"` in `package.json`) styled **CodeMirror 5** in v5.
-Inkdrop 6 runs on [CodeMirror 6](https://codemirror.net/), so a theme moves from styling CodeMirror's DOM directly to setting **CSS variables**, and from CodeMirror 5 mode tokens (`.cm-*`) to CodeMirror 6 / [Lezer](https://lezer.codemirror.net/) highlight classes (`.tok-*`).
+Inkdrop 6 runs on [CodeMirror 6](https://codemirror.net/), and the theme model shifts in two ways: a theme now (1) sets **CSS variables** instead of styling CodeMirror's DOM, and (2) sets **`--syntax-*` color variables** instead of writing per-token rules. The rules that paint the tokens — the CodeMirror 6 / [Lezer](https://lezer.codemirror.net/) `.tok-*` classes — now live in the shared [`@inkdropapp/css`](https://github.com/inkdropapp/css) package and read your variables. So a v6 syntax theme is a single `:root { … }` block with no selectors of its own.
 
-The stock [`default-light`](https://github.com/inkdropapp/default-light-syntax-theme) and [`default-dark`](https://github.com/inkdropapp/default-dark-syntax-theme) themes are maintained as reference implementations.
+The base syntax theme now lives in [`@inkdropapp/css`'s `syntax.css`](https://github.com/inkdropapp/css/blob/main/syntax.css): it defines every `--editor-*`, `--syntax-*`, and `--md-*` variable with a default value (the built-in light and dark themes merged via `light-dark()`). The app loads it before your theme, so the stock [`default-syntax`](https://github.com/inkdropapp/default-syntax-theme) theme is now essentially empty — its `styles/index.css` just points back at `syntax.css`. Browse that file to know which variables to override; set only the ones you want to change.
 Like every other plugin, themes also [drop LESS for plain CSS](#less-is-deprecated), and should bump `engines.inkdrop` to `^6.x`.
 
 ### Editor chrome: DOM selectors → CSS variables
@@ -369,26 +369,26 @@ You no longer style CodeMirror's DOM. Replace the old `.CodeMirror-*` rules with
 | `.CodeMirror-activeline-background`        | `--editor-active-line-background-color`                                           |
 | `.CodeMirror-matchingbracket`              | `--editor-matching-bracket-outline`, `--editor-matching-bracket-background-color` |
 
-See the full list of `--editor-*` and `--md-*` variables at the top of the reference theme's [`styles/index.css`](https://github.com/inkdropapp/default-light-syntax-theme/blob/master/styles/index.css).
+See the full list of `--editor-*` and `--md-*` variables — with their default values — in [`@inkdropapp/css`'s `syntax.css`](https://github.com/inkdropapp/css/blob/main/syntax.css).
 
-### Syntax tokens: `.cm-*` → `.tok-*`
+### Syntax tokens: `.cm-*` → `--syntax-*` variables
 
-CodeMirror 5 mode tokens become CodeMirror 6 / Lezer highlight classes, scoped under `.cm-editor` (and `.mde-preview .codeblock` for rendered preview code blocks):
+CodeMirror 5 mode tokens map to v6 highlight tokens — but instead of writing rules for them, you set one `--syntax-*` color variable per token. `@inkdropapp/css` applies each variable to the matching `.tok-*` class it emits under `.cm-editor` and `.mde-preview .codeblock` (the latter for rendered preview code blocks):
 
-| v5 (CodeMirror 5) | v6 (Lezer highlight class)                                    |
-| ----------------- | ------------------------------------------------------------- |
-| `.cm-keyword`     | `.tok-keyword`                                                |
-| `.cm-string`      | `.tok-string`                                                 |
-| `.cm-comment`     | `.tok-comment`                                                |
-| `.cm-number`      | `.tok-number`                                                 |
-| `.cm-variable`    | `.tok-variable-name`                                          |
-| `.cm-def`         | `.tok-name.tok-definition`, `.tok-variable-name.tok-function` |
-| `.cm-type`        | `.tok-type-name`, `.tok-class-name`                           |
-| `.cm-operator`    | `.tok-operator`                                               |
-| `.cm-tag`         | `.tok-tag-name`                                               |
-| `.cm-attribute`   | `.tok-attribute-name`                                         |
-| `.cm-atom`        | `.tok-atom`, `.tok-bool`                                      |
-| `.cm-meta`        | `.tok-meta`                                                   |
+| v5 (CodeMirror 5) | v6 (`--syntax-*` variable)                                                |
+| ----------------- | ------------------------------------------------------------------------- |
+| `.cm-keyword`     | `--syntax-keyword-color`                                                  |
+| `.cm-string`      | `--syntax-string-color`                                                   |
+| `.cm-comment`     | `--syntax-comment-color`                                                  |
+| `.cm-number`      | `--syntax-number-color`                                                   |
+| `.cm-variable`    | `--syntax-variable-name-color`                                            |
+| `.cm-def`         | `--syntax-name-definition-color`, `--syntax-variable-name-function-color` |
+| `.cm-type`        | `--syntax-class-name-color`                                               |
+| `.cm-operator`    | `--syntax-operator-color`                                                 |
+| `.cm-tag`         | `--syntax-tag-name-color`                                                 |
+| `.cm-attribute`   | `--syntax-attribute-name-color`                                           |
+| `.cm-atom`        | `--syntax-atom-color`, `--syntax-bool-color`                              |
+| `.cm-meta`        | `--syntax-meta-color`                                                     |
 
 Before:
 
@@ -406,36 +406,21 @@ Before:
 After:
 
 ```css
-.cm-editor,
-.mde-preview .codeblock {
-  .tok-keyword {
-    color: #c678dd;
-  }
-  .tok-string {
-    color: #98c379;
-  }
+:root {
+  --syntax-keyword-color: #c678dd;
+  --syntax-string-color: #98c379;
 }
 ```
+
+A few conventions: each token also exposes `-font-style` / `-font-weight` / `-text-decoration` variants where relevant (`--syntax-comment-font-style`, `--syntax-heading-font-weight`, …); modifier variants default to their base token (`--syntax-name-function-color` falls back to `--syntax-name-color`); and any token you don't color falls back to `--editor-foreground-color`. [`@inkdropapp/css`'s `syntax.css`](https://github.com/inkdropapp/css/blob/main/syntax.css) defines a value for every token — copy it as a starting point.
 
 <Note>
-  The `.tok-*` classes are finer-grained than CodeMirror 5's modes, so combine
-  them for specificity — e.g. `.tok-variable-name.tok-function` for function
-  identifiers. Copy the full set from a reference theme as a starting point.
+  The token catalog is finer-grained than CodeMirror 5's modes (separate
+  variables for line vs. block comments, the six heading levels, each operator
+  kind, and so on). If you need to style something the variables don't cover,
+  you can still write an ordinary <code>.tok-*</code> rule scoped under{' '}
+  <code>.cm-editor, .mde-preview .codeblock</code>.
 </Note>
-
-### Use the shared color tokens (recommended)
-
-Inkdrop ships a primitive color palette — Tailwind-style `--hsl-<family>-<scale>` HSL triplets — in the shared `@inkdropapp/css` package, loaded before your theme. Instead of hard-coding `hsl(...)` values, reference these tokens so your theme stays consistent with the rest of the app:
-
-```css
-:root {
-  --editor-background-color: hsl(var(--hsl-white));
-  --editor-foreground-color: hsl(var(--hsl-slate-800));
-  --editor-selection-background: hsl(var(--hsl-slate-500) / 40%);
-}
-```
-
-The full list of primitive tokens is defined in [`tokens.css`](https://github.com/inkdropapp/css/blob/main/tokens.css).
 
 ## Preview theme
 
