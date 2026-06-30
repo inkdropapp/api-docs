@@ -14,15 +14,24 @@ export const metadata = {
 Inkdrop's interface is rendered using HTML and CSS.
 If you already have experience with web development, you're ready to go!{{ className: 'lead' }}
 
-Inkdrop supports three types of themes: UI, Syntax and Preview:
+A theme is **a single package** that restyles Inkdrop by overriding its CSS variables. One theme can cover all three areas of the app at once:
 
-- **UI themes** style elements such as the sidebar, the note list, drop-down lists, and the tool bar.
-- **Syntax themes** style the note, gutter and other elements inside the editor view.
-- **Preview themes** style the header, texts, code blocks and other elements inside the preview view.
+- The **app UI** — the sidebar, the note list, drop-down lists, and the tool bar.
+- The **editor** — the note, gutter and other elements inside the editor view, including syntax highlighting.
+- The **preview** — the header, texts, code blocks and other elements inside the rendered Markdown preview.
 
 ![Theme Types](/images/creating-a-theme_types.png)
 
-Themes can be changed from Preferences which you can open by selecting the **Inkdrop > Preferences** on macOS or **File > Settings** on Windows and Linux, and clicking the **Themes** tab on the left hand navigation.
+<Note>
+  In Inkdrop 5 these were three separate theme packages (UI, Syntax, and
+  Preview), each selected independently. Inkdrop 6 merges them into one unified
+  theme, declared with <code>"theme": true</code> and selected from a single
+  **Theme** drop-down. See [Themes are now a single, unified
+  type](/appendix/plugin-migration-from-v5-to-v6#themes-are-now-a-single-unified-type)
+  in the migration guide if you're combining three v5 packages into one.
+</Note>
+
+The theme can be changed from Preferences which you can open by selecting **Inkdrop > Preferences** on macOS or **File > Settings** on Windows and Linux, and clicking the **Themes** tab on the left hand navigation.
 Themes can be also installed with [Inkdrop Plugin Manager](https://docs.inkdrop.app/manual/extend-inkdrop-with-plugins).
 
 ## Prerequisites
@@ -36,27 +45,62 @@ Themes are pretty straightforward but it's still helpful to be familiar with a f
 
 - [CSS Variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_variables) are entities defined by CSS authors which contain specific values to be reused throughout a document.
 - You may also want to review the concept of a `package.json` (as covered in Inkdrop `package.json`). This file is used to help distribute your theme to Inkdrop users.
-- Your theme's `package.json` must contain a `theme` key with a value of `ui`, `syntax` or `preview` for Inkdrop to recognize and load it as a theme.
+- Your theme's `package.json` must contain a `theme` key set to `true` for Inkdrop to recognize and load it as a theme. (The old string values `"ui"`, `"syntax"`, and `"preview"` are no longer supported — see the [migration guide](/appendix/plugin-migration-from-v5-to-v6#themes-are-now-a-single-unified-type).)
 - You can find existing themes to install or fork in the [Inkdrop themes registry](https://my.inkdrop.app/plugins/theme).
+
+### Anatomy of a theme
+
+A theme is a package whose `package.json` sets `"theme": true`, declares its light/dark `themeAppearance`, and lists its stylesheets:
+
+```json {{ filename: 'package.json' }}
+{
+  "name": "motif",
+  "theme": true,
+  "themeAppearance": "dark",
+  "styleSheets": ["ui.css", "syntax.css", "preview.css"],
+  "scripts": {
+    "prepublishOnly": "generate-palette"
+  },
+  "devDependencies": {
+    "@inkdropapp/theme-dev-helpers": "^0.6.0"
+  },
+  "engines": { "inkdrop": "^6.0.0" }
+}
+```
+
+By convention a theme ships three stylesheets — one per area:
+
+- `styles/ui.css` — restyles the app chrome by overriding the UI component variables.
+- `styles/syntax.css` — restyles the editor and its syntax highlighting via the `--editor-*`, `--syntax-*`, and `--md-*` variables.
+- `styles/preview.css` — restyles the rendered Markdown preview via the `--mde-preview-*` variables.
+
+You don't have to fill in all three — a theme that only restyles the editor can ship just `syntax.css`. But shipping the full set is what makes a theme feel cohesive across the whole app.
+
+### Themes own their cascade layers
+
+This is the one structural rule to remember. **Each stylesheet must wrap its rules in the matching cascade layer** — `theme.ui`, `theme.syntax`, or `theme.preview`:
+
+```css {{ filename: 'styles/ui.css' }}
+@layer theme.ui {
+  :root {
+    --page-background: var(--color-neutral-50);
+    --sidebar-background: var(--color-neutral-100);
+  }
+}
+```
+
+Inkdrop injects your stylesheets verbatim — it no longer wraps them in a layer for you. The app's built-in defaults live in the `theme.ui.base` / `theme.ui.components`, `theme.syntax.base`, and `theme.preview.base` **sub-layers**, and a layer's own rules outrank its sub-layers. So wrapping your overrides in `@layer theme.ui` (etc.) lets them win over the defaults reliably, without resorting to high-specificity selectors. The `ipm` scaffold sets this up for you.
 
 ### Scaffolding a theme with `ipm`
 
-The quickest way to start is the [`ipm` CLI](https://github.com/inkdropapp/ipm-cli), which scaffolds a ready-to-edit theme into a new directory. Pick the `--type` that matches the theme you want to build:
+The quickest way to start is the [`ipm` CLI](https://github.com/inkdropapp/ipm-cli), which scaffolds a ready-to-edit theme into a new directory:
 
 ```shell
-# A syntax (editor) theme → creates ./motif-syntax
-$ ipm init motif --type theme-syntax
-
-# A UI (app chrome) theme → creates ./motif-dark-ui
-$ ipm init motif-dark-ui --type theme-ui
-
-# A preview (Markdown) theme → creates ./motif-preview
-$ ipm init motif --type theme-preview
+# Creates ./motif with theme: true and styles/{ui,syntax,preview}.css
+$ ipm init motif --type theme
 ```
 
-`ipm` appends the matching `-syntax`, `-ui`, or `-preview` suffix automatically when you leave it off. For UI themes it also sets `themeAppearance` from the name when it contains `light` or `dark`, and asks you otherwise. Run `ipm init` with no arguments to launch an interactive wizard that prompts for the name and type.
-
-Each theme type is covered step by step below, starting from its `ipm init` command.
+When the name contains `light` or `dark`, `ipm` sets `themeAppearance` accordingly; otherwise it asks which one to use. Run `ipm init` with no arguments to launch an interactive wizard that prompts for the name and type.
 
 ### Enabling Development Mode
 
@@ -78,110 +122,51 @@ Check out Google's [extensive tutorial](https://developer.chrome.com/docs/devtoo
 
 There is a plugin called [dev-tools](https://my.inkdrop.app/plugins/dev-tools) that provides a set of useful tools for plugin development.
 
-For theme development, it allows you to enable hot reloading of the current active themes.
+For theme development, it allows you to enable hot reloading of the current active theme.
 When you made any changes to your theme, it will reload the stylesheets automatically.
 So, you don't have to reload the entire app manually every time you made changes.
 
 To start, select the menu **Plugins → dev-tools → Start hot reloading themes**.
 To stop, select the menu **Plugins → dev-tools → Stop hot reloading themes**.
 
-## Creating a Syntax Theme
+## Creating your first theme
 
-<Note>
-  <strong>Tip:</strong> Syntax themes should end with <code>-syntax</code>.
-</Note>
+Let's create a theme called `motif-dark`. To set it up for local development, do the following:
 
-Let's create your first syntax theme which is called `motif-syntax`.
-To create a syntax theme, do the following:
-
-1. Run `ipm init motif --type theme-syntax` to scaffold the theme into `./motif-syntax` (`ipm` adds the `-syntax` suffix for you).
-2. Open a terminal in the `motif-syntax` directory.
-3. Run `ipm link --dev` to symlink your repository to `<USER_DATA>/inkdrop/dev/packages`. You can find the user data directory as described on [this page](https://docs.inkdrop.app/reference/user-data-directory).
-4. Reload Inkdrop using <kbd>Alt+Cmd+Shift+R</kbd> / <kbd>Alt+Ctrl+R</kbd>
-5. Enable the theme via the "_Syntax Theme_" drop-down in the "Themes" tab of the Preferences
-6. Enable hot reloading by selecting the menu **Plugins → dev-tools → Start hot reloading themes**
-
-Now you are ready to make changes!
-
-Open up `styles/index.css`. A syntax theme is **just a set of CSS variables** you set in a single `:root { … }` block with no selectors of its own. It starts essentially empty — like the stock [`default-syntax`](https://github.com/inkdropapp/default-syntax-theme) theme, whose `styles/index.css` now just points back at the base variables — because the full catalog of variables, each with its default value, lives in [`@inkdropapp/css`'s `syntax.css`](https://github.com/inkdropapp/css/blob/main/syntax.css). Browse that file to see every variable you can override, then copy the ones you want to change into your `:root` block. The rules that actually paint the highlighting (`.tok-*`, `.md-*`) live in the same [`@inkdropapp/css`](https://github.com/inkdropapp/css) package and read your variables, so recoloring the theme means changing variable _values_, not writing CSS rules.
-
-The variables fall into three families:
-
-- The **editor chrome** — `--editor-*` variables for the background, foreground, gutter, cursor, selection, tooltips, brackets, and more.
-- The **syntax tokens** — one `--syntax-*` variable per [Lezer](https://lezer.codemirror.net/) highlight token (`--syntax-keyword-color`, `--syntax-string-color`, `--syntax-comment-color`, …), plus `-font-style` / `-font-weight` / `-text-decoration` variants where relevant. `@inkdropapp/css` maps these onto the `.tok-*` classes it emits inside `.cm-editor` and `.mde-preview .codeblock` (the latter styles rendered preview code blocks).
-- The **Markdown-specific tokens** — `--md-*` variables that style Markdown-specific syntax, such as fenced (triple-backtick) code blocks, inline code, highlight marks, and tables.
-
-Set those to whatever colors you like — for example, the values reference the primitive color tokens from [`@inkdropapp/css`](https://github.com/inkdropapp/css), which come in two forms:
-
-- **`--color-<family>-<scale>`** — finished, opaque colors, e.g. `var(--color-violet-600)`.
-- **`--hsl-<family>-<scale>`** — the underlying HSL triplets, e.g. `hsl(var(--hsl-violet-600) / 13%)`, for when you need an alpha channel.
-
-Reaching for these design tokens is optional, though. Each `--editor-*` / `--syntax-*` / `--md-*` variable accepts any CSS color, so a custom syntax theme is free to define its own palette — raw `#hex`, `rgb()`, `oklch()`, or whatever you prefer — instead of building on the `@inkdropapp/css` ramps.
-
-```css
-:root {
-  --editor-foreground-color: var(--color-gray-800);
-  --editor-caret-color: var(--color-violet-600);
-  --editor-selection-background: hsl(var(--hsl-violet-600) / 13%);
-
-  --syntax-keyword-color: var(--color-violet-600);
-  --syntax-string-color: var(--color-green-600);
-  --syntax-comment-color: var(--color-slate-400);
-  --syntax-comment-font-style: italic;
-}
-```
-
-A couple of conventions keep this easy to fill in: modifier variants default to their base token (so `--syntax-name-function-color` falls back to `--syntax-name-color` unless you override it), and tokens you don't color fall back to `--editor-foreground-color`. You only need to set what differs.
-
-The editor runs on [CodeMirror 6](https://codemirror.net/), so these `--editor-*` variables and `.tok-*` classes replace the old CodeMirror 5 `.CodeMirror-*` / `.cm-*` selectors. See [Syntax themes](/appendix/plugin-migration-from-v5-to-v6#syntax-themes) in the migration guide for the full reference and the v5 → v6 selector mapping — in Inkdrop 6 you drive the highlighting by setting `--syntax-*` variables rather than writing `.tok-*` rules.
-After making changes, the app automatically reflects changes via the dev-tools hot-reloading.
-
-<Warning>
-  <strong>Note</strong>: It's advised to not specify a <code>font-family</code>{' '}
-  in your syntax theme because it will override the Font Family field in
-  Inkdrop's settings. If you still like to recommend a font that goes well with
-  your theme, we suggest you do so in your README.
-</Warning>
-
-### Example syntax themes
-
-- [Solarized Light Syntax](https://github.com/inkdropapp/solarized-light-syntax/)
-- [Solarized Dark Syntax](https://github.com/inkdropapp/solarized-dark-syntax/)
-- [Kanagawa Wave Syntax](https://github.com/inkdropapp/kanagawa-wave-syntax/)
-- [Kanagawa Dragon Syntax](https://github.com/inkdropapp/kanagawa-dragon-syntax/)
-- [Kanagawa Lotus Syntax](https://github.com/inkdropapp/kanagawa-lotus-syntax/)
-
-## Creating a UI Theme
-
-<Note>
-  <strong>Tip:</strong> UI themes should end with <code>-ui</code> or for dark
-  theme<code>-dark-ui</code>.
-</Note>
-
-Let's create your first UI theme which is called `motif-dark-ui`.
-To create a UI theme, do the following:
-
-1. Run `ipm init motif-dark-ui --type theme-ui` to scaffold the theme into `./motif-dark-ui`. Because the name contains `dark`, `ipm` sets `"themeAppearance": "dark"` in `package.json` for you — when the name has neither `light` nor `dark`, it asks which one to use.
-2. Open a terminal in the `motif-dark-ui` directory.
+1. Run `ipm init motif-dark --type theme` to scaffold the theme into `./motif-dark`. Because the name contains `dark`, `ipm` sets `"themeAppearance": "dark"` in `package.json` for you — when the name has neither `light` nor `dark`, it asks which one to use.
+2. Open a terminal in the `motif-dark` directory.
 3. Run `npm install` to install dependencies.
 4. Run `ipm link --dev` to symlink your repository to `<USER_DATA>/inkdrop/dev/packages`. You can find the user data directory as described on [this page](https://docs.inkdrop.app/reference/user-data-directory).
 5. Reload Inkdrop using <kbd>Alt+Cmd+Shift+R</kbd> / <kbd>Alt+Ctrl+R</kbd>
-6. Enable the theme via the "_UI Theme_" drop-down in the "Themes" tab of the Preferences
+6. Enable the theme via the "_Theme_" drop-down in the "Themes" tab of the Preferences
 7. Start hot reloading by selecting the menu **Plugins → dev-tools → Start hot reloading themes**
-8. Run `npx dev-server` to start the development server
-9. Open the URL displayed in your console in a web browser
-10. Edit your theme's `styles/theme.css` file to customize the theme
-11. Publish your theme — `palette.json` is generated for you on publish (see [Generating `palette.json`](#generating-palette-json))
+8. Run `npx dev-server` to start the development server (handy for browsing the available variables — see below)
+9. Edit the stylesheets in `styles/` to customize the theme
+10. Publish your theme — `palette.json` is generated for you on publish (see [Generating `palette.json`](#generating-palette-json))
 
-### Customizing Theme Variables
+Now you are ready to make changes! The three sections below walk through each stylesheet.
 
-Most of Inkdrop's UI elements can be customized with [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_variables).
+## Styling the app UI
+
+Your theme's `styles/ui.css` styles the app chrome. Most of Inkdrop's UI elements can be customized with [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_variables).
 These variables let Inkdrop give meaningful names for styles of the UI components.
 For example, `--note-list-bar-background` variable styles the background of the note list bar.
 This approach saves you from handling CSS selector specificities, making your themes easier to maintain.
 
-After creating a repository, there is an empty CSS file in `styles/theme.css`.
-You are going to add only the CSS variables that you want to change in this file.
+Add only the CSS variables you want to change, inside the `@layer theme.ui` block:
+
+```css {{ filename: 'styles/ui.css' }}
+@layer theme.ui {
+  :root {
+    --primary-color: var(--color-blue-500);
+    --page-background: var(--color-neutral-50);
+    --text-color: var(--color-neutral-600);
+    --sidebar-background: var(--color-neutral-100);
+    --note-list-bar-background: var(--color-neutral-50);
+    --editor-background: var(--color-neutral-50);
+  }
+}
+```
 
 For the full list of variables you can override, refer to the source CSS files in the [`@inkdropapp/css`](https://github.com/inkdropapp/css) package, which the app loads before your theme:
 
@@ -237,14 +222,16 @@ It is currently supported on macOS and Windows 11+.
 If this feature is enabled in the app, the `body` element will have the `acrylic-window` class name.
 So, you can add styles for the acrylic background like this:
 
-```css
-:root:has(body.acrylic-window) {
-  --page-background: transparent;
-  --editor-background: hsl(192deg 100% 10% / 70%);
-  --editor-drawer-background: hsl(var(--hsl-base04));
-  --note-list-bar-background: hsl(var(--hsl-bg-muted-highlight) / 70%);
-  --sidebar-background: hsl(var(--hsl-bg) / 70%);
-  --inline-dropdown-menu-background: hsl(var(--hsl-base04));
+```css {{ filename: 'styles/ui.css' }}
+@layer theme.ui {
+  :root:has(body.acrylic-window) {
+    --page-background: transparent;
+    --editor-background: hsl(192deg 100% 10% / 70%);
+    --editor-drawer-background: hsl(var(--hsl-base04));
+    --note-list-bar-background: hsl(var(--hsl-bg-muted-highlight) / 70%);
+    --sidebar-background: hsl(var(--hsl-bg) / 70%);
+    --inline-dropdown-menu-background: hsl(var(--hsl-base04));
+  }
 }
 ```
 
@@ -253,55 +240,188 @@ It makes the background transparent, and increases transparency of the editor, n
 On Windows, the window background opacity is lower than on macOS.
 So, you may want to adjust the styles by specifying the platform selector like so:
 
-```css
-:root:has(body.acrylic-window.platform-win32) {
-  --page-background: rgb(0 0 0 / 40%);
+```css {{ filename: 'styles/ui.css' }}
+@layer theme.ui {
+  :root:has(body.acrylic-window.platform-win32) {
+    --page-background: rgb(0 0 0 / 40%);
+  }
 }
 ```
 
-### Example UI themes
+## Styling the editor
 
-- [Solarized Light UI](https://github.com/inkdropapp/solarized-light-ui/)
-- [Solarized Dark UI](https://github.com/inkdropapp/solarized-dark-ui/)
-- [Kanagawa Wave UI](https://github.com/inkdropapp/kanagawa-wave-ui/)
-- [Kanagawa Dragon UI](https://github.com/inkdropapp/kanagawa-dragon-ui/)
-- [Kanagawa Lotus UI](https://github.com/inkdropapp/kanagawa-lotus-ui/)
+Your theme's `styles/syntax.css` styles the editor and its syntax highlighting. It's **just a set of CSS variables** you set in a `:root { … }` block — no selectors of your own. The full catalog of variables, each with its default value, lives in [`@inkdropapp/css`'s `syntax.css`](https://github.com/inkdropapp/css/blob/main/syntax.css). Browse that file to see every variable you can override, then copy the ones you want to change into your `:root` block. The rules that actually paint the highlighting (`.tok-*`, `.md-*`) live in the same [`@inkdropapp/css`](https://github.com/inkdropapp/css) package and read your variables, so recoloring the editor means changing variable _values_, not writing CSS rules.
 
-## Creating a Preview Theme
+The variables fall into three families:
+
+- The **editor chrome** — `--editor-*` variables for the background, foreground, gutter, cursor, selection, tooltips, brackets, and more.
+- The **syntax tokens** — one `--syntax-*` variable per [Lezer](https://lezer.codemirror.net/) highlight token (`--syntax-keyword-color`, `--syntax-string-color`, `--syntax-comment-color`, …), plus `-font-style` / `-font-weight` / `-text-decoration` variants where relevant. `@inkdropapp/css` maps these onto the `.tok-*` classes it emits inside `.cm-editor` and `.mde-preview .codeblock` (the latter styles rendered preview code blocks).
+- The **Markdown-specific tokens** — `--md-*` variables that style Markdown-specific syntax, such as fenced (triple-backtick) code blocks, inline code, highlight marks, and tables.
+
+Set those to whatever colors you like — for example, the values reference the primitive color tokens from [`@inkdropapp/css`](https://github.com/inkdropapp/css), which come in two forms:
+
+- **`--color-<family>-<scale>`** — finished, opaque colors, e.g. `var(--color-violet-600)`.
+- **`--hsl-<family>-<scale>`** — the underlying HSL triplets, e.g. `hsl(var(--hsl-violet-600) / 13%)`, for when you need an alpha channel.
+
+Reaching for these design tokens is optional, though. Each `--editor-*` / `--syntax-*` / `--md-*` variable accepts any CSS color, so a custom theme is free to define its own palette — raw `#hex`, `rgb()`, `oklch()`, or whatever you prefer — instead of building on the `@inkdropapp/css` ramps.
+
+```css {{ filename: 'styles/syntax.css' }}
+@layer theme.syntax {
+  :root {
+    --editor-foreground-color: var(--color-gray-800);
+    --editor-caret-color: var(--color-violet-600);
+    --editor-selection-background: hsl(var(--hsl-violet-600) / 13%);
+
+    --syntax-keyword-color: var(--color-violet-600);
+    --syntax-string-color: var(--color-green-600);
+    --syntax-comment-color: var(--color-slate-400);
+    --syntax-comment-font-style: italic;
+  }
+}
+```
+
+A couple of conventions keep this easy to fill in: modifier variants default to their base token (so `--syntax-name-function-color` falls back to `--syntax-name-color` unless you override it), and tokens you don't color fall back to `--editor-foreground-color`. You only need to set what differs.
+
+The editor runs on [CodeMirror 6](https://codemirror.net/), so these `--editor-*` variables and `.tok-*` classes replace the old CodeMirror 5 `.CodeMirror-*` / `.cm-*` selectors. See [The editor stylesheet](/appendix/plugin-migration-from-v5-to-v6#the-editor-stylesheet-syntax-css) in the migration guide for the full reference and the v5 → v6 selector mapping — in Inkdrop 6 you drive the highlighting by setting `--syntax-*` variables rather than writing `.tok-*` rules.
+After making changes, the app automatically reflects changes via the dev-tools hot-reloading.
+
+<Warning>
+  <strong>Note</strong>: It's advised to not specify a <code>font-family</code>{' '}
+  in your editor stylesheet because it will override the Font Family field in
+  Inkdrop's settings. If you still like to recommend a font that goes well with
+  your theme, we suggest you do so in your README.
+</Warning>
+
+## Styling the preview
+
+Your theme's `styles/preview.css` styles the rendered Markdown preview. Inkdrop ships the base preview stylesheet inside the app (see [`@inkdropapp/css`'s `markdown.css`](https://github.com/inkdropapp/css/blob/main/markdown.css)), so your preview stylesheet doesn't carry the full GitHub-markdown CSS — it only **overrides `--mde-preview-*` variables** on `:root`. Most of those variables default to the active theme's UI tokens (`--text-color`, `--border-color`, `--link-color`, …), so the preview matches the rest of your theme out of the box, and you set only the handful you want to diverge on:
+
+```css {{ filename: 'styles/preview.css' }}
+@layer theme.preview {
+  :root {
+    --mde-preview-link-color: hsl(var(--hsl-blue-500));
+    --mde-preview-heading-color: hsl(var(--hsl-slate-900));
+    --mde-preview-strong-color: hsl(var(--hsl-slate-900));
+    --mde-preview-em-color: hsl(var(--hsl-slate-700));
+    --mde-preview-inline-code-background-color: hsl(var(--hsl-slate-100));
+    --mde-preview-blockquote-text-color: hsl(var(--hsl-slate-500));
+    --mde-preview-blockquote-border-color: hsl(var(--hsl-slate-200));
+  }
+}
+```
+
+For non-color tweaks that no variable covers — font weight, letter-spacing, and the like — you can still write ordinary rules inside `.mde-preview`. The full list of `--mde-preview-*` variables lives in the `:root` block of [`markdown.css`](https://github.com/inkdropapp/css/blob/main/markdown.css); the migration guide's [preview-stylesheet section](/appendix/plugin-migration-from-v5-to-v6#the-preview-stylesheet-preview-css) has a table of the most commonly themed ones.
 
 <Note>
-  <strong>Tip:</strong> Preview themes should end with <code>-preview</code>.
+  Override the <code>--mde-preview-*</code> variables on <code>:root</code> by
+  default, the same as the UI and editor stylesheets. The{' '}
+  <code>.mde-preview</code> content root is only for the extra rules that the
+  variables don't cover — don't confuse it with{' '}
+  <code>.mde-preview-container</code>, the outer wrapper used for keymap and
+  command scoping.
 </Note>
 
-Let's create your first theme which is called `motif-preview`.
-To create a preview theme, do the following:
+## Sharing a palette across the three stylesheets
 
-1. Run `ipm init motif --type theme-preview` to scaffold the theme into `./motif-preview` (`ipm` adds the `-preview` suffix for you).
-2. Open a terminal in the `motif-preview` directory.
-3. Run `ipm link --dev` to symlink your repository to `<USER_DATA>/inkdrop/dev/packages`. You can find the user data directory as described on [this page](https://docs.inkdrop.app/reference/user-data-directory).
-4. Reload Inkdrop using <kbd>Alt+Cmd+Shift+R</kbd> / <kbd>Alt+Ctrl+R</kbd>
-5. Enable the theme via the "_Preview Theme_" drop-down in the "Themes" tab of the Preferences
-6. Start hot reloading by selecting the menu **Plugins → dev-tools → Start hot reloading themes**
+A theme often defines a single set of raw colors and references them from all three stylesheets. Rather than copying those color definitions into each layer, keep them in **one shared file** loaded first, then reference them from the layered stylesheets via `var()`:
 
-Now you are ready to make changes!
+```json {{ filename: 'package.json' }}
+{
+  "styleSheets": ["palette.css", "ui.css", "syntax.css", "preview.css"]
+}
+```
 
-After making changes, reload the app to reflected changes.
+```css {{ filename: 'styles/palette.css' }}
+@layer theme {
+  :root {
+    --motif-bg: 240deg 13% 14%;
+    --motif-fg: 220deg 28% 88%;
+    --motif-accent: 197deg 50% 60%;
+  }
+}
+```
 
-### Example preview themes
+```css {{ filename: 'styles/ui.css' }}
+@layer theme.ui {
+  :root {
+    --page-background: hsl(var(--motif-bg));
+    --text-color: hsl(var(--motif-fg));
+    --primary-color: hsl(var(--motif-accent));
+  }
+}
+```
 
-- [Solarized Light Preview](https://github.com/inkdropapp/solarized-light-preview/)
-- [Solarized Dark Preview](https://github.com/inkdropapp/solarized-dark-preview/)
-- [Kanagawa Wave Preview](https://github.com/inkdropapp/kanagawa-wave-preview/)
-- [Kanagawa Dragon Preview](https://github.com/inkdropapp/kanagawa-dragon-preview/)
-- [Kanagawa Lotus Preview](https://github.com/inkdropapp/kanagawa-lotus-preview/)
+The shared file is wrapped in the plain `theme` layer, which sits above Inkdrop's base `tokens` layer and below the per-area `theme.ui` / `theme.syntax` / `theme.preview` layers.
+
+<Note>
+  Whether the `@layer theme` wrapper is **required** depends on your token
+  names:
+
+- If your tokens have **unique names** (e.g. `--motif-accent` here, or
+  Kanagawa's `--kanagawa-*`), nothing in the app shares those names, so the
+  wrapper is **optional** — recommended for consistency, but a plain
+  `:root { … }` works just as well.
+- If you instead **override Inkdrop's built-in design tokens** — remapping the
+  `--hsl-neutral-*` / `--hsl-<accent>-*` ramps the way Solarized does — the
+  wrapper is **required**. Those defaults live in the base `tokens` layer, and
+  only by placing your overrides in the later `theme` layer do they win. See
+  [recolor by overriding the
+  ramps](#optional-recolor-by-overriding-the-ramps).
+
+</Note>
+
+This is how the official Kanagawa and Solarized themes are structured — Kanagawa keeps a `palette.css` of uniquely-named `--kanagawa-*` tokens, while Solarized's `tokens.css` remaps the built-in ramps inside `@layer theme`; both then map Inkdrop's semantic variables onto those tokens in `ui.css` / `syntax.css` / `preview.css`. Keeping the palette in one place avoids duplicating color definitions and lets you retune the whole theme from a single file.
+
+## Optional: recolor by overriding the ramps
+
+This is the right approach **only when your theme's palette is shaped like Inkdrop's own design tokens** — named color ramps with numeric shades (`--hsl-neutral-50`…`--hsl-neutral-950`, `--hsl-blue-500`, …), the same palette pattern [Tailwind CSS](https://tailwindcss.com/docs/colors) uses. If your palette follows that pattern, **redefine those ramps directly** in a token file (e.g. `tokens.css` or `palette.css`) listed first in `styleSheets`, rather than repointing every component variable by hand. Because the app's component variables resolve through `--hsl-neutral-*` / `--hsl-<accent>-*`, overriding the ramps recolors the whole UI from one place; your `ui.css` then only needs the handful of component variables that differ from the default.
+
+If your theme is instead built on a small set of bespoke colors, keep your own uniquely-named tokens as shown above — don't touch the ramps.
+
+Wrap the file in `@layer theme`. Inkdrop's defaults for those ramps live in the base `tokens` layer, and the later `theme` layer is what lets your overrides win — this is the [Solarized themes'](https://github.com/inkdropapp/solarized-light/) approach:
+
+```css {{ filename: 'styles/tokens.css' }}
+@layer theme {
+  /* map your palette onto the v6 ramps */
+  :root {
+    --hsl-neutral-50: 44deg 87% 94%;
+    --hsl-neutral-100: 46deg 42% 88%;
+    /* …through --hsl-neutral-950… */
+
+    --hsl-blue-500: 205deg 69% 49%;
+
+    /* re-declare the --color-* wrappers so they pick up the overrides */
+    --color-neutral-50: hsl(var(--hsl-neutral-50));
+    /* … */
+  }
+}
+```
+
+<Note>
+  Redefine both the `--hsl-*` ramps and their `--color-*` wrappers. Components
+  reference both forms, and re-declaring the wrapper guarantees it resolves
+  against your overridden `--hsl-*` value. The `@layer theme` wrapper is what
+  makes these overrides outrank Inkdrop's base `tokens` layer — a token file
+  that only defines **uniquely-named** tokens (e.g. `--mytheme-*`) doesn't need
+  it. See [Sharing a palette across the three
+  stylesheets](#sharing-a-palette-across-the-three-stylesheets).
+</Note>
+
+## Example themes
+
+The official themes are good references — each one is a single unified package covering UI, editor, and preview:
+
+- [Default Light](https://github.com/inkdropapp/default-light/) · [Default Dark](https://github.com/inkdropapp/default-dark/)
+- [Solarized Light](https://github.com/inkdropapp/solarized-light/) · [Solarized Dark](https://github.com/inkdropapp/solarized-dark/)
+- [Kanagawa Wave](https://github.com/inkdropapp/kanagawa-wave/) · [Kanagawa Dragon](https://github.com/inkdropapp/kanagawa-dragon/) · [Kanagawa Lotus](https://github.com/inkdropapp/kanagawa-lotus/)
 
 ## Generating `palette.json`
 
-Every theme — UI, syntax, and preview alike — ships a `palette.json` next to its stylesheets. It's a JSON snapshot of the theme's resolved CSS variables, used to render theme previews and (in the future) by the mobile app.
+Every theme ships a `palette.json` next to its stylesheets. It's a JSON snapshot of the theme's resolved CSS variables, used to render theme previews and (in the future) by the mobile app.
 
 You don't have to generate or commit it by hand. Every theme scaffolded with `ipm` includes a `prepublishOnly` script:
 
-```json
+```json {{ filename: 'package.json' }}
 {
   "scripts": {
     "prepublishOnly": "generate-palette"

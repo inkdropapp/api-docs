@@ -237,11 +237,70 @@ env.clipboard.writeText('Hello, Inkdrop!')
 `env.clipboard` also provides `readHTML()`, `readImageAsDataURL()`, `writeImage(dataUrl)`, `availableFormats()`, `write({ text, html })`, and `saveAsImageAttachment()`. See the `clipboard` property on the [Environment](https://github.com/inkdropapp/types/blob/main/src/environment.d.ts) for details.
 </Note>
 
-## UI themes
+## Themes are now a single, unified type
 
-UI themes (packages with `"theme": "ui"` in `package.json`) style the app chrome — sidebar, note list, toolbar, drop-downs, modals — by overriding **CSS variables** in `:root`. That model is unchanged in v6: you still set the same component variables (`--sidebar-background`, `--note-list-bar-background`, `--editor-background`, …). What changed is the **primitive color tokens** those variables build on. Like every other plugin, UI themes also [drop LESS for plain CSS](#less-is-deprecated) and should bump `engines.inkdrop` to `^6.x`.
+In Inkdrop 5, a visual theme was up to **three separate packages** — a UI theme, a syntax theme, and a preview theme — each declaring `"theme": "ui" | "syntax" | "preview"` in its `package.json` and selected independently from three drop-downs.
 
-The stock [Solarized Light UI](https://github.com/inkdropapp/solarized-light-ui/) and [Solarized Dark UI](https://github.com/inkdropapp/solarized-dark-ui/) themes have been updated for v6 and make good references.
+Inkdrop 6 merges them into **one theme package**:
+
+- `package.json` sets `"theme": true` — a **boolean**, not a string.
+- It ships up to three stylesheets — `ui.css`, `syntax.css`, `preview.css` — one per area (app chrome, editor, preview), each wrapped in its own cascade layer.
+- A single `themeAppearance: "light" | "dark"` describes the whole theme.
+- Preferences → Themes shows **one Theme drop-down** instead of three.
+
+Before (three packages):
+
+```json {{ filename: 'kanagawa-lotus-ui/package.json' }}
+{
+  "theme": "ui",
+  "themeAppearance": "light",
+  "styleSheets": ["theme.css"]
+}
+```
+
+After (one package):
+
+```json {{ filename: 'kanagawa-lotus/package.json' }}
+{
+  "theme": true,
+  "themeAppearance": "light",
+  "styleSheets": ["ui.css", "syntax.css", "preview.css"]
+}
+```
+
+<Note>
+  The old string values are **no longer recognized**. If a package still
+  declares `"theme": "ui"` (or `"syntax"` / `"preview"`), Inkdrop logs a warning
+  — <em>“&lt;name&gt; does not support v6. Please update the theme.”</em> — and
+  does **not** load or activate it. Convert the package to `"theme": true` to
+  make it loadable again.
+</Note>
+
+### Wrap each stylesheet in its cascade layer
+
+The app no longer wraps your theme CSS in an `@layer` for you — your stylesheets are now injected **verbatim**. Wrap each one in the matching layer (`theme.ui`, `theme.syntax`, or `theme.preview`) so its overrides land in the right place in the cascade:
+
+```css {{ filename: 'styles/ui.css' }}
+@layer theme.ui {
+  :root {
+    --page-background: var(--color-neutral-50);
+    --sidebar-background: var(--color-neutral-100);
+  }
+}
+```
+
+The app's built-in defaults live in the `theme.ui.base` / `theme.ui.components`, `theme.syntax.base`, and `theme.preview.base` **sub-layers**, and a layer's own rules outrank its sub-layers. So wrapping your overrides in `@layer theme.ui` (etc.) lets them win over the defaults reliably, without resorting to high-specificity selectors.
+
+### Merging three v5 themes into one
+
+If you maintained separate `-ui`, `-syntax`, and `-preview` packages, combine them into a single repository:
+
+1. Keep **one** `package.json` with `"theme": true`, a single `themeAppearance`, and a `styleSheets` array.
+2. Move each old package's CSS into `ui.css`, `syntax.css`, and `preview.css` respectively, each wrapped in its `@layer`.
+3. If the three packages shared a color palette, keep those raw tokens in **one** shared file (e.g. `palette.css`, wrapped in `@layer theme`) listed first in `styleSheets`, and reference them from the three layer files via `var()`. Don't copy the color definitions into all three — define them once. See [Sharing a palette across the three stylesheets](/guides/create-a-theme#sharing-a-palette-across-the-three-stylesheets).
+4. List the files in `styleSheets` (tokens first, then the layered stylesheets).
+
+The official [Solarized](https://github.com/inkdropapp/solarized-light/) and [Kanagawa](https://github.com/inkdropapp/kanagawa-lotus/) themes were migrated exactly this way and make good references.
 
 ### Update the manifest and tooling
 
@@ -251,6 +310,8 @@ Before:
 
 ```json
 {
+  "theme": "ui",
+  "styleSheets": ["theme.css"],
   "devDependencies": {
     "@inkdropapp/theme-dev-helpers": "^0.3.6"
   },
@@ -264,11 +325,13 @@ After:
 
 ```json
 {
+  "theme": true,
+  "styleSheets": ["ui.css", "syntax.css", "preview.css"],
   "scripts": {
     "prepublishOnly": "generate-palette"
   },
   "devDependencies": {
-    "@inkdropapp/theme-dev-helpers": "^0.5.0"
+    "@inkdropapp/theme-dev-helpers": "^0.6.0"
   },
   "engines": {
     "inkdrop": "^6.0.0"
@@ -276,7 +339,7 @@ After:
 }
 ```
 
-The `styleSheets`, `theme`, and `themeAppearance` fields are unchanged.
+Like every other plugin, themes also [drop LESS for plain CSS](#less-is-deprecated).
 
 ### Use the v6 design tokens
 
@@ -296,9 +359,25 @@ The biggest thing to be aware of is that the shared color palette was overhauled
 
 If your v5 theme referenced palette tokens that no longer exist, repoint them at the tokens above. (For example, Solarized Light dropped its old base16-style grayscale and semantic aliases in favor of the `neutral` ramp, and switched its `--hsl-magenta-*` references to `--hsl-pink-*`.) The full set of color tokens is published in the [`@inkdropapp/css`](https://github.com/inkdropapp/css) repository.
 
+### Generate `palette.json`
+
+All v6 themes ship a `palette.json`: a JSON dump of the theme's variables, used for theme previews and (in the future) the mobile app. The `prepublishOnly` script above runs the `generate-palette` binary from `@inkdropapp/theme-dev-helpers` on every publish, so you don't need to generate or commit the file by hand. To inspect it beforehand, run it yourself:
+
+```sh
+npx generate-palette
+```
+
+See [Creating a theme](/guides/create-a-theme#creating-your-first-theme) for the full dev loop (`ipm init --type theme`, `npx dev-server`, hot reloading, and the component preview).
+
+## The UI stylesheet (`ui.css`)
+
+This stylesheet styles the app chrome — sidebar, note list, toolbar, drop-downs, modals — by overriding **CSS variables** in `:root`. That model is unchanged in v6: you still set the same component variables (`--sidebar-background`, `--note-list-bar-background`, `--editor-background`, …). What changed is the [primitive color tokens](#use-the-v6-design-tokens) those variables build on.
+
+The stock [Solarized Light](https://github.com/inkdropapp/solarized-light/) and [Solarized Dark](https://github.com/inkdropapp/solarized-dark/) themes have been updated for v6 and make good references.
+
 ### Override the built-in variables
 
-Colors are only part of it. The app defines named CSS variables for nearly every UI surface, and your theme overrides just the ones you want to change. For the full list, refer to the source CSS files in [`@inkdropapp/css`](https://github.com/inkdropapp/css), which the app loads before your theme:
+The app defines named CSS variables for nearly every UI surface, and your theme overrides just the ones you want to change. For the full list, refer to the source CSS files in [`@inkdropapp/css`](https://github.com/inkdropapp/css), which the app loads before your theme:
 
 - [`tokens.css`](https://github.com/inkdropapp/css/blob/main/tokens.css) — design tokens
 - [`ui.css`](https://github.com/inkdropapp/css/blob/main/ui.css) — the main file that defines CSS variables for UI components (sidebar, note list, editor chrome, modals, …)
@@ -306,52 +385,21 @@ Colors are only part of it. The app defines named CSS variables for nearly every
 - [`tags.css`](https://github.com/inkdropapp/css/blob/main/tags.css) — tag colors (`--tag-*`)
 - [`task-progress.css`](https://github.com/inkdropapp/css/blob/main/task-progress.css) — task progress view colors (`--task-progress-view-*`)
 
-### Recommended: recolor by overriding the ramps in `tokens.css`
+### Optional: recolor by overriding the ramps
 
-Rather than repointing every component variable by hand, keep a custom palette by **redefining the primitive ramps themselves** in a `tokens.css` listed first in `styleSheets`. Because the app's component variables resolve through `--hsl-neutral-*` / `--hsl-<accent>-*`, overriding those ramps recolors the whole UI from one place; your `theme.css` then only needs the handful of component variables that differ from the default.
-
-```css
-/* tokens.css — map your palette onto the v6 ramps */
-:root {
-  --hsl-neutral-50: 44deg 87% 94%;
-  --hsl-neutral-100: 46deg 42% 88%;
-  /* …through --hsl-neutral-950… */
-
-  --hsl-blue-500: 205deg 69% 49%;
-
-  /* re-declare the --color-* wrappers so they pick up the overrides */
-  --color-neutral-50: hsl(var(--hsl-neutral-50));
-  /* … */
-}
-```
-
-<Note>
-  Redefine both the `--hsl-*` ramps and their `--color-*` wrappers. Components
-  reference both forms, and re-declaring the wrapper guarantees it resolves
-  against your overridden `--hsl-*` value.
-</Note>
+If your theme's palette is shaped like Inkdrop's own design tokens — Tailwind-style color ramps with numeric shades — you can recolor the whole UI from one place by **redefining the primitive `--hsl-*` / `--color-*` ramps** in a token file wrapped in `@layer theme`, rather than repointing every component variable by hand. The theme authoring guide covers this in detail — see [recolor by overriding the ramps](/guides/create-a-theme#optional-recolor-by-overriding-the-ramps).
 
 ### Move preview styling out
 
-If your v5 UI theme styled preview content directly (e.g. `.mde-preview h1`, `.mde-preview em`), drop those rules — preview content belongs in a dedicated **preview theme**. For any UI-level rule you keep, note that the container class was renamed `.mde-preview` → `.mde-preview-container` ([see above](#css-selectors-for-keymaps-and-commands)).
+If your v5 UI theme styled preview content directly (e.g. `.mde-preview h1`, `.mde-preview em`), move those rules into your theme's [preview stylesheet](#the-preview-stylesheet-preview-css) instead.
+For any UI-level rule you keep, note that the container class was renamed `.mde-preview` → `.mde-preview-container` ([see above](#css-selectors-for-keymaps-and-commands)).
 
-### Generate `palette.json`
+## The editor stylesheet (`syntax.css`)
 
-All v6 themes — UI, syntax, and preview — ship a `palette.json`: a JSON dump of the theme's variables, used for theme previews and (in the future) the mobile app. The `prepublishOnly` script above runs the `generate-palette` binary from `@inkdropapp/theme-dev-helpers` on every publish, so you don't need to generate or commit the file by hand. To inspect it beforehand, run it yourself:
+This stylesheet styled **CodeMirror 5** in v5.
+Inkdrop 6 runs on [CodeMirror 6](https://codemirror.net/), and the model shifts in two ways: the theme now (1) sets **CSS variables** instead of styling CodeMirror's DOM, and (2) sets **`--syntax-*` color variables** instead of writing per-token rules. The rules that paint the tokens — the CodeMirror 6 / [Lezer](https://lezer.codemirror.net/) `.tok-*` classes — now live in the shared [`@inkdropapp/css`](https://github.com/inkdropapp/css) package and read your variables. So a v6 editor stylesheet is a single `:root { … }` block (wrapped in `@layer theme.syntax`) with no selectors of its own.
 
-```sh
-npx generate-palette
-```
-
-See [Creating a UI Theme](/guides/create-a-theme#creating-a-ui-theme) for the full dev loop (`npx dev-server`, hot reloading, and the component preview).
-
-## Syntax themes
-
-Syntax themes (packages with `"theme": "syntax"` in `package.json`) styled **CodeMirror 5** in v5.
-Inkdrop 6 runs on [CodeMirror 6](https://codemirror.net/), and the theme model shifts in two ways: a theme now (1) sets **CSS variables** instead of styling CodeMirror's DOM, and (2) sets **`--syntax-*` color variables** instead of writing per-token rules. The rules that paint the tokens — the CodeMirror 6 / [Lezer](https://lezer.codemirror.net/) `.tok-*` classes — now live in the shared [`@inkdropapp/css`](https://github.com/inkdropapp/css) package and read your variables. So a v6 syntax theme is a single `:root { … }` block with no selectors of its own.
-
-The base syntax theme now lives in [`@inkdropapp/css`'s `syntax.css`](https://github.com/inkdropapp/css/blob/main/syntax.css): it defines every `--editor-*`, `--syntax-*`, and `--md-*` variable with a default value (the built-in light and dark themes merged via `light-dark()`). The app loads it before your theme, so the stock [`default-syntax`](https://github.com/inkdropapp/default-syntax-theme) theme is now essentially empty — its `styles/index.css` just points back at `syntax.css`. Browse that file to know which variables to override; set only the ones you want to change.
-Like every other plugin, themes also [drop LESS for plain CSS](#less-is-deprecated), and should bump `engines.inkdrop` to `^6.x`. Add a `"prepublishOnly": "generate-palette"` script too (and the `@inkdropapp/theme-dev-helpers` dev-dependency that provides it), so a syntax theme ships a [`palette.json`](#generate-palette-json) just like UI themes.
+The base syntax theme now lives in [`@inkdropapp/css`'s `syntax.css`](https://github.com/inkdropapp/css/blob/main/syntax.css): it defines every `--editor-*`, `--syntax-*`, and `--md-*` variable with a default value (the built-in light and dark themes merged via `light-dark()`). The app loads it before your theme, so you set only the variables you want to change.
 
 ### Editor chrome: DOM selectors → CSS variables
 
@@ -405,10 +453,12 @@ Before:
 
 After:
 
-```css
-:root {
-  --syntax-keyword-color: #c678dd;
-  --syntax-string-color: #98c379;
+```css {{ filename: 'styles/syntax.css' }}
+@layer theme.syntax {
+  :root {
+    --syntax-keyword-color: #c678dd;
+    --syntax-string-color: #98c379;
+  }
 }
 ```
 
@@ -422,67 +472,19 @@ A few conventions: each token also exposes `-font-style` / `-font-weight` / `-te
   <code>.cm-editor, .mde-preview .codeblock</code>.
 </Note>
 
-## Preview theme
+## The preview stylesheet (`preview.css`)
 
-Preview themes (packages with `"theme": "preview"` in `package.json`) style the **rendered Markdown preview** — headings, body text, links, blockquotes, tables, code blocks, task lists, GFM alerts, and so on. This is the theme type that changed the most between v5 and v6.
+This stylesheet styles the **rendered Markdown preview** — headings, body text, links, blockquotes, tables, code blocks, task lists, GFM alerts, and so on. This is the area that changed the most between v5 and v6.
 
 In v5 a preview theme **shipped the entire preview stylesheet**: a fork of GitHub's `github-markdown.css` (usually with a separate `github-markdown-dark.css` for the dark UI), plus extra files such as `gfm-alerts.css` and `metadata-section.css`, often authored in LESS. Every rule hard-coded its own colors, so recoloring the preview meant editing hundreds of lines of CSS — and the theme had to be kept in sync with each change Inkdrop made to the preview markup.
 
-In v6 those base styles are **embedded in the app**. Inkdrop ships them in [`@inkdropapp/css`'s `markdown.css`](https://github.com/inkdropapp/css/blob/main/markdown.css), loaded inside an `@layer theme.preview.base`, so a preview theme no longer carries the full stylesheet — it only **overrides CSS variables**. The stock [`default-preview`](https://github.com/inkdropapp/default-preview) theme is now essentially empty:
+In v6 those base styles are **embedded in the app**. Inkdrop ships them in [`@inkdropapp/css`'s `markdown.css`](https://github.com/inkdropapp/css/blob/main/markdown.css), loaded inside an `@layer theme.preview.base`, so your preview stylesheet no longer carries the full stylesheet — it only **overrides CSS variables**.
 
-```css
-/* styles/index.css */
-/* See https://github.com/inkdropapp/css/blob/main/markdown.css */
-```
-
-The base stylesheet drives every element through a family of `--mde-preview-*` variables, most of which default to the **active UI theme's** tokens (`--text-color`, `--border-color`, `--link-color`, …). So in v6 a preview theme matches the UI theme out of the box, and you set only the handful of `--mde-preview-*` variables you want to diverge on.
-
-The stock [`default-preview`](https://github.com/inkdropapp/default-preview) and the [Solarized Light](https://github.com/inkdropapp/solarized-light-preview/) / [Solarized Dark](https://github.com/inkdropapp/solarized-dark-preview/) preview themes have been updated for v6 and make good references.
-
-### Update the manifest and tooling
-
-Bump the engine, collapse the multiple stylesheets into one, add a `prepublishOnly` script (and the `@inkdropapp/theme-dev-helpers` dev-dependency that provides `generate-palette`) so the theme ships a [`palette.json`](#generate-palette-json), and — like every other plugin — [drop LESS for plain CSS](#less-is-deprecated):
-
-Before:
-
-```json
-{
-  "theme": "preview",
-  "styleSheets": [
-    "github-markdown.css",
-    "github-markdown-dark.css",
-    "gfm-alerts.css",
-    "metadata-section.css"
-  ],
-  "engines": {
-    "inkdrop": "^5.x"
-  }
-}
-```
-
-After:
-
-```json
-{
-  "theme": "preview",
-  "styleSheets": ["index.css"],
-  "scripts": {
-    "prepublishOnly": "generate-palette"
-  },
-  "devDependencies": {
-    "@inkdropapp/theme-dev-helpers": "^0.5.0"
-  },
-  "engines": {
-    "inkdrop": "^6.0.0"
-  }
-}
-```
-
-The `theme: "preview"` field is unchanged. The old `gfm-alerts.css` and `metadata-section.css` are now part of the embedded base, so you can drop them. Preview themes have no `themeAppearance`, but — like UI and syntax themes — they now ship a [`palette.json`](#generate-palette-json), generated on publish by the `prepublishOnly` script above.
+The base stylesheet drives every element through a family of `--mde-preview-*` variables, most of which default to the **active theme's** tokens (`--text-color`, `--border-color`, `--link-color`, …). So in v6 the preview matches the rest of your theme out of the box, and you set only the handful of `--mde-preview-*` variables you want to diverge on.
 
 ### Ship full stylesheets → override variables
 
-This is the breaking change. Delete your forked GitHub-markdown rules and replace them with variable overrides scoped to `.mde-preview`. Anything you don't override falls back to the app's base styles (which track the active UI theme).
+This is the breaking change. Delete your forked GitHub-markdown rules and replace them with variable overrides on `:root`, inside `@layer theme.preview`. Anything you don't override falls back to the app's base styles (which track the rest of your theme).
 
 Before (v5 — styling elements directly):
 
@@ -504,34 +506,43 @@ Before (v5 — styling elements directly):
 
 After (v6 — overriding variables):
 
-```css
-.mde-preview {
-  --mde-preview-link-color: hsl(var(--hsl-blue-500));
-  --mde-preview-inline-code-background-color: hsl(var(--hsl-slate-100));
-  --mde-preview-blockquote-text-color: hsl(var(--hsl-slate-500));
-  --mde-preview-blockquote-border-color: hsl(var(--hsl-slate-200));
-}
-```
-
-Reach for the shared [`@inkdropapp/css`](https://github.com/inkdropapp/css) palette (`--hsl-<family>-<scale>` / `--color-<family>-<scale>`) for values, the same way syntax and UI themes do.
-
-For the few things the variables don't cover — coloring `strong`, `em`, or the headings, for example — you can still write ordinary rules inside `.mde-preview`:
-
-```css
-.mde-preview {
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    color: var(--color-yellow-500);
-  }
-  em {
-    color: var(--color-green-500);
+```css {{ filename: 'styles/preview.css' }}
+@layer theme.preview {
+  :root {
+    --mde-preview-link-color: hsl(var(--hsl-blue-500));
+    --mde-preview-heading-color: hsl(var(--hsl-slate-900));
+    --mde-preview-strong-color: hsl(var(--hsl-slate-900));
+    --mde-preview-em-color: hsl(var(--hsl-slate-700));
+    --mde-preview-inline-code-background-color: hsl(var(--hsl-slate-100));
+    --mde-preview-blockquote-text-color: hsl(var(--hsl-slate-500));
+    --mde-preview-blockquote-border-color: hsl(var(--hsl-slate-200));
   }
 }
 ```
+
+Reach for the shared [`@inkdropapp/css`](https://github.com/inkdropapp/css) palette (`--hsl-<family>-<scale>` / `--color-<family>-<scale>`) for values, the same way the UI and editor stylesheets do.
+
+For non-color tweaks that no variable covers — font weight, letter-spacing, and the like — you can still write ordinary rules under `.mde-preview`:
+
+```css {{ filename: 'styles/preview.css' }}
+@layer theme.preview {
+  .mde-preview {
+    strong {
+      font-weight: 800;
+    }
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      letter-spacing: -0.02em;
+    }
+  }
+}
+```
+
+The old `gfm-alerts.css` and `metadata-section.css` are now part of the embedded base, so you can drop them.
 
 ### The variables
 
@@ -540,7 +551,8 @@ The full list lives in the `:root` block of [`markdown.css`](https://github.com/
 | Area                   | Variable(s)                                                                                                                                                |
 | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Links                  | `--mde-preview-link-color`                                                                                                                                 |
-| Headings               | `--mde-preview-heading-border-color`, `--mde-preview-heading-muted-text-color`                                                                             |
+| Headings               | `--mde-preview-heading-color`, `--mde-preview-heading-border-color`, `--mde-preview-heading-muted-text-color`                                              |
+| Strong / emphasis      | `--mde-preview-strong-color`, `--mde-preview-em-color`                                                                                                     |
 | Blockquotes            | `--mde-preview-blockquote-text-color`, `--mde-preview-blockquote-border-color`                                                                             |
 | Inline code            | `--mde-preview-inline-code-text-color`, `--mde-preview-inline-code-background-color`, `--mde-preview-inline-code-border-color` / `-border-width`           |
 | Code blocks            | `--mde-preview-codeblock-background-color`, `--mde-preview-codeblock-border-color`, `--mde-preview-codeblock-text-color`, `--mde-preview-codeblock-meta-*` |
@@ -553,13 +565,15 @@ The full list lives in the `:root` block of [`markdown.css`](https://github.com/
 
 ### Code blocks: frame vs. tokens
 
-A preview theme styles the code block **frame** — background, border, and the meta/title bar — through the `--mde-preview-codeblock-*` variables above. The **syntax highlighting inside** the block (the `.tok-*` classes under `.mde-preview .codeblock`) belongs to the **syntax theme**, not the preview theme. See [Syntax themes](#syntax-themes) for that side.
+The preview stylesheet styles the code block **frame** — background, border, and the meta/title bar — through the `--mde-preview-codeblock-*` variables above. The **syntax highlighting inside** the block (the `.tok-*` classes under `.mde-preview .codeblock`) is driven by your theme's [editor stylesheet](#the-editor-stylesheet-syntax-css), not the preview stylesheet.
 
 <Note>
-  The preview content root is <code>.mde-preview</code> — that's the element
-  your variable overrides target. Don't confuse it with{' '}
+  Override the <code>--mde-preview-*</code> variables on <code>:root</code> by
+  default, the same as the UI and editor stylesheets. The{' '}
+  <code>.mde-preview</code> content root is only for the extra rules that the
+  variables don't cover — don't confuse it with{' '}
   <code>.mde-preview-container</code>, the outer wrapper renamed for [keymap and
   command scoping](#css-selectors-for-keymaps-and-commands).
 </Note>
 
-See [Creating a Preview Theme](/guides/create-a-theme#creating-a-preview-theme) for the full dev loop (`ipm init --type theme-preview`, `ipm link --dev`, and hot reloading).
+See [Creating a theme](/guides/create-a-theme#creating-your-first-theme) for the full dev loop (`ipm init --type theme`, `ipm link --dev`, and hot reloading).
