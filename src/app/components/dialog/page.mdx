@@ -120,6 +120,33 @@ const HelloMessageDialog: React.FC = () => {
 export default HelloMessageDialog
 ```
 
+A dialog is a top-level overlay, so it only appears once you
+[**register**](/modules/component-manager#registering-and-unregistering-a-react-component)
+it and add it to the built-in `modal` layout — the region where Inkdrop mounts modal
+overlays. Do this in your plugin's `activate` / `deactivate`:
+
+```ts
+import HelloMessageDialog from './HelloMessageDialog'
+
+export function activate() {
+  inkdrop.components.registerClass(HelloMessageDialog)
+  inkdrop.layouts.addComponentToLayout('modal', 'HelloMessageDialog')
+}
+
+export function deactivate() {
+  inkdrop.layouts.removeComponentFromLayout('modal', 'HelloMessageDialog')
+  inkdrop.components.deleteClass(HelloMessageDialog)
+}
+```
+
+<Note>
+The name passed to `addComponentToLayout` (and `removeComponentFromLayout`) must
+match the registered component's class name. If your bundler minifies class names,
+pass an explicit name so the lookup stays stable —
+`inkdrop.components.registerClass(HelloMessageDialog, 'HelloMessageDialog')` — and
+use that same string in the layout calls.
+</Note>
+
 It produces:
 
 ![Example](/images/component-dialog_example.png)
