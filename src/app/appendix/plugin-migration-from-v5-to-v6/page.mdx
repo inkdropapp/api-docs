@@ -576,4 +576,12 @@ The preview stylesheet styles the code block **frame** — background, border, a
   command scoping](#css-selectors-for-keymaps-and-commands).
 </Note>
 
+### Mermaid diagram colors
+
+In v5, diagrams rendered by the [mermaid](https://github.com/inkdropapp/inkdrop-mermaid) plugin had their own `theme` / `themeCSS` / `themeVariables` plugin settings, separate from your theme's stylesheet — matching a diagram's colors to your theme meant configuring the plugin on top of it, if at all.
+
+That plugin setting is gone in v6. Diagrams now always render with a built-in theme driven by CSS variables: `@inkdropapp/css`'s [`mermaid.css`](https://github.com/inkdropapp/css/blob/main/mermaid.css) defines a `--mermaid-*` token for every color Mermaid can draw, layered the same way as the rest of the preview — you override the ones you care about in `preview.css`, and everything else falls back to defaults that already track `--text-color`, `--border-color`, and the rest of your palette. See [Diagram colors (Mermaid)](/guides/create-a-theme#diagram-colors-mermaid) in the theme guide for the token list and an example.
+
+If your v5 theme shipped custom Mermaid CSS or documented the plugin's theme option for users, drop it — it no longer applies, and the `--mermaid-*` variables replace it.
+
 See [Creating a theme](/guides/create-a-theme#creating-your-first-theme) for the full dev loop (`ipm init --type theme`, `ipm link --dev`, and hot reloading).

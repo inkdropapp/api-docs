@@ -321,6 +321,36 @@ For non-color tweaks that no variable covers — font weight, letter-spacing, an
   command scoping.
 </Note>
 
+### Diagram colors (Mermaid)
+
+Diagrams rendered by the built-in [mermaid](https://github.com/inkdropapp/inkdrop-mermaid) plugin follow your theme the same way the rest of the preview does — through CSS variables. `@inkdropapp/css`'s [`mermaid.css`](https://github.com/inkdropapp/css/blob/main/mermaid.css) defines a `--mermaid-*` variable for every color Mermaid can draw (nodes, edges, labels, notes, and diagram-specific ones for sequence, class, state, ER, Gantt, pie, quadrant, C4, and more), and the plugin always renders with a theme that reads those variables. There's no `theme` option to pick anymore — restyling diagrams is just overriding variables in your `preview.css`, like everything else in this stylesheet.
+
+A handful of **base** tokens carry the actual colors, and most of the rest cascade from them via `var()` — for example, `--mermaid-actor-background-color` (sequence-diagram actors) defaults to `--mermaid-node-background-color`. So overriding a few base tokens restyles most diagram types at once, and you only need the specific token when you want a single surface to diverge:
+
+```css {{ filename: 'styles/preview.css' }}
+@layer theme.preview {
+  :root {
+    --mermaid-node-background-color: var(--color-violet-50);
+    --mermaid-node-border-color: var(--color-violet-600);
+    --mermaid-line-color: var(--color-slate-700);
+    --mermaid-cluster-background-color: hsl(var(--hsl-slate-400) / 12%);
+  }
+}
+```
+
+Three tokens — `--mermaid-primary-color`, `--mermaid-secondary-color`, `--mermaid-tertiary-color` — seed Mermaid's categorical scales (pie slices, git branches, quadrant backgrounds), so overriding those three retints every chart that draws from a palette rather than a single color.
+
+The full list of `--mermaid-*` tokens, with their defaults and what cascades from what, lives in [`mermaid.css`](https://github.com/inkdropapp/css/blob/main/mermaid.css).
+
+<Note>
+  Mermaid diagrams render to inline SVG once, at render time — each
+  `--mermaid-*` value is resolved to a concrete color and baked into the SVG,
+  rather than the SVG referencing `var(--mermaid-*)` live. This means an
+  already-rendered diagram doesn't recolor itself the instant you switch themes,
+  unlike the rest of the preview — it picks up the new colors the next time it
+  renders (e.g. reopening the note).
+</Note>
+
 ## Sharing a palette across the three stylesheets
 
 A theme often defines a single set of raw colors and references them from all three stylesheets. Rather than copying those color definitions into each layer, keep them in **one shared file** loaded first, then reference them from the layered stylesheets via `var()`:
