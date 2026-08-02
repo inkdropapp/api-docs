@@ -1,19 +1,17 @@
 export const metadata = {
   title: 'Adding styles for text annotations',
   description:
-    'How to add styles for text annotation like highlighting, underlining, and so on.',
+    'How to add styles for text annotation like highlighting, underlining, and so on.'
 }
 
 # Adding styles for text annotations
 
-<Note>
-This hacking tip requires some web development skill.
-</Note>
+<Note>This hacking tip requires some web development skill.</Note>
 
 GitHub Flavored Markdown(GFM) supports some emphasises like so:
 
 ```markdown
-Emphasis, aka italics, with *asterisks* or _underscores_.
+Emphasis, aka italics, with _asterisks_ or _underscores_.
 
 Strong emphasis, aka bold, with **asterisks** or **underscores**.
 
@@ -52,9 +50,9 @@ You get it? With this class name, you can add notebook-specific stylesheets!
 
 ## Add special emphasise stylesheets for a notebook
 
-Create a `styles.less` in [your data directory](https://docs.inkdrop.app/manual/basic-usage#user-data-directory) and write some CSS like the following:
+Create a `styles.css` in [your data directory](https://docs.inkdrop.app/manual/basic-usage#user-data-directory) and write some CSS like the following:
 
-```less
+```css
 .editor.book-TjNHyND4Q {
   .mde-preview,
   .CodeMirror {
