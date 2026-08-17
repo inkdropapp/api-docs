@@ -16,7 +16,7 @@ You can obtain the `queryContext` state and integrate it with React components.{
   <Col>
     <Properties>
       <Property name="mode" type="string">
-        The query mode which takes one of "all", "book", "tag", "status", "trash", and "search".
+        The query mode which takes one of "all", "book", "tag", "status", "template", "trash", and "search".
 
         Following sections describe data structure for each mode.
 
@@ -64,6 +64,17 @@ You can obtain the `queryContext` state and integrate it with React components.{
         <Properties sub>
           <Property name="status" type="string">
             A status to query.
+          </Property>
+          <Property name="filterKeyword" type="string">
+            A filter keyword to filter note list items.
+          </Property>
+        </Properties>
+
+        ### `"template"`: Show note templates
+
+        <Properties sub>
+          <Property name="bookId" type="string">
+            The templates notebook ID.
           </Property>
           <Property name="filterKeyword" type="string">
             A filter keyword to filter note list items.
@@ -118,5 +129,6 @@ You can obtain the `queryContext` state and integrate it with React components.{
       "includeChildren": false
     }
     ```
+
   </Col>
 </Row>
