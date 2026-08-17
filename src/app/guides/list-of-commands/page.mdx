@@ -131,6 +131,25 @@ Create a note and show it in a separate window.
 
 ## Core commands
 
+### core:activate-package {{ selector: 'body' }}
+
+Activates the named package.
+
+<Properties sub title="Arguments">
+  <Property name="name" type="string" required>
+    The package name.
+  </Property>
+</Properties>
+
+### core:activate-themes {{ selector: 'body' }}
+
+Re-applies the currently selected UI and syntax themes.
+
+### core:choose-template {{ selector: 'body' }}
+
+Opens the template picker to apply a template to the current note.
+Only available when the editing note is empty and is not in Templates or Trash.
+
 ### core:copy {{ selector: 'body' }}
 
 Copy the selected text to clipboard.
@@ -167,9 +186,49 @@ Copy the link address of an `<a>` element under the event target in the preview 
 
 Copy the currently selected text in the preview pane to the clipboard.
 
+### core:copy-note-id {{ selector: 'body' }}
+
+Copies the IDs of the selected notes to the clipboard, one per line.
+
+<Properties sub title="Arguments">
+  <Property name="noteId" type="string | string[]">
+    The note ID(s) to copy. Defaults to the notes selected on the note list bar.
+  </Property>
+</Properties>
+
+### core:copy-notebook-id {{ selector: 'body' }}
+
+Copies a notebook ID to the clipboard.
+
+<Properties sub title="Arguments">
+  <Property name="bookId" type="string">
+    The notebook ID to copy. Defaults to the target element's `data-bookid`, then to the notebook targeted by the context menu.
+  </Property>
+</Properties>
+
+### core:copy-tag-id {{ selector: 'body' }}
+
+Copies a tag ID to the clipboard.
+
+<Properties sub title="Arguments">
+  <Property name="tagId" type="string">
+    The tag ID to copy. Defaults to the target element's `data-tagid`, then to the tag targeted by the context menu.
+  </Property>
+</Properties>
+
 ### core:cut {{ selector: 'body' }}
 
 Delete the selected text and copy it to clipboard.
+
+### core:deactivate-package {{ selector: 'body' }}
+
+Deactivates the named package, if it is active.
+
+<Properties sub title="Arguments">
+  <Property name="name" type="string" required>
+    The package name.
+  </Property>
+</Properties>
 
 ### core:delete-note {{ selector: 'body' }}
 
@@ -278,6 +337,17 @@ Shows a file picker and inserts the selected image into the editor at the cursor
 
 <Warning>It's a private command for now</Warning>
 
+### core:navigate {{ selector: 'body' }}
+
+Moves through the note open history in the given direction.
+Dispatches `core:navigate-back` or `core:navigate-forward` accordingly.
+
+<Properties sub title="Arguments">
+  <Property name="direction" type="string" required>
+    Either `"back"` or `"forward"`. Default: `"back"`
+  </Property>
+</Properties>
+
 ### core:navigate-back {{ selector: 'body' }}
 
 Moves backward through the note open history.
@@ -340,13 +410,13 @@ Lists all notes on the note list bar.
   </Property>
 </Properties>
 
-### core:note-list-show-pinned-notes {{ selector: 'body' }}
+### core:note-list-show-notes-in-templates {{ selector: 'body' }}
 
-Lists only the pinned notes on the note list bar.
+Lists note templates on the note list bar, and closes the currently open note.
 
 <Properties sub title="Arguments">
-  <Property name="selectFirstNote" type="boolean">
-    Whether to select the first note or not. Default: `true`
+  <Property name="callback" type="function">
+    Invoked after the note list has finished reloading.
   </Property>
 </Properties>
 
@@ -382,7 +452,6 @@ List notes in specified notebook on the note list bar
   </Property>
 </Properties>
 
-
 ### core:note-list-show-notes-with-tag {{ selector: 'body' }}
 
 List notes with specified tag on the note list bar
@@ -408,10 +477,6 @@ List notes with specified note status on the note list bar
     Whether to select the first note or not. Default: `true`.
   </Property>
 </Properties>
-
-### core:note-list-show-notes-in-book-of-editing-note {{ selector: 'body' }}
-
-List notes in a notebook of the currently editing note on the note list bar.
 
 ### core:note-tags-bar-item-list-unselect {{ selector: '.note-tags-bar-item-list' }}
 
@@ -503,6 +568,17 @@ Opens up the settings window for the tag with specified ID.
   </Property>
 </Properties>
 
+### core:open-template {{ selector: 'body' }}
+
+Opens a note template in the editor.
+A template that already exists in the database is opened like a normal note; an official template that has not been saved yet is loaded into the editor unsaved.
+
+<Properties sub title="Arguments">
+  <Property name="template" type="Note" required>
+    The template note to open.
+  </Property>
+</Properties>
+
 ### core:paste {{ selector: 'body' }}
 
 Pastes a text from clipboard.
@@ -531,6 +607,16 @@ Shows the application menu as a popup context menu (useful on Windows / Linux wh
 ### core:redo {{ selector: 'body' }}
 
 Redoes the last undone change.
+
+### core:reload-package {{ selector: 'body' }}
+
+Unloads and re-loads the named package, if it is loaded.
+
+<Properties sub title="Arguments">
+  <Property name="name" type="string" required>
+    The package name.
+  </Property>
+</Properties>
 
 ### core:rename-notebook
 
@@ -575,6 +661,23 @@ Shows up a dialog for viewing note change history with specified ID.
 <Properties sub title="Arguments">
   <Property name="noteId" type="string" required>
     The ID of the note to view its revision history.
+  </Property>
+</Properties>
+
+### core:show-editor-action-menu {{ selector: 'body' }}
+
+Opens the editor's action menu below the header button, with the per-note actions (move, duplicate, copy link, pin, revisions, share, delete).
+
+### core:show-image-viewer {{ selector: 'body' }}
+
+Opens the full-screen image viewer for the given image.
+
+<Properties sub title="Arguments">
+  <Property name="src" type="string" required>
+    The image URL or URI to display.
+  </Property>
+  <Property name="alt" type="string">
+    The alt text to show as a caption.
   </Property>
 </Properties>
 
@@ -647,6 +750,16 @@ Undoes the last change.
 ### core:unindent {{ selector: '.mde-cm-wrapper' }}
 
 Unindents the current lines.
+
+### core:unload-package {{ selector: 'body' }}
+
+Unloads the named package from memory, if it is loaded.
+
+<Properties sub title="Arguments">
+  <Property name="name" type="string" required>
+    The package name.
+  </Property>
+</Properties>
 
 ### core:insert-alert {{ selector: '.mde-cm-wrapper' }}
 
@@ -830,6 +943,14 @@ Set the note status of the editing note to Completed.
 
 Set the note status of the editing note to Dropped.
 
+### editor:copy-line-up {{ selector: '.mde-cm-wrapper' }}
+
+Duplicates the selected lines upward, keeping the selection in the top copy.
+
+### editor:copy-line-down {{ selector: '.mde-cm-wrapper' }}
+
+Duplicates the selected lines downward, keeping the selection in the bottom copy.
+
 ### editor:delete-char-after {{ selector: '.mde-cm-wrapper' }}
 
 Deletes the char after the cursor.
@@ -869,6 +990,20 @@ Deletes the wrapped line right.
 ### editor:edit-with-ai {{ selector: '.mde-cm-wrapper' }}
 
 Opens the AI inline assistant to edit the currently selected text. Does nothing if there is no selection.
+
+### editor:trigger-nes {{ selector: '.mde-cm-wrapper' }}
+
+Requests a Next Edit Suggestion at the cursor.
+Suggestions are rendered as dim ghost text and can also be triggered automatically after an idle pause, depending on the `ai.nextEditSuggestions` config.
+
+### editor:accept-nes {{ selector: '.mde-cm-wrapper' }}
+
+Accepts the visible Next Edit Suggestion, inserting the ghost text as a single undoable edit.
+Does nothing and lets the keystroke fall through when no suggestion is visible.
+
+### editor:dismiss-nes {{ selector: '.mde-cm-wrapper' }}
+
+Dismisses the visible Next Edit Suggestion.
 
 ### editor:find {{ selector: 'body' }}
 
@@ -955,6 +1090,10 @@ Moves the cursor to the line start.
 
 Moves the cursor to one line up.
 
+### editor:go-matching-bracket {{ selector: '.mde-cm-wrapper' }}
+
+Moves the cursor to the bracket matching the one it is on.
+
 ### editor:go-page-down {{ selector: '.mde-cm-wrapper' }}
 
 Moves the cursor to one page down.
@@ -962,6 +1101,14 @@ Moves the cursor to one page down.
 ### editor:go-page-up {{ selector: '.mde-cm-wrapper' }}
 
 Moves the cursor to one page up.
+
+### editor:go-subword-left {{ selector: '.mde-cm-wrapper' }}
+
+Moves the cursor one group or camel-case subword backward.
+
+### editor:go-subword-right {{ selector: '.mde-cm-wrapper' }}
+
+Moves the cursor one group or camel-case subword forward.
 
 ### editor:go-syntax-left {{ selector: '.mde-cm-wrapper' }}
 
@@ -986,6 +1133,14 @@ Extends the selection one syntax node to the left.
 ### editor:select-syntax-right {{ selector: '.mde-cm-wrapper' }}
 
 Extends the selection one syntax node to the right.
+
+### editor:select-subword-left {{ selector: '.mde-cm-wrapper' }}
+
+Moves the selection head one group or camel-case subword backward.
+
+### editor:select-subword-right {{ selector: '.mde-cm-wrapper' }}
+
+Moves the selection head one group or camel-case subword forward.
 
 ### editor:select-group-left {{ selector: '.mde-cm-wrapper' }}
 
@@ -1035,6 +1190,26 @@ Extends the selection to the start of the document.
 
 Extends the selection to the end of the document.
 
+### editor:select-line {{ selector: '.mde-cm-wrapper' }}
+
+Expands the selection to cover entire lines.
+
+### editor:select-parent-syntax {{ selector: '.mde-cm-wrapper' }}
+
+Expands the selection to the next larger syntactic construct.
+
+### editor:select-matching-bracket {{ selector: '.mde-cm-wrapper' }}
+
+Extends the selection to the bracket matching the one the selection head is on.
+
+### editor:select-next-occurrence {{ selector: '.mde-cm-wrapper' }}
+
+Adds a selection at the next occurrence of the selected text, or selects the word at the cursor when the selection is empty.
+
+### editor:select-selection-matches {{ selector: '.mde-cm-wrapper' }}
+
+Selects all instances of the currently selected text.
+
 ### editor:move-line-up {{ selector: '.mde-cm-wrapper' }}
 
 Moves the current line(s) up.
@@ -1055,9 +1230,45 @@ Unindents the currently selected line(s).
 
 Indents one more the currently selected line(s).
 
+### editor:insert-blank-line {{ selector: '.mde-cm-wrapper' }}
+
+Creates a blank, indented line below the current line.
+
 ### editor:insert-images {{ selector: '.mde-cm-wrapper' }}
 
 Inserts image files at the cursor to the editing note.
+
+### editor:insert-link {{ selector: 'body' }}
+
+Opens the "Insert a link" dialog, pre-filled with the given title and URL, and inserts `[title](url)` at the cursor.
+Not registered while the session is read-only.
+
+<Properties sub title="Arguments">
+  <Property name="title" type="string">
+    The link title to pre-fill.
+  </Property>
+  <Property name="url" type="string">
+    The URL to pre-fill. When given, the URL field is selected instead of the
+    title field.
+  </Property>
+</Properties>
+
+### editor:resize-image-auto {{ selector: '.mde-cm-wrapper' }}
+
+Restores the image at the cursor to its natural size, by removing the `w:` and `h:` tokens from its alt text.
+Does nothing when the cursor is not inside an image.
+
+### editor:resize-image-small {{ selector: '.mde-cm-wrapper' }}
+
+Resizes the image at the cursor to 30% width.
+
+### editor:resize-image-half {{ selector: '.mde-cm-wrapper' }}
+
+Resizes the image at the cursor to 50% width.
+
+### editor:resize-image-full {{ selector: '.mde-cm-wrapper' }}
+
+Resizes the image at the cursor to 100% width.
 
 <Row>
   <Col>
@@ -1097,6 +1308,7 @@ Inserts image files at the cursor to the editing note.
       }
     })
     ```
+
   </Col>
 </Row>
 
@@ -1283,6 +1495,16 @@ Replaces the entire editor content with the given body.
   </Property>
 </Properties>
 
+### editor:toggle-comment {{ selector: '.mde-cm-wrapper' }}
+
+Comments or uncomments the selection, using line comments when the language provides them and block comments otherwise.
+In Markdown text this produces an HTML comment (`<!-- -->`), since Markdown defines only block comment tokens.
+
+### editor:toggle-line-comment {{ selector: '.mde-cm-wrapper' }}
+
+Comments or uncomments the selection using line comments.
+This only takes effect inside a fenced code block whose language provides line comment tokens — in Markdown text it does nothing.
+
 ### editor:toggle-line-numbers {{ selector: 'body' }}
 
 Toggles line numbers in the editor.
@@ -1418,18 +1640,6 @@ Display notes in a notebook of the currently editing note on the note list bar.
 ### editor:go-to-workspace-of-editing-note {{ selector: 'body' }}
 
 Switches to the workspace of the notebook of the currently editing note.
-
-### core:toggle-editor-drawer {{ selector: 'body' }}
-
-Toggle editor drawer.
-
-### core:show-editor-drawer {{ selector: 'body' }}
-
-Show editor drawer.
-
-### core:close-editor-drawer {{ selector: 'body' }}
-
-Hide editor drawer.
 
 ---
 
@@ -1572,17 +1782,73 @@ Reformats all tables in the note.
 
 ## Export commands
 
-### export-as-html:export {{ selector: 'body' }}
+### export-as-html:selections {{ selector: 'body' }}
 
-Exports selected notes on the note list bar as HTML to disk.
+Exports the selected notes on the note list bar as HTML to disk.
+Exporting more than one note prompts for a destination directory; exporting exactly one opens a save dialog.
+
+<Properties sub title="Arguments">
+  <Property name="noteId" type="string">
+    The note to export. Defaults to the notes selected on the note list bar, then to the editing note.
+  </Property>
+</Properties>
+
+### export-as-html:notebook {{ selector: 'body' }}
+
+Prompts for a directory and exports every note in a notebook, and its child notebooks, as HTML.
+
+<Properties sub title="Arguments">
+  <Property name="bookId" type="string">
+    The notebook to export. Defaults to the notebook targeted by the context
+    menu.
+  </Property>
+</Properties>
+
+### export-as-html:copy {{ selector: 'body' }}
+
+Copies a note to the clipboard as full templated HTML, with images inlined as data URIs.
+
+<Properties sub title="Arguments">
+  <Property name="noteId" type="string">
+    The note to copy. Defaults to the first note selected on the note list bar.
+  </Property>
+</Properties>
+
+### export-as-html:copy-simple {{ selector: 'body' }}
+
+Copies a note to the clipboard as stripped-down HTML, without the document template.
+
+<Properties sub title="Arguments">
+  <Property name="noteId" type="string">
+    The note to copy. Defaults to the first note selected on the note list bar.
+  </Property>
+</Properties>
 
 ### export-as-markdown:all {{ selector: 'body' }}
 
 Exports all notes as Markdown to disk.
 
-### export-as-markdown:single {{ selector: 'body' }}
+### export-as-markdown:selections {{ selector: 'body' }}
 
-Exports the editing note as Markdown to disk.
+Exports the selected notes on the note list bar as Markdown, along with their attachments.
+Exporting more than one note prompts for a destination directory; exporting exactly one opens a save dialog.
+
+<Properties sub title="Arguments">
+  <Property name="noteId" type="string">
+    The note to export. Defaults to the notes selected on the note list bar, then to the editing note.
+  </Property>
+</Properties>
+
+### export-as-markdown:notebook {{ selector: 'body' }}
+
+Prompts for a directory and exports every note in a notebook, and its child notebooks, as Markdown.
+
+<Properties sub title="Arguments">
+  <Property name="bookId" type="string">
+    The notebook to export. Defaults to the notebook targeted by the context
+    menu.
+  </Property>
+</Properties>
 
 ### export-print:export-as-pdf {{ selector: 'body' }}
 
@@ -1599,6 +1865,10 @@ Prints the editing note.
 ### import-html:import-from-file {{ selector: 'body' }}
 
 Imports a note from a HTML file.
+
+### import-markdown:import-from-file {{ selector: 'body' }}
+
+Opens the Markdown import wizard, which scans the chosen files or directory and imports them into a notebook you pick.
 
 ---
 
@@ -1688,6 +1958,11 @@ Toggles the Developer Tools window.
 
 Toggles full screen mode.
 
+### window:toggle-menu-bar {{ selector: 'body', warning: 'Windows / Linux only' }}
+
+Toggles the `core.autoHideMenuBar` config, which hides or shows the menu bar.
+When the menu bar is hidden it can be revealed temporarily by pressing the Alt key.
+
 ---
 
 ## Special commands
@@ -1705,4 +1980,3 @@ Unbinds the existing keybinding.
 ### abort!
 
 Prevents the default behavior of the key event. It calls `preventDefault` on the event object.
-
