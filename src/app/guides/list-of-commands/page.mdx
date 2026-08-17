@@ -247,7 +247,7 @@ If the notes are already in trash, they will be permanently deleted.
 
 Duplicates notes currently selected on the note list.
 
-### core:emphasize {{ selector: '.mde-cm-wrapper' }}
+### core:emphasize {{ selector: '.cm-editor' }}
 
 Emphasize currently selected text.
 
@@ -309,23 +309,23 @@ Moves focus to the note list bar.
 
 Moves focus to the previous focusable UI component.
 
-### core:indent {{ selector: '.mde-cm-wrapper' }}
+### core:indent {{ selector: '.cm-editor' }}
 
 Indents the selected line(s).
 
-### core:insert-code-block {{ selector: '.mde-cm-wrapper' }}
+### core:insert-code-block {{ selector: '.cm-editor' }}
 
 Inserts a code block.
 
-### core:insert-horizontal-rule {{ selector: '.mde-cm-wrapper' }}
+### core:insert-horizontal-rule {{ selector: '.cm-editor' }}
 
 Inserts a horizontal rule: `* * *`.
 
-### core:insert-link {{ selector: '.mde-cm-wrapper' }}
+### core:insert-link {{ selector: '.cm-editor' }}
 
 Inserts a link.
 
-### core:insert-image {{ selector: '.mde-cm-wrapper' }}
+### core:insert-image {{ selector: '.cm-editor' }}
 
 Shows a file picker and inserts the selected image into the editor at the cursor position.
 
@@ -681,55 +681,55 @@ Opens the full-screen image viewer for the given image.
   </Property>
 </Properties>
 
-### core:strikethrough {{ selector: '.mde-cm-wrapper' }}
+### core:strikethrough {{ selector: '.cm-editor' }}
 
 Toggles strikethrough to the selected text.
 
-### core:strong {{ selector: '.mde-cm-wrapper' }}
+### core:strong {{ selector: '.cm-editor' }}
 
 Toggles strong emphasis to the selected text.
 
-### core:toggle-blockquote {{ selector: '.mde-cm-wrapper' }}
+### core:toggle-blockquote {{ selector: '.cm-editor' }}
 
 Toggles blockquote to the selected lines.
 
-### core:toggle-bulleted-list {{ selector: '.mde-cm-wrapper' }}
+### core:toggle-bulleted-list {{ selector: '.cm-editor' }}
 
 Toggles bulleted list to the selected lines.
 
-### core:toggle-heading-1 {{ selector: '.mde-cm-wrapper' }}
+### core:toggle-heading-1 {{ selector: '.cm-editor' }}
 
 Toggles h1 heading to the selected lines.
 
-### core:toggle-heading-2 {{ selector: '.mde-cm-wrapper' }}
+### core:toggle-heading-2 {{ selector: '.cm-editor' }}
 
 Toggles h2 heading to the selected lines.
 
-### core:toggle-heading-3 {{ selector: '.mde-cm-wrapper' }}
+### core:toggle-heading-3 {{ selector: '.cm-editor' }}
 
 Toggles h3 heading to the selected lines.
 
-### core:toggle-heading-4 {{ selector: '.mde-cm-wrapper' }}
+### core:toggle-heading-4 {{ selector: '.cm-editor' }}
 
 Toggles h4 heading to the selected lines.
 
-### core:toggle-heading-bigger {{ selector: '.mde-cm-wrapper' }}
+### core:toggle-heading-bigger {{ selector: '.cm-editor' }}
 
 Decreases heading level of the selected lines.
 
-### core:toggle-heading-smaller {{ selector: '.mde-cm-wrapper' }}
+### core:toggle-heading-smaller {{ selector: '.cm-editor' }}
 
 Increases heading level of the selected lines.
 
-### core:toggle-numbered-list {{ selector: '.mde-cm-wrapper' }}
+### core:toggle-numbered-list {{ selector: '.cm-editor' }}
 
 Toggles ordered list to the selected lines.
 
-### core:toggle-task-list {{ selector: '.mde-cm-wrapper' }}
+### core:toggle-task-list {{ selector: '.cm-editor' }}
 
 Toggles task list to the selected lines.
 
-### core:toggle-inline-code {{ selector: '.mde-cm-wrapper' }}
+### core:toggle-inline-code {{ selector: '.cm-editor' }}
 
 Toggles inline code block to the selected text.
 
@@ -739,15 +739,15 @@ Toggles inline code block to the selected text.
   </Property>
 </Properties>
 
-### core:toggle-inline-mark-tag {{ selector: '.mde-cm-wrapper' }}
+### core:toggle-inline-mark-tag {{ selector: '.cm-editor' }}
 
 Toggles an inline `<mark>` tag around the selected text.
 
-### core:undo {{ selector: '.mde-cm-wrapper' }}
+### core:undo {{ selector: '.cm-editor' }}
 
 Undoes the last change.
 
-### core:unindent {{ selector: '.mde-cm-wrapper' }}
+### core:unindent {{ selector: '.cm-editor' }}
 
 Unindents the current lines.
 
@@ -761,7 +761,7 @@ Unloads the named package from memory, if it is loaded.
   </Property>
 </Properties>
 
-### core:insert-alert {{ selector: '.mde-cm-wrapper' }}
+### core:insert-alert {{ selector: '.cm-editor' }}
 
 Inserts an alert block with the specified type.
 
@@ -771,23 +771,23 @@ Inserts an alert block with the specified type.
   </Property>
 </Properties>
 
-### core:insert-alert-note {{ selector: '.mde-cm-wrapper' }}
+### core:insert-alert-note {{ selector: '.cm-editor' }}
 
 Inserts a note alert block.
 
-### core:insert-alert-tip {{ selector: '.mde-cm-wrapper' }}
+### core:insert-alert-tip {{ selector: '.cm-editor' }}
 
 Inserts a tip alert block.
 
-### core:insert-alert-important {{ selector: '.mde-cm-wrapper' }}
+### core:insert-alert-important {{ selector: '.cm-editor' }}
 
 Inserts an important alert block.
 
-### core:insert-alert-warning {{ selector: '.mde-cm-wrapper' }}
+### core:insert-alert-warning {{ selector: '.cm-editor' }}
 
 Inserts a warning alert block.
 
-### core:insert-alert-caution {{ selector: '.mde-cm-wrapper' }}
+### core:insert-alert-caution {{ selector: '.cm-editor' }}
 
 Inserts a caution alert block.
 
@@ -943,65 +943,73 @@ Set the note status of the editing note to Completed.
 
 Set the note status of the editing note to Dropped.
 
-### editor:copy-line-up {{ selector: '.mde-cm-wrapper' }}
+### editor:copy-line-up {{ selector: '.cm-editor' }}
 
 Duplicates the selected lines upward, keeping the selection in the top copy.
 
-### editor:copy-line-down {{ selector: '.mde-cm-wrapper' }}
+### editor:copy-line-down {{ selector: '.cm-editor' }}
 
 Duplicates the selected lines downward, keeping the selection in the bottom copy.
 
-### editor:delete-char-after {{ selector: '.mde-cm-wrapper' }}
+### editor:delete-char-after {{ selector: '.cm-editor' }}
 
 Deletes the char after the cursor.
 
-### editor:delete-char-before {{ selector: '.mde-cm-wrapper' }}
+### editor:delete-char-before {{ selector: '.cm-editor' }}
 
 Deletes the char before the cursor.
 
-### editor:delete-group-after {{ selector: '.mde-cm-wrapper' }}
+### editor:delete-group-after {{ selector: '.cm-editor' }}
 
 Deletes the text group after the cursor.
 
-### editor:delete-group-before {{ selector: '.mde-cm-wrapper' }}
+### editor:delete-group-before {{ selector: '.cm-editor' }}
 
 Deletes the text group before the cursor.
 
-### editor:delete-line {{ selector: '.mde-cm-wrapper' }}
+### editor:delete-line {{ selector: '.cm-editor' }}
 
 Deletes the line.
 
-### editor:delete-word-after {{ selector: '.mde-cm-wrapper' }}
+### editor:delete-word-after {{ selector: '.cm-editor' }}
 
 Deletes the word after the cursor.
 
-### editor:delete-word-before {{ selector: '.mde-cm-wrapper' }}
+### editor:delete-word-before {{ selector: '.cm-editor' }}
 
 Deletes the word before the cursor.
 
-### editor:delete-wrapped-line-left {{ selector: '.mde-cm-wrapper' }}
+### editor:delete-wrapped-line-left {{ selector: '.cm-editor' }}
 
 Deletes the wrapped line left.
 
-### editor:delete-wrapped-line-right {{ selector: '.mde-cm-wrapper' }}
+### editor:delete-wrapped-line-right {{ selector: '.cm-editor' }}
 
 Deletes the wrapped line right.
 
-### editor:edit-with-ai {{ selector: '.mde-cm-wrapper' }}
+### editor:upcase-at-cursor {{ selector: '.cm-editor' }}
+
+Uppercases the selection, or the word at the cursor when nothing is selected.
+
+### editor:downcase-at-cursor {{ selector: '.cm-editor' }}
+
+Lowercases the selection, or the word at the cursor when nothing is selected.
+
+### editor:edit-with-ai {{ selector: '.cm-editor' }}
 
 Opens the AI inline assistant to edit the currently selected text. Does nothing if there is no selection.
 
-### editor:trigger-nes {{ selector: '.mde-cm-wrapper' }}
+### editor:trigger-nes {{ selector: '.cm-editor' }}
 
 Requests a Next Edit Suggestion at the cursor.
 Suggestions are rendered as dim ghost text and can also be triggered automatically after an idle pause, depending on the `ai.nextEditSuggestions` config.
 
-### editor:accept-nes {{ selector: '.mde-cm-wrapper' }}
+### editor:accept-nes {{ selector: '.cm-editor' }}
 
 Accepts the visible Next Edit Suggestion, inserting the ghost text as a single undoable edit.
 Does nothing and lets the keystroke fall through when no suggestion is visible.
 
-### editor:dismiss-nes {{ selector: '.mde-cm-wrapper' }}
+### editor:dismiss-nes {{ selector: '.cm-editor' }}
 
 Dismisses the visible Next Edit Suggestion.
 
@@ -1030,6 +1038,14 @@ Finds given text in the editor.
   </Property>
 </Properties>
 
+### editor:find-under {{ selector: '.cm-editor' }}
+
+Selects the next occurrence of the selection, or of the word at the cursor when nothing is selected, wrapping around the end of the note.
+
+### editor:find-under-previous {{ selector: '.cm-editor' }}
+
+Selects the previous occurrence of the selection, or of the word at the cursor when nothing is selected, wrapping around the start of the note.
+
 ### editor:focus {{ selector: 'body' }}
 
 Focuses to the MDE or preview pane depending on the editor mode.
@@ -1042,199 +1058,212 @@ Moves focus to the MDE.
 
 Moves focus to the preview pane.
 
-### editor:go-char-left {{ selector: '.mde-cm-wrapper' }}
+### editor:go-char-left {{ selector: '.cm-editor' }}
 
 Moves the cursor to one character left.
 
-### editor:go-char-right {{ selector: '.mde-cm-wrapper' }}
+### editor:go-char-right {{ selector: '.cm-editor' }}
 
 Moves the cursor to one character right.
 
-### editor:go-doc-end {{ selector: '.mde-cm-wrapper' }}
+### editor:go-doc-end {{ selector: '.cm-editor' }}
 
 Moves the cursor to the end of the document.
 
-### editor:go-doc-start {{ selector: '.mde-cm-wrapper' }}
+### editor:go-doc-start {{ selector: '.cm-editor' }}
 
 Moves the cursor to the start of the document.
 
-### editor:go-group-left {{ selector: '.mde-cm-wrapper' }}
+### editor:go-group-left {{ selector: '.cm-editor' }}
 
 Moves the cursor to one group left.
 
-### editor:go-group-right {{ selector: '.mde-cm-wrapper' }}
+### editor:go-group-right {{ selector: '.cm-editor' }}
 
 Moves the cursor to one group right.
 
-### editor:go-line-down {{ selector: '.mde-cm-wrapper' }}
+### editor:go-line-down {{ selector: '.cm-editor' }}
 
 Moves the cursor to one line down.
 
-### editor:go-line-end {{ selector: '.mde-cm-wrapper' }}
+### editor:go-line-end {{ selector: '.cm-editor' }}
 
 Moves the cursor to the line end.
 
-### editor:go-line-left {{ selector: '.mde-cm-wrapper' }}
+### editor:go-line-left {{ selector: '.cm-editor' }}
 
 Moves the cursor to the line left.
 
-### editor:go-line-right {{ selector: '.mde-cm-wrapper' }}
+### editor:go-line-right {{ selector: '.cm-editor' }}
 
 Moves the cursor to the line right.
 
-### editor:go-line-start {{ selector: '.mde-cm-wrapper' }}
+### editor:go-line-start {{ selector: '.cm-editor' }}
 
 Moves the cursor to the line start.
 
-### editor:go-line-up {{ selector: '.mde-cm-wrapper' }}
+### editor:go-line-up {{ selector: '.cm-editor' }}
 
 Moves the cursor to one line up.
 
-### editor:go-matching-bracket {{ selector: '.mde-cm-wrapper' }}
+### editor:go-matching-bracket {{ selector: '.cm-editor' }}
 
 Moves the cursor to the bracket matching the one it is on.
 
-### editor:go-page-down {{ selector: '.mde-cm-wrapper' }}
+### editor:go-page-down {{ selector: '.cm-editor' }}
 
 Moves the cursor to one page down.
 
-### editor:go-page-up {{ selector: '.mde-cm-wrapper' }}
+### editor:go-page-up {{ selector: '.cm-editor' }}
 
 Moves the cursor to one page up.
 
-### editor:go-subword-left {{ selector: '.mde-cm-wrapper' }}
+### editor:go-subword-left {{ selector: '.cm-editor' }}
 
 Moves the cursor one group or camel-case subword backward.
 
-### editor:go-subword-right {{ selector: '.mde-cm-wrapper' }}
+### editor:go-subword-right {{ selector: '.cm-editor' }}
 
 Moves the cursor one group or camel-case subword forward.
 
-### editor:go-syntax-left {{ selector: '.mde-cm-wrapper' }}
+### editor:go-syntax-left {{ selector: '.cm-editor' }}
 
 Moves the cursor one syntax node to the left.
 
-### editor:go-syntax-right {{ selector: '.mde-cm-wrapper' }}
+### editor:go-syntax-right {{ selector: '.cm-editor' }}
 
 Moves the cursor one syntax node to the right.
 
-### editor:select-char-left {{ selector: '.mde-cm-wrapper' }}
+### editor:select-char-left {{ selector: '.cm-editor' }}
 
 Extends the selection by one character to the left.
 
-### editor:select-char-right {{ selector: '.mde-cm-wrapper' }}
+### editor:select-char-right {{ selector: '.cm-editor' }}
 
 Extends the selection by one character to the right.
 
-### editor:select-syntax-left {{ selector: '.mde-cm-wrapper' }}
+### editor:select-syntax-left {{ selector: '.cm-editor' }}
 
 Extends the selection one syntax node to the left.
 
-### editor:select-syntax-right {{ selector: '.mde-cm-wrapper' }}
+### editor:select-syntax-right {{ selector: '.cm-editor' }}
 
 Extends the selection one syntax node to the right.
 
-### editor:select-subword-left {{ selector: '.mde-cm-wrapper' }}
+### editor:select-subword-left {{ selector: '.cm-editor' }}
 
 Moves the selection head one group or camel-case subword backward.
 
-### editor:select-subword-right {{ selector: '.mde-cm-wrapper' }}
+### editor:select-subword-right {{ selector: '.cm-editor' }}
 
 Moves the selection head one group or camel-case subword forward.
 
-### editor:select-group-left {{ selector: '.mde-cm-wrapper' }}
+### editor:select-group-left {{ selector: '.cm-editor' }}
 
 Extends the selection by one group to the left.
 
-### editor:select-group-right {{ selector: '.mde-cm-wrapper' }}
+### editor:select-group-right {{ selector: '.cm-editor' }}
 
 Extends the selection by one group to the right.
 
-### editor:select-line-up {{ selector: '.mde-cm-wrapper' }}
+### editor:select-line-up {{ selector: '.cm-editor' }}
 
 Extends the selection one line up.
 
-### editor:select-line-down {{ selector: '.mde-cm-wrapper' }}
+### editor:select-line-down {{ selector: '.cm-editor' }}
 
 Extends the selection one line down.
 
-### editor:select-line-start {{ selector: '.mde-cm-wrapper' }}
+### editor:select-line-start {{ selector: '.cm-editor' }}
 
 Extends the selection to the line start.
 
-### editor:select-line-end {{ selector: '.mde-cm-wrapper' }}
+### editor:select-line-end {{ selector: '.cm-editor' }}
 
 Extends the selection to the line end.
 
-### editor:select-line-left {{ selector: '.mde-cm-wrapper' }}
+### editor:select-line-left {{ selector: '.cm-editor' }}
 
 Extends the selection to the line boundary on the left.
 
-### editor:select-line-right {{ selector: '.mde-cm-wrapper' }}
+### editor:select-line-right {{ selector: '.cm-editor' }}
 
 Extends the selection to the line boundary on the right.
 
-### editor:select-page-up {{ selector: '.mde-cm-wrapper' }}
+### editor:select-page-up {{ selector: '.cm-editor' }}
 
 Extends the selection one page up.
 
-### editor:select-page-down {{ selector: '.mde-cm-wrapper' }}
+### editor:select-page-down {{ selector: '.cm-editor' }}
 
 Extends the selection one page down.
 
-### editor:select-doc-start {{ selector: '.mde-cm-wrapper' }}
+### editor:select-doc-start {{ selector: '.cm-editor' }}
 
 Extends the selection to the start of the document.
 
-### editor:select-doc-end {{ selector: '.mde-cm-wrapper' }}
+### editor:select-doc-end {{ selector: '.cm-editor' }}
 
 Extends the selection to the end of the document.
 
-### editor:select-line {{ selector: '.mde-cm-wrapper' }}
+### editor:select-line {{ selector: '.cm-editor' }}
 
 Expands the selection to cover entire lines.
 
-### editor:select-parent-syntax {{ selector: '.mde-cm-wrapper' }}
+### editor:select-parent-syntax {{ selector: '.cm-editor' }}
 
 Expands the selection to the next larger syntactic construct.
 
-### editor:select-matching-bracket {{ selector: '.mde-cm-wrapper' }}
+### editor:select-matching-bracket {{ selector: '.cm-editor' }}
 
 Extends the selection to the bracket matching the one the selection head is on.
 
-### editor:select-next-occurrence {{ selector: '.mde-cm-wrapper' }}
+### editor:select-next-occurrence {{ selector: '.cm-editor' }}
 
 Adds a selection at the next occurrence of the selected text, or selects the word at the cursor when the selection is empty.
 
-### editor:select-selection-matches {{ selector: '.mde-cm-wrapper' }}
+### editor:select-selection-matches {{ selector: '.cm-editor' }}
 
 Selects all instances of the currently selected text.
 
-### editor:move-line-up {{ selector: '.mde-cm-wrapper' }}
+### editor:skip-and-select-next-occurrence {{ selector: '.cm-editor' }}
+
+Moves the selection on to the next occurrence instead of adding it, dropping the range it searched from.
+With nothing selected, the first press only expands the selection to the word at the cursor.
+
+### editor:split-selection-by-line {{ selector: '.cm-editor' }}
+
+Replaces every selection range with one range per line it covers.
+
+### editor:move-line-up {{ selector: '.cm-editor' }}
 
 Moves the current line(s) up.
 
-### editor:move-line-down {{ selector: '.mde-cm-wrapper' }}
+### editor:move-line-down {{ selector: '.cm-editor' }}
 
 Moves the current line(s) down.
 
-### editor:indent {{ selector: '.mde-cm-wrapper' }}
+### editor:indent {{ selector: '.cm-editor' }}
 
 Indents the currently selected line(s).
 
-### editor:indent-less {{ selector: '.mde-cm-wrapper' }}
+### editor:indent-less {{ selector: '.cm-editor' }}
 
 Unindents the currently selected line(s).
 
-### editor:indent-more {{ selector: '.mde-cm-wrapper' }}
+### editor:indent-more {{ selector: '.cm-editor' }}
 
 Indents one more the currently selected line(s).
 
-### editor:insert-blank-line {{ selector: '.mde-cm-wrapper' }}
+### editor:insert-blank-line {{ selector: '.cm-editor' }}
 
 Creates a blank, indented line below the current line.
 
-### editor:insert-images {{ selector: '.mde-cm-wrapper' }}
+### editor:insert-line-before {{ selector: '.cm-editor' }}
+
+Opens an indented blank line above the line at the cursor and moves the cursor onto it — the upward counterpart of `editor:insert-blank-line`.
+
+### editor:insert-images {{ selector: 'body' }}
 
 Inserts image files at the cursor to the editing note.
 
@@ -1253,20 +1282,20 @@ Not registered while the session is read-only.
   </Property>
 </Properties>
 
-### editor:resize-image-auto {{ selector: '.mde-cm-wrapper' }}
+### editor:resize-image-auto {{ selector: '.cm-editor' }}
 
 Restores the image at the cursor to its natural size, by removing the `w:` and `h:` tokens from its alt text.
 Does nothing when the cursor is not inside an image.
 
-### editor:resize-image-small {{ selector: '.mde-cm-wrapper' }}
+### editor:resize-image-small {{ selector: '.cm-editor' }}
 
 Resizes the image at the cursor to 30% width.
 
-### editor:resize-image-half {{ selector: '.mde-cm-wrapper' }}
+### editor:resize-image-half {{ selector: '.cm-editor' }}
 
 Resizes the image at the cursor to 50% width.
 
-### editor:resize-image-full {{ selector: '.mde-cm-wrapper' }}
+### editor:resize-image-full {{ selector: '.cm-editor' }}
 
 Resizes the image at the cursor to 100% width.
 
@@ -1312,27 +1341,32 @@ Resizes the image at the cursor to 100% width.
   </Col>
 </Row>
 
-### editor:jump-to-line {{ selector: '.mde-cm-wrapper' }}
+### editor:join-lines {{ selector: '.cm-editor' }}
+
+Joins the lines each selection range covers into a single line, separated by one space and dropping the indentation of the absorbed lines.
+An empty selection joins the line at the cursor with the one below it.
+
+### editor:jump-to-line {{ selector: '.cm-editor' }}
 
 Toggles a dialog which allows you to jump to the line at the specified number.
 
-### editor:kill-line {{ selector: '.mde-cm-wrapper' }}
+### editor:kill-line {{ selector: '.cm-editor' }}
 
 Deletes the line at the cursor.
 
-### editor:new-line {{ selector: '.mde-cm-wrapper' }}
+### editor:new-line {{ selector: '.cm-editor' }}
 
 Inserts a plain new line at the cursor without continuing any Markdown markup.
 
-### editor:new-line-continue-markup {{ selector: '.mde-cm-wrapper' }}
+### editor:new-line-continue-markup {{ selector: '.cm-editor' }}
 
 Inserts a new line and continues the current Markdown markup — list markers, ordered-list numbers, task list checkboxes, and blockquotes — then indents to match the surrounding block.
 
-### editor:open-line {{ selector: '.mde-cm-wrapper' }}
+### editor:open-line {{ selector: '.cm-editor' }}
 
 Inserts a new line above the cursor.
 
-### editor:redo-selection {{ selector: '.mde-cm-wrapper' }}
+### editor:redo-selection {{ selector: '.cm-editor' }}
 
 Redoes the last selection.
 
@@ -1348,7 +1382,7 @@ Replaces the next occurrence in the editor.
 
 Replaces all occurrences in the editor.
 
-### editor:replace-selection {{ selector: '.mde-cm-wrapper' }}
+### editor:replace-selection {{ selector: '.cm-editor' }}
 
 Replaces selected text with the given text.
 
@@ -1365,6 +1399,36 @@ Replaces selected text with the given text.
 ### editor:save-preview-scroll
 
 <Warning>It's a private command</Warning>
+
+### editor:scroll-line-up {{ selector: '.cm-editor' }}
+
+Scrolls the viewport up by one line, leaving the cursor where it is.
+
+### editor:scroll-line-down {{ selector: '.cm-editor' }}
+
+Scrolls the viewport down by one line, leaving the cursor where it is.
+
+### editor:show-in-center {{ selector: '.cm-editor' }}
+
+Scrolls the line with the cursor on it to the vertical center of the viewport.
+
+### editor:sort-lines {{ selector: '.cm-editor' }}
+
+Sorts the lines covered by each selection range alphabetically.
+Ranges covering fewer than two lines are left alone, so an empty selection never rewrites the note.
+
+### editor:reverse-sort-lines {{ selector: '.cm-editor' }}
+
+Sorts the selected lines in reverse alphabetical order.
+
+### editor:sort-lines-insensitive {{ selector: '.cm-editor' }}
+
+Sorts the selected lines alphabetically, ignoring case.
+Lines that differ only in case keep a stable order between themselves.
+
+### editor:reverse-sort-lines-insensitive {{ selector: '.cm-editor' }}
+
+Sorts the selected lines in reverse alphabetical order, ignoring case.
 
 ### editor:scroll-editor-to-line {{ selector: 'body' }}
 
@@ -1386,19 +1450,19 @@ Scrolls the preview to the given line.
   </Property>
 </Properties>
 
-### editor:select-all {{ selector: '.mde-cm-wrapper' }}
+### editor:select-all {{ selector: '.cm-editor' }}
 
 Selects all text in the editor.
 
-### editor:select-lines-downward {{ selector: '.mde-cm-wrapper' }}
+### editor:select-lines-downward {{ selector: '.cm-editor' }}
 
 Adds a cursor downward.
 
-### editor:select-lines-upward {{ selector: '.mde-cm-wrapper' }}
+### editor:select-lines-upward {{ selector: '.cm-editor' }}
 
 Adds a cursor upward.
 
-### editor:single-selection {{ selector: '.mde-cm-wrapper' }}
+### editor:single-selection {{ selector: '.cm-editor' }}
 
 Removes all cursors except the primary one.
 
@@ -1435,15 +1499,15 @@ Inserts the given text at the current cursor position.
   </Property>
 </Properties>
 
-### editor:open-link {{ selector: '.mde-cm-wrapper' }}
+### editor:open-link {{ selector: '.cm-editor' }}
 
 Opens the URL at the cursor in the default browser.
 
-### editor:copy-link {{ selector: '.mde-cm-wrapper' }}
+### editor:copy-link {{ selector: '.cm-editor' }}
 
 Copies the URL at the cursor to the clipboard.
 
-### editor:paste-url {{ selector: '.mde-cm-wrapper' }}
+### editor:paste-url {{ selector: '.cm-editor' }}
 
 Pastes a URL at the cursor. If text is selected, wraps it as a Markdown link.
 
@@ -1453,31 +1517,31 @@ Pastes a URL at the cursor. If text is selected, wraps it as a Markdown link.
   </Property>
 </Properties>
 
-### editor:start-completion {{ selector: '.mde-cm-wrapper' }}
+### editor:start-completion {{ selector: '.cm-editor' }}
 
 Manually triggers the autocompletion popup.
 
-### editor:accept-completion {{ selector: '.mde-cm-wrapper' }}
+### editor:accept-completion {{ selector: '.cm-editor' }}
 
 Accepts the currently highlighted completion suggestion.
 
-### editor:close-completion {{ selector: '.mde-cm-wrapper' }}
+### editor:close-completion {{ selector: '.cm-editor' }}
 
 Closes the autocompletion popup.
 
-### editor:move-completion-selection-up {{ selector: '.mde-cm-wrapper' }}
+### editor:move-completion-selection-up {{ selector: '.cm-editor' }}
 
 Moves the highlighted completion suggestion up.
 
-### editor:move-completion-selection-down {{ selector: '.mde-cm-wrapper' }}
+### editor:move-completion-selection-down {{ selector: '.cm-editor' }}
 
 Moves the highlighted completion suggestion down.
 
-### editor:move-completion-selection-page-up {{ selector: '.mde-cm-wrapper' }}
+### editor:move-completion-selection-page-up {{ selector: '.cm-editor' }}
 
 Moves the highlighted completion suggestion up by a page.
 
-### editor:move-completion-selection-page-down {{ selector: '.mde-cm-wrapper' }}
+### editor:move-completion-selection-page-down {{ selector: '.cm-editor' }}
 
 Moves the highlighted completion suggestion down by a page.
 
@@ -1495,12 +1559,12 @@ Replaces the entire editor content with the given body.
   </Property>
 </Properties>
 
-### editor:toggle-comment {{ selector: '.mde-cm-wrapper' }}
+### editor:toggle-comment {{ selector: '.cm-editor' }}
 
 Comments or uncomments the selection, using line comments when the language provides them and block comments otherwise.
 In Markdown text this produces an HTML comment (`<!-- -->`), since Markdown defines only block comment tokens.
 
-### editor:toggle-line-comment {{ selector: '.mde-cm-wrapper' }}
+### editor:toggle-line-comment {{ selector: '.cm-editor' }}
 
 Comments or uncomments the selection using line comments.
 This only takes effect inside a fenced code block whose language provides line comment tokens — in Markdown text it does nothing.
@@ -1601,35 +1665,31 @@ Unregisters previously added slash-command items.
   </Property>
 </Properties>
 
-### editor:new-table-row-and-continue {{ selector: '.mde-cm-wrapper' }}
+### editor:new-table-row-and-continue {{ selector: '.cm-editor' }}
 
 Inserts a new row in the table at the cursor and continues editing.
 
-### editor:move-to-next-table-cell {{ selector: '.mde-cm-wrapper' }}
+### editor:move-to-next-table-cell {{ selector: '.cm-editor' }}
 
 Moves the cursor to the next cell of the table at the cursor.
 
-### editor:move-to-previous-table-cell {{ selector: '.mde-cm-wrapper' }}
+### editor:move-to-previous-table-cell {{ selector: '.cm-editor' }}
 
 Moves the cursor to the previous cell of the table at the cursor.
 
-### editor:toggle-overwrite {{ selector: '.mde-cm-wrapper' }}
-
-Toggles overwrite mode.
-
-### editor:toggle-task-list {{ selector: '.mde-cm-wrapper' }}
+### editor:toggle-task-list {{ selector: '.cm-editor' }}
 
 Toggles task list to the current selections.
 
-### editor:transpose-chars {{ selector: '.mde-cm-wrapper' }}
+### editor:transpose-chars {{ selector: '.cm-editor' }}
 
 Transposes characters at the cursor.
 
-### editor:undo-selection {{ selector: '.mde-cm-wrapper' }}
+### editor:undo-selection {{ selector: '.cm-editor' }}
 
 Undoes the last selection.
 
-### editor:unindent {{ selector: '.mde-cm-wrapper' }}
+### editor:unindent {{ selector: '.cm-editor' }}
 
 Unindents the current lines.
 
@@ -1686,95 +1746,95 @@ Removes prompt presets from the AI inline assistant by ID.
 
 These commands operate while the cursor is inside a Markdown table.
 
-### table-editor:select-cell {{ selector: '.mde-cm-wrapper' }}
+### table-editor:select-cell {{ selector: '.cm-editor' }}
 
 Selects the contents of the current cell.
 
-### table-editor:next-cell {{ selector: '.mde-cm-wrapper' }}
+### table-editor:next-cell {{ selector: '.cm-editor' }}
 
 Moves to the next cell.
 
-### table-editor:previous-cell {{ selector: '.mde-cm-wrapper' }}
+### table-editor:previous-cell {{ selector: '.cm-editor' }}
 
 Moves to the previous cell.
 
-### table-editor:next-row {{ selector: '.mde-cm-wrapper' }}
+### table-editor:next-row {{ selector: '.cm-editor' }}
 
 Moves to the next row.
 
-### table-editor:escape {{ selector: '.mde-cm-wrapper' }}
+### table-editor:escape {{ selector: '.cm-editor' }}
 
 Exits the table editing mode.
 
-### table-editor:move-left {{ selector: '.mde-cm-wrapper' }}
+### table-editor:move-left {{ selector: '.cm-editor' }}
 
 Moves one cell to the left.
 
-### table-editor:move-right {{ selector: '.mde-cm-wrapper' }}
+### table-editor:move-right {{ selector: '.cm-editor' }}
 
 Moves one cell to the right.
 
-### table-editor:move-up {{ selector: '.mde-cm-wrapper' }}
+### table-editor:move-up {{ selector: '.cm-editor' }}
 
 Moves one cell up.
 
-### table-editor:move-down {{ selector: '.mde-cm-wrapper' }}
+### table-editor:move-down {{ selector: '.cm-editor' }}
 
 Moves one cell down.
 
-### table-editor:align-left {{ selector: '.mde-cm-wrapper' }}
+### table-editor:align-left {{ selector: '.cm-editor' }}
 
 Aligns the current column to the left.
 
-### table-editor:align-right {{ selector: '.mde-cm-wrapper' }}
+### table-editor:align-right {{ selector: '.cm-editor' }}
 
 Aligns the current column to the right.
 
-### table-editor:align-center {{ selector: '.mde-cm-wrapper' }}
+### table-editor:align-center {{ selector: '.cm-editor' }}
 
 Aligns the current column to the center.
 
-### table-editor:align-none {{ selector: '.mde-cm-wrapper' }}
+### table-editor:align-none {{ selector: '.cm-editor' }}
 
 Removes column alignment.
 
-### table-editor:move-row-up {{ selector: '.mde-cm-wrapper' }}
+### table-editor:move-row-up {{ selector: '.cm-editor' }}
 
 Moves the current row up.
 
-### table-editor:move-row-down {{ selector: '.mde-cm-wrapper' }}
+### table-editor:move-row-down {{ selector: '.cm-editor' }}
 
 Moves the current row down.
 
-### table-editor:move-column-left {{ selector: '.mde-cm-wrapper' }}
+### table-editor:move-column-left {{ selector: '.cm-editor' }}
 
 Moves the current column to the left.
 
-### table-editor:move-column-right {{ selector: '.mde-cm-wrapper' }}
+### table-editor:move-column-right {{ selector: '.cm-editor' }}
 
 Moves the current column to the right.
 
-### table-editor:delete-column {{ selector: '.mde-cm-wrapper' }}
+### table-editor:delete-column {{ selector: '.cm-editor' }}
 
 Deletes the current column.
 
-### table-editor:delete-row {{ selector: '.mde-cm-wrapper' }}
+### table-editor:delete-row {{ selector: '.cm-editor' }}
 
 Deletes the current row.
 
-### table-editor:insert-column {{ selector: '.mde-cm-wrapper' }}
+### table-editor:insert-column {{ selector: '.cm-editor' }}
 
 Inserts a new column.
 
-### table-editor:insert-row {{ selector: '.mde-cm-wrapper' }}
+### table-editor:insert-row {{ selector: '.cm-editor' }}
 
 Inserts a new row.
 
-### table-editor:format {{ selector: '.mde-cm-wrapper' }}
+### table-editor:format {{ selector: '.cm-editor' }}
 
 Reformats the current table.
 
-### table-editor:format-all {{ selector: '.mde-cm-wrapper' }}
+### table-editor:format-all {{ selector: '.cm-editor' }}
 
 Reformats all tables in the note.
 

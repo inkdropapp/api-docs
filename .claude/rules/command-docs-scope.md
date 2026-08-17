@@ -29,15 +29,33 @@ of what you find. Adding them all is the mistake this rule exists to prevent.
   `github:oauth-complete`, `github:oauth-error`, `core:show-update-notification`.
 - **Commands whose only selector is a specific widget.** A binding scoped to `.ui.dropdown`, a
   particular `input`, or a single component's textarea is internal keyboard plumbing for that
-  widget. Public commands are registered on `body`, or on `.mde-cm-wrapper` for editor commands —
+  widget. Public commands are registered on `body`, or on `.cm-editor` for editor commands —
   **those two selectors only**.
   → `core:submit`, `core:cancel`, `core:toggle-menu`, `core:select-next-item`,
   `core:focus-item-list`, `core:submit-preset-selection`.
 - **Commands with no registered handler.** A declaration in a `*Commands` type is not proof the
   command exists — grep for the handler too.
+  → `editor:toggle-overwrite` (declared, but its handler is commented out behind a `// TODO:`).
   → `core:preview-render` (declared, never registered, nothing dispatches it).
 - **Diagnostics and support-only affordances**, even when they are menu-bound and main-window.
   → `core:run-network-diagnosis`.
+
+## Getting the selector right
+
+The `selector` on each heading must name the element the command is **registered** on, since that
+is what a keymap has to match. Derive it from the `commands.add(...)` call, not from the
+neighbouring entries:
+
+- `bindMDELocalCommands(cm.dom, cm)` (`mde.tsx`) → **`.cm-editor`**
+- `commands.add<MDECommands>(document.body, ...)` and `commands.add<EditorCommands>(document.body, ...)`
+  → **`body`**
+
+Note that an `editor:` prefix does **not** imply the editor element — `editor:insert-images` is
+registered on `document.body` in `src/browser/commands/editor.ts`.
+
+`.mde-cm-wrapper` is a **CodeMirror 5 leftover** that the app deleted in desktop commit
+`dd7f101b`; it exists nowhere in the codebase, so a keymap written against it silently never
+fires. It was wrong on 150 entries here before being swept to `.cm-editor`. Do not reintroduce it.
 
 ## `hiddenInCommandPalette` is not the test
 
