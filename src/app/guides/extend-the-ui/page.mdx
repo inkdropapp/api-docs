@@ -44,20 +44,62 @@ We will explore along with this example to learn how to add components to each l
 
 ### Showing a custom dialog
 
-- [Example: LayoutExampleMessageDialog](https://github.com/inkdropapp/layout-example-plugin/blob/master/lib/layout-example-message-dialog.js)
+- [Example: LayoutExampleMessageDialog](https://github.com/inkdropapp/layout-example-plugin/blob/master/src/message-dialog.tsx)
 
-Inkdrop provides [MessageDialog](/components/message-dialog) component so that you can easily create a custom dialog like so:
+Inkdrop provides the [Dialog](/components/dialog) component, with `Title`, `Content`, and
+`Actions` sub-components for laying one out. Its visibility is driven by the
+[useModal](/components/modal#example) hook rather than by an imperative handle, so a dialog is
+an ordinary function component that shows and hides itself in response to your plugin's
+command:
 
-```js
-render() {
-  const MessageDialog = inkdrop.components.getComponentClass('MessageDialog')
+```tsx {{ filename: 'src/message-dialog.tsx' }}
+import type { Dialog as DialogClass } from '@inkdropapp/types'
+import { logger, useModal } from 'inkdrop'
+import { useEffect } from 'react'
+
+import { getEnv } from './env'
+
+export function LayoutExampleMessageDialog() {
+  const Dialog = getEnv().components.getComponentClass('Dialog') as DialogClass
+  const modal = useModal()
+  const { show, close } = modal
+  const { visible } = modal.state
+
+  useEffect(() => {
+    const sub = getEnv().commands.add(document.body, {
+      'layout-example:toggle-dialog': () => {
+        logger.debug('dialog was toggled!')
+        if (visible) close()
+        else show()
+      }
+    })
+    return () => sub.dispose()
+  }, [visible, show, close])
+
   return (
-    <MessageDialog ref={el => (this.dialogRef = el)} title="LayoutExample">
-      LayoutExample was toggled!
-    </MessageDialog>
+    <Dialog {...modal.state} onBackdropClick={close} onEscKeyDown={close}>
+      <Dialog.Title>LayoutExample</Dialog.Title>
+      <Dialog.Content>LayoutExample was toggled!</Dialog.Content>
+      <Dialog.Actions>
+        <button className="ui small button" onClick={close} autoFocus>
+          Close
+        </button>
+      </Dialog.Actions>
+    </Dialog>
   )
 }
 ```
+
+Spreading `modal.state` passes the dialog its `visible` flag, and `modal.show()` / `modal.close()`
+flip it. The `as DialogClass` cast restores the sub-component types from
+[`@inkdropapp/types`](https://github.com/inkdropapp/types) — a plain
+`getComponentClass<DialogProps>('Dialog')` only types the props.
+
+The component reaches the environment through `getEnv()`, the small helper that captures the
+instance passed to `activate()`. See
+[`activate()` receives the inkdrop environment](/appendix/plugin-migration-from-v5-to-v6#activate-receives-the-inkdrop-environment)
+for the rationale, and the [Word Count plugin](/guides/plugin-word-count#understanding-the-generated-code)
+walkthrough for the helper itself.
 
 ### Inserting a view into the main layout
 
