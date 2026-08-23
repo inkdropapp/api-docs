@@ -178,6 +178,28 @@ You no longer have to do the same dance of checking for an already-active editor
 
 ## `inkdrop.main.dataStore.getLocalDB()` → `inkdrop.localDB`
 
+`inkdrop.main` was a `remote` reference to the main process, and with it `inkdrop.main.dataStore` is gone. The local database is now an IPC proxy on the environment, with the same `notes` / `books` / `tags` / `files` / `utils` sub-objects and change events — see [Accessing the local database](/guides/access-the-local-database).
+
+Before:
+
+```js
+const db = inkdrop.main.dataStore.getLocalDB()
+const note = await db.notes.get('note:F8xUp-23G')
+```
+
+After:
+
+```js
+const db = inkdrop.localDB
+const note = await db.notes.get('note:F8xUp-23G')
+```
+
+<Note>
+  Returned documents are plain objects now, not Remote Objects, so
+  `structuredClone()` is no longer needed. Direct access to the PouchDB instance
+  (`inkdrop.main.dataStore.localPouch`) is not available to plugins.
+</Note>
+
 ## CSS selectors for keymaps and commands
 
 - `.mde-preview` → `.mde-preview-container`

@@ -15,7 +15,7 @@ In your package's menu `.json` file you need to specify it under a `context-menu
 ```json
 {
   "context-menu": {
-    ".mde-preview": [
+    ".mde-preview-container": [
       { "label": "Copy", "command": "core:copy" },
       { "label": "Select All", "command": "core:select-all" }
     ]
@@ -44,7 +44,7 @@ Add context menu items scoped by CSS selectors.
     <CodeGroup title="Adding Context Menu Example">
     ```js
     inkdrop.contextMenu.add({
-      '.CodeMirror': [
+      '.cm-editor': [
         {
           label: 'History',
           submenu: [

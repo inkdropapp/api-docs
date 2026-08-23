@@ -55,13 +55,13 @@ Create a `styles.css` in [your data directory](https://docs.inkdrop.app/manual/b
 ```css
 .editor.book-TjNHyND4Q {
   .mde-preview,
-  .CodeMirror {
+  .cm-editor {
     p {
       line-height: 160%;
     }
 
     strong,
-    .cm-strong {
+    .tok-strong {
       font-size: x-large;
       text-decoration: underline;
       text-underline-position: under;
@@ -69,7 +69,7 @@ Create a `styles.css` in [your data directory](https://docs.inkdrop.app/manual/b
       text-decoration-color: rgba(200, 160, 0, 0.5);
     }
     em,
-    .cm-em {
+    .tok-emphasis {
       font-weight: bold;
       font-size: large;
       text-decoration: underline;
@@ -87,3 +87,31 @@ Then, boom! You should see that your notes got special highlightings for italic 
 ![Result](/images/adding-styles-for-text-annotation_result.png)
 
 Of course, you can tweak styles as you like for more notebooks.
+
+## Tweak colors through the theme variables
+
+The rules above target the `.tok-*` classes directly, which works but re-implements what the syntax theme is already doing.
+When all you want is a different color, weight, style, or decoration, it's simpler to override the variables the theme reads.
+
+Inkdrop splits them in two: the [`--syntax-*` variables](/guides/create-a-theme#styling-the-editor) drive the `.tok-*` classes inside `.cm-editor`, and the [`--mde-preview-*` variables](/guides/create-a-theme#styling-the-preview) drive the rendered Markdown inside `.mde-preview`.
+Both are ordinary CSS custom properties, so they inherit — setting them on a notebook's `.editor.book-*` element scopes the syntax theme to that notebook alone:
+
+```css
+.editor.book-TjNHyND4Q {
+  /* Editor pane */
+  --syntax-strong-color: #b45309;
+  --syntax-emphasis-color: #b45309;
+  --syntax-emphasis-font-style: normal;
+  --syntax-strikethrough-text-decoration: line-through wavy;
+  --syntax-link-color: #0e7490;
+
+  /* Preview pane */
+  --mde-preview-strong-color: #b45309;
+  --mde-preview-em-color: #b45309;
+  --mde-preview-link-color: #0e7490;
+}
+```
+
+[`@inkdropapp/css`](https://github.com/inkdropapp/css) defines every one of these with a default value — see the `:root` block of [`syntax.css`](https://github.com/inkdropapp/css/blob/main/syntax.css) for the editor and of [`markdown.css`](https://github.com/inkdropapp/css/blob/main/markdown.css) for the preview.
+Properties that no variable covers, such as `background-color`, `text-underline-position`, or `font-size`, still need the element rules shown earlier.
+The two approaches mix freely in the same stylesheet.

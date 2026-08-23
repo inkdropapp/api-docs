@@ -1,22 +1,19 @@
 export const metadata = {
   title: 'Inkdrop Application',
-  description: 'The class in the main process for dealing with data store.',
+  description:
+    'Removed in Inkdrop 6 — the inkdrop.main reference no longer exists.'
 }
 
 # Inkdrop Application
 
-The class in the main process for dealing with data store.
-An instance of this class is always available as the `inkdrop.main` global.
+<Note>
+  **Removed in Inkdrop 6.** `inkdrop.main` was a reference to the application
+  instance in the main process, obtained through Electron's `remote` module,
+  which v6 dropped. Everything a plugin needs is now on the
+  [Environment](/modules/environment) itself.
+</Note>
 
----
-
-## Properties
-
-<Properties>
-  <Property name="dataStore" type="DataStore">
-    A [DataStore](/modules/data-store) instance.
-  </Property>
-  <Property name="version" type="string">
-    String, indicating the app version.
-  </Property>
-</Properties>
+| Inkdrop 5                | Inkdrop 6                                                 |
+| ------------------------ | --------------------------------------------------------- |
+| `inkdrop.main.dataStore` | `inkdrop.localDB` — see [Data Store](/modules/data-store) |
+| `inkdrop.main.version`   | `inkdrop.appVersion`                                      |

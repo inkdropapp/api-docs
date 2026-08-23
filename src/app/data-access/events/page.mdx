@@ -31,7 +31,7 @@ Provides the ability to subscribe to various events raised by the local database
   <Col sticky>
     <CodeGroup title="Example">
     ```js
-    const db = inkdrop.main.dataStore.getLocalDB()
+    const db = inkdrop.localDB
     const subscription = db.onChange(changes => {
       console.log('Database has been changed', changes)
     });
@@ -67,7 +67,7 @@ Provides the ability to subscribe to various events raised by the local database
   <Col sticky>
     <CodeGroup title="Example">
     ```js
-    const db = inkdrop.main.dataStore.getLocalDB()
+    const db = inkdrop.localDB
     const subscription = db.onNoteChange(changes => {
       console.log('Note has been changed', changes)
     });
@@ -103,7 +103,7 @@ Provides the ability to subscribe to various events raised by the local database
   <Col sticky>
     <CodeGroup title="Example">
     ```js
-    const db = inkdrop.main.dataStore.getLocalDB()
+    const db = inkdrop.localDB
     const subscription = db.onBookChange(changes => {
       console.log('Notebook has been changed', changes)
     });
@@ -139,7 +139,7 @@ Provides the ability to subscribe to various events raised by the local database
   <Col sticky>
     <CodeGroup title="Example">
     ```js
-    const db = inkdrop.main.dataStore.getLocalDB()
+    const db = inkdrop.localDB
     const subscription = db.onTagChange(changes => {
       console.log('Tag has been changed', changes)
     });
@@ -175,8 +175,8 @@ Provides the ability to subscribe to various events raised by the local database
   <Col sticky>
     <CodeGroup title="Example">
     ```js
-    const db = inkdrop.main.dataStore.getLocalDB()
-    const subscription = db.onFullTextIndexBuildStart(changes => {
+    const db = inkdrop.localDB
+    const subscription = db.onFullTextIndexBuildStart(() => {
       console.log('Full-text search index building has been started')
     });
 
@@ -211,8 +211,8 @@ Provides the ability to subscribe to various events raised by the local database
   <Col sticky>
     <CodeGroup title="Example">
     ```js
-    const db = inkdrop.main.dataStore.getLocalDB()
-    const subscription = db.onFullTextIndexBuildStart(changes => {
+    const db = inkdrop.localDB
+    const subscription = db.onFullTextIndexBuildEnd(() => {
       console.log('Full-text search index building has been finished')
     });
 
@@ -247,9 +247,9 @@ Provides the ability to subscribe to various events raised by the local database
   <Col sticky>
     <CodeGroup title="Example">
     ```js
-    const db = inkdrop.main.dataStore.getLocalDB()
-    const subscription = db.onFullTextIndexBuildStart(changes => {
-      console.log('Full-text search index building has been failed')
+    const db = inkdrop.localDB
+    const subscription = db.onFullTextIndexBuildError(error => {
+      console.log('Full-text search index building has failed', error)
     });
 
     // Later, dispose

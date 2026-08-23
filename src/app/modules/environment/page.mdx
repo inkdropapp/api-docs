@@ -5,14 +5,34 @@ export const metadata = {
 
 # Environment
 
-Inkdrop global for dealing with packages, themes, menus, and the window.
-An instance of this class is always available as the `inkdrop` global.{{ className: 'lead' }}
+The top-level object representing the Inkdrop application in the renderer process — packages, themes, menus, the local database, and the window.
+Your plugin receives it as the first argument of `activate(env)`.{{ className: 'lead' }}
+
+```ts
+import type { Environment, IInkdropPlugin } from '@inkdropapp/types'
+
+class YourPlugin implements IInkdropPlugin {
+  activate(env: Environment) {
+    env.notifications.addInfo(`Running Inkdrop ${env.appVersion}`)
+  }
+}
+
+export default new YourPlugin()
+```
+
+The same instance is also exposed globally as `inkdrop`, but that global is deprecated and will be sandboxed away in a future release, so take `env` from `activate()` instead.
 
 ---
 
 ## Properties
 
 <Properties>
+  <Property name="appVersion" type="string">
+    The application version string.
+  </Property>
+  <Property name="clipboard" type="object">
+    The system clipboard proxy. See [Electron's `clipboard` is deprecated](/appendix/plugin-migration-from-v5-to-v6#electrons-clipboard-is-deprecated).
+  </Property>
   <Property name="commands" type="object">
     A [CommandRegistry](/modules/command-registry) instance.
   </Property>
@@ -28,8 +48,8 @@ An instance of this class is always available as the `inkdrop` global.{{ classNa
   <Property name="devMode" type="boolean">
     Boolean, true if Development Mode is enabled, false if disabled.
   </Property>
-  <Property name="element" type="component">
-    A React root component.
+  <Property name="dialog" type="object">
+    The native dialog box proxy. See [`remote.dialog` → `inkdrop.dialog`](/appendix/plugin-migration-from-v5-to-v6#remote-dialog-inkdrop-dialog).
   </Property>
   <Property name="keymaps" type="object">
     A [KeymapManager](/modules/keymap-manager) instance.
@@ -37,8 +57,11 @@ An instance of this class is always available as the `inkdrop` global.{{ classNa
   <Property name="layouts" type="object">
     A [LayoutManager](/modules/layout-manager) instance.
   </Property>
-  <Property name="main" type="object">
-    A reference to an [InkdropApplication](/modules/inkdrop-application) instance in the main process.
+  <Property name="localDB" type="object">
+    The local database proxy, with [notes](/data-access/notes), [books](/data-access/books), [tags](/data-access/tags), [files](/data-access/files) and [utils](/data-access/utils) sub-objects plus [change events](/data-access/events). See [Accessing the local database](/guides/access-the-local-database).
+  </Property>
+  <Property name="markdownRenderer" type="object">
+    A [MarkdownRenderer](/modules/markdown-renderer) instance.
   </Property>
   <Property name="menu" type="object">
     A [MenuManager](/modules/menu-manager) instance.
@@ -52,17 +75,20 @@ An instance of this class is always available as the `inkdrop` global.{{ classNa
   <Property name="resourcePath" type="string">
     A path to the app's bundled resource directory. For example, usually `"/Applications/Inkdrop.app/Contents/Resources/app.asar"` on macOS.
   </Property>
-  <Property name="themes" type="object">
-    A [ThemeManager](/modules/theme-manager) instance.
-  </Property>
   <Property name="styles" type="object">
     A [StyleManager](/modules/style-manager) instance.
   </Property>
-  <Property name="store" type="object">
-    A [Redux store](https://redux.js.org/api/store).
+  <Property name="telescope" type="object">
+    The Telescope manager for registering custom sources in the fuzzy finder.
+  </Property>
+  <Property name="themes" type="object">
+    A [ThemeManager](/modules/theme-manager) instance.
+  </Property>
+  <Property name="userDataPath" type="string">
+    The path to [the user's data directory](https://docs.inkdrop.app/reference/user-data-directory).
   </Property>
   <Property name="window" type="object">
-    A [BrowserWindow](https://electronjs.org/docs/api/browser-window) instance of the current window.
+    The IPC proxy for the current window.
   </Property>
 </Properties>
 
@@ -72,12 +98,16 @@ An instance of this class is always available as the `inkdrop` global.{{ classNa
 
 Invoke the given callback when the editor has been loaded.
 
+<Note>
+  Prefer [`ensureEditorLoaded(callback)`](#ensure-editor-loaded), which also covers the case where an editor is already loaded by the time your plugin subscribes. See [`onEditorLoad` → `ensureEditorLoaded`](/appendix/plugin-migration-from-v5-to-v6#on-editor-load-ensure-editor-loaded).
+</Note>
+
 <Row>
   <Col>
     ### Parameters
     <Properties>
       <Property name="callback(editor)" type="function" required>
-        Function to be called when the editor loads, where `editor` is the instance of [MDE](/modules/markdown-editor) that was loaded.
+        Function to be called when the editor loads, where `editor` is the [EditorView](https://codemirror.net/docs/ref/#view.EditorView) instance that was loaded.
       </Property>
     </Properties>
 
@@ -103,6 +133,27 @@ Invoke the given callback when the editor has been unloaded.
 
     ### Returns
     Returns a [Disposable](/event-subscription/disposable) on which `.dispose()` can be called to unsubscribe.
+  </Col>
+</Row>
+
+---
+
+## Ensure Editor Loaded {{ label: 'ensureEditorLoaded(callback)' }}
+
+Run the given callback with the active editor, waiting for one if needed.
+If an editor is already loaded, the callback is invoked immediately; otherwise it is invoked once when the next editor loads, after which the subscription disposes itself.
+
+<Row>
+  <Col>
+    ### Parameters
+    <Properties>
+      <Property name="callback(editor)" type="function" required>
+        Function to be called with the loaded [EditorView](https://codemirror.net/docs/ref/#view.EditorView).
+      </Property>
+    </Properties>
+
+    ### Returns
+    Nothing. In windows without an editor the callback simply never fires rather than throwing.
   </Col>
 </Row>
 
@@ -168,7 +219,7 @@ Retrieve the active editor instance.
 <Row>
   <Col>
     ### Returns
-    Returns an instance of [MDE](/modules/markdown-editor) if the editor is active, otherwise undefined.
+    Returns the active [EditorView](https://codemirror.net/docs/ref/#view.EditorView) if the editor is active, otherwise `null` or `undefined`.
   </Col>
 </Row>
 
@@ -181,7 +232,7 @@ Retrieve the active editor instance or throw an error if it's not available.
 <Row>
   <Col>
     ### Returns
-    Returns an instance of [MDE](/modules/markdown-editor) if the editor is active, otherwise throws an error.
+    Returns the active [EditorView](https://codemirror.net/docs/ref/#view.EditorView) if the editor is active, otherwise throws an error.
   </Col>
 </Row>
 
@@ -195,12 +246,11 @@ Set the currently active editor instance.
   <Col>
     ### Parameters
     <Properties>
-      <Property name="editor" type="MDE" required>
-        The [MDE](/modules/markdown-editor) instance to set as the active editor.
+      <Property name="editor" type="EditorView" required>
+        The [EditorView](https://codemirror.net/docs/ref/#view.EditorView) to set as the active editor, or `null` to clear it.
       </Property>
     </Properties>
   </Col>
 </Row>
 
 ---
-

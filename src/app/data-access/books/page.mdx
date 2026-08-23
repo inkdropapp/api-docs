@@ -154,7 +154,7 @@ The notebook model contains information about your notebook collections, such as
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.main.dataStore.getLocalDB()
+    const db = inkdrop.localDB
     const book = await db.books.get('book:Bk5Ivk0T')
     ```
 
@@ -196,7 +196,7 @@ The notebook model contains information about your notebook collections, such as
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.main.dataStore.getLocalDB()
+    const db = inkdrop.localDB
     const list = await db.books.all()
     ```
 
@@ -242,7 +242,7 @@ The notebook model contains information about your notebook collections, such as
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.main.dataStore.getLocalDB()
+    const db = inkdrop.localDB
     const bookId = await db.books.createId()
     ```
 
@@ -281,7 +281,7 @@ The notebook model contains information about your notebook collections, such as
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.main.dataStore.getLocalDB()
+    const db = inkdrop.localDB
     const isValid = await db.books.validateDocId('book:ak0s1ce6')
     ```
 
@@ -322,7 +322,7 @@ The notebook model contains information about your notebook collections, such as
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.main.dataStore.getLocalDB()
+    const db = inkdrop.localDB
     const result = await db.books.put({
       _id: 'book:9IoGtoCuv',
       updatedAt: 1475549348850,
@@ -377,7 +377,7 @@ The notebook model contains information about your notebook collections, such as
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.main.dataStore.getLocalDB()
+    const db = inkdrop.localDB
     const result = await db.books.remove("book:9IoGtoCuv")
     ```
 
@@ -416,7 +416,7 @@ The notebook model contains information about your notebook collections, such as
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.main.dataStore.getLocalDB()
+    const db = inkdrop.localDB
     const num = await db.books.countAll()
     ```
 
@@ -456,7 +456,7 @@ The notebook model contains information about your notebook collections, such as
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.main.dataStore.getLocalDB()
+    const db = inkdrop.localDB
     const book = await db.books.findWithName('Inbox')
     ```
 

@@ -41,7 +41,7 @@ Create `init.js` in [your data directory](https://docs.inkdrop.app/manual/basic-
 
 ```js
 inkdrop.commands.add(document.body, 'custom:new-journal', async () => {
-  const db = inkdrop.main.dataStore.getLocalDB()
+  const db = inkdrop.localDB
   const template = await db.notes.get('note:bSU-gSHd_')
   const note = {
     ...template,
@@ -67,10 +67,10 @@ inkdrop.commands.add(document.body, 'custom:new-journal', async () => {
 Let's look at the lines we've added.
 
 ```js
-const db = inkdrop.main.dataStore.getLocalDB()
+const db = inkdrop.localDB
 ```
 
-It gets an instance of [the local Inkdrop database](/modules/data-store#get-local-database).
+It gets an instance of [the local Inkdrop database](/guides/access-the-local-database).
 
 ```js
 const template = await db.notes.get('note:bSU-gSHd_')
@@ -175,7 +175,7 @@ Let's make a command named `custom:new-note` in your `init.js`:
 
 ```js
 ;(async () => {
-  const db = inkdrop.main.dataStore.getLocalDB()
+  const db = inkdrop.localDB
   const template = await db.notes.get('note:08zdMqQyj')
 
   inkdrop.commands.add(document.body, 'custom:new-journal', async e => {
@@ -216,7 +216,7 @@ Let's look at the lines we've added.
 
 ```js
 (async () => {
-  const db = inkdrop.main.dataStore.getLocalDB()
+  const db = inkdrop.localDB
   const template = await db.notes.get("note:08zdMqQyj")
 ```
 

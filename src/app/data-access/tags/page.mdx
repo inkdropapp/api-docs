@@ -157,7 +157,7 @@ The tag model contains all the information about your tags, such as their name, 
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.main.dataStore.getLocalDB()
+    const db = inkdrop.localDB
     const tag = await db.tags.get('tag:tBELDUITs')
     ```
 
@@ -199,7 +199,7 @@ The tag model contains all the information about your tags, such as their name, 
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.main.dataStore.getLocalDB()
+    const db = inkdrop.localDB
     const list = await db.tags.all()
     ```
 
@@ -245,7 +245,7 @@ The tag model contains all the information about your tags, such as their name, 
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.main.dataStore.getLocalDB()
+    const db = inkdrop.localDB
     const tagId = await db.tags.createId()
     ```
 
@@ -284,7 +284,7 @@ The tag model contains all the information about your tags, such as their name, 
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.main.dataStore.getLocalDB()
+    const db = inkdrop.localDB
     const isValid = await db.tags.validateDocId('tag:ak0s1ce6')
     ```
 
@@ -325,7 +325,7 @@ The tag model contains all the information about your tags, such as their name, 
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.main.dataStore.getLocalDB()
+    const db = inkdrop.localDB
     const result = await db.tags.put({
       _id: 'tag:9IoGtoCuv',
       updatedAt: 1475549348850,
@@ -380,7 +380,7 @@ The tag model contains all the information about your tags, such as their name, 
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.main.dataStore.getLocalDB()
+    const db = inkdrop.localDB
     const result = await db.tags.remove("tag:9IoGtoCuv")
     ```
 
@@ -419,7 +419,7 @@ The tag model contains all the information about your tags, such as their name, 
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.main.dataStore.getLocalDB()
+    const db = inkdrop.localDB
     const num = await db.tags.countAll()
     ```
 
@@ -459,7 +459,7 @@ The tag model contains all the information about your tags, such as their name, 
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.main.dataStore.getLocalDB()
+    const db = inkdrop.localDB
     const tag = await db.tags.findWithName('Videography')
     ```
 

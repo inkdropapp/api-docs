@@ -361,11 +361,11 @@ class InkdropPlugin implements IInkdropPlugin {
   activate(env: Environment) {
     setEnv(env)
     env.components.registerClass(WordcountMessageDialog)
-    env.layouts.addComponentToLayout('modals', 'WordcountMessageDialog')
+    env.layouts.addComponentToLayout('modal', 'WordcountMessageDialog')
   }
 
   deactivate(env: Environment) {
-    env.layouts.removeComponentFromLayout('modals', 'WordcountMessageDialog')
+    env.layouts.removeComponentFromLayout('modal', 'WordcountMessageDialog')
     env.components.deleteClass(WordcountMessageDialog)
     setEnv(undefined)
   }

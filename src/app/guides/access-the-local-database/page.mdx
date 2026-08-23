@@ -15,14 +15,14 @@ Data is written to the local database first, then synced with the remote databas
 
 ![Data flow](/images/accessing-the-local-database_data-flow.png)
 
-## Accessing the data from plugins (Recommended)
+## Accessing the data from plugins
 
-There is a class called `InkdropDatabase` which wraps PouchDB and provides a bunch of useful methods that help you access the local database for managing notes, notebooks, tags and images.
+`inkdrop.localDB` — or `env.localDB` inside `activate(env)` — is a proxy to the local database, which lives in the main process. It provides a bunch of useful methods that help you manage [notes](/data-access/notes), [notebooks](/data-access/books), [tags](/data-access/tags) and [files](/data-access/files), plus [utilities](/data-access/utils) and [change events](/data-access/events).
 
 For example, below code gets data directly from the local database:
 
 ```js
-const db = inkdrop.main.dataStore.getLocalDB()
+const db = inkdrop.localDB
 
 // Get a note data by note ID
 const note = await db.notes.get('note:F8xUp-23G')
@@ -39,41 +39,11 @@ const { docs } = result
 console.log('Search result:', docs)
 ```
 
-<Note>
-  <strong>NOTE</strong>: Returned objects from the database represent{' '}
-  <a href="https://github.com/electron/remote#remote-objects">Remote Objects</a>
-  . They can be converted into plain objects by calling
-  [`structuredClone(remoteObj)`](https://developer.mozilla.org/en-US/docs/Web/API/structuredClone).
-</Note>
-
 <Resources level={3} />
 
-## Accessing via HTTP (Advanced)
+## Accessing via HTTP
 
 <Note>
   Moved to the <a href="/guides/integrate-with-external-programs">Integrate with External Programs</a> guide.
 </Note>
 
-## Accessing the PouchDB instance (Advanced, not recommended)
-
-There is a global variables named [`inkdrop`](/modules/environment) which allows you to access the internal objects of Inkdrop.
-It has [`main`](/modules/inkdrop-application) property, which is a reference to the inkdrop instance in the main process.
-To access the local PouchDB instance in the main process:
-
-```js
-async function getDatabaseInfo() {
-  const db = inkdrop.main.dataStore.localPouch
-  const info = await db.info()
-  console.log(info.db_name)
-}
-```
-
-In this code, `localPouch` is the instance of PouchDB.
-_Be careful, you could break your database_ by accessing it with PouchDB since its API does not protect you from breaking it.
-Use it only if the data access API does not provide what you would do.
-
-<Note>
-  <strong>NOTE</strong>: Returned objects from the database represent{' '}
-  <a href="https://github.com/electron/remote#remote-objects">Remote Objects</a>
-  .
-</Note>
