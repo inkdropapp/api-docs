@@ -292,7 +292,6 @@ export const navigation: Array<NavGroup> = [
       { title: 'Context Menu Manager', href: '/modules/context-menu-manager' },
       { title: 'Component Manager', href: '/modules/component-manager' },
       { title: 'Environment', href: '/modules/environment' },
-      { title: 'IPM Wrapper', href: '/modules/ipm-wrapper' },
       { title: 'Keymap Manager', href: '/modules/keymap-manager' },
       { title: 'Layout Manager', href: '/modules/layout-manager' },
       { title: 'Markdown Renderer', href: '/modules/markdown-renderer' },
