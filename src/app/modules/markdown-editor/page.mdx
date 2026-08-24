@@ -1,68 +1,39 @@
 export const metadata = {
   title: 'Markdown Editor',
-  description: 'Markdown editor React component.',
+  description:
+    'The CodeMirror based Markdown editor and how plugins interact with it.'
 }
 
 # Markdown Editor
 
-Markdown editor React component. An instance of this class will be loaded when you opened a note.
-You can access it as following:
-
-```js
-const mde = inkdrop.getActiveEditorOrThrowError()
-```
-
-If you are building a plugin that extends the editor, you have to subscribe events to know when it is loaded/unloaded:
-
-```js
-module.exports = {
-  activate() {
-    const editor = inkdrop.getActiveEditor()
-    if (editor) {
-      this.extendEditor(editor)
-    } else {
-      inkdrop.onEditorLoad(this.extendEditor)
-    }
-  },
-
-  deactivate() {
-    const editor = inkdrop.getActiveEditor()
-    if (editor) this.unextendEditor(editor)
-  },
-
-  extendEditor: (editor) => {
-    const { cm } = editor
-  },
-
-  unextendEditor: (editor) => {
-    // unload
-  }
-}
-```
-
-For more information about accessing the editor, refer to [Environment](/modules/environment).
+Inkdrop's Markdown editor is built on [CodeMirror](https://codemirror.net/). The editor instance a plugin interacts with is a CodeMirror [EditorView](https://codemirror.net/docs/ref/#view.EditorView){{ className: 'lead' }}
 
 ---
 
-## Extending the Inkdrop Editor
+## Getting the editor instance
 
 <Row>
   <Col>
-    Inkdrop's editor is built on top of [CodeMirror](https://codemirror.net/5/).
-    You can access its instance via `mde.cm`.
+    The [Environment](/modules/environment) exposes the active editor:
 
-    All available CodeMirror APIs are [documented here](https://codemirror.net/doc/manual.html).
+    - [`getActiveEditor()`](/modules/environment#get-active-editor) — returns the active [EditorView](https://codemirror.net/docs/ref/#view.EditorView), or `null` / `undefined` if none is active
+    - [`getActiveEditorOrThrowError()`](/modules/environment#get-active-editor-with-error-handling) — throws if no editor is active
+    - [`ensureEditorLoaded(callback)`](/modules/environment#ensure-editor-loaded) — runs the callback with the editor: immediately if one is already loaded, otherwise once the next one loads
+
+    Everything CodeMirror offers is available on the view — see the [CodeMirror reference](https://codemirror.net/docs/ref/).
 
   </Col>
   <Col sticky>
-    For example, you can change an editor option like so:
     <CodeGroup title="Example">
+    ```js
+    const view = env.getActiveEditorOrThrowError()
 
-      ```js
-      const mde = inkdrop.getActiveEditorOrThrowError()
-      mde.cm.setOption('lineNumbers', true)
-      ```
+    // Read the document
+    const doc = view.state.doc.toString()
 
+    // Move the cursor to the top
+    view.dispatch({ selection: { anchor: 0 } })
+    ```
     </CodeGroup>
 
   </Col>
@@ -70,15 +41,49 @@ For more information about accessing the editor, refer to [Environment](/modules
 
 ---
 
-## Properties
+## Reacting to the editor lifecycle
 
-<Properties>
-  <Property name="cm" type="CodeMirror.Editor">
-    An instance of [CodeMirror v5](https://codemirror.net/5/).
-  </Property>
-  <Property name="wrapper" type="React.Component">
-    A React component that wraps [CodeMirror](https://codemirror.net/).
-  </Property>
-</Properties>
+<Row>
+  <Col>
+    An editor is created when a note is opened and torn down when it goes away, so don't hold on to a view reference — subscribe instead:
+
+    - [`ensureEditorLoaded(callback)`](/modules/environment#ensure-editor-loaded) — the usual entry point in `activate()`
+    - [`onEditorLoad(callback)`](/modules/environment#editor-load-event) / [`onEditorUnload(callback)`](/modules/environment#editor-unload-event) — fire on every subsequent load / unload; both return a [Disposable](/event-subscription/disposable)
+
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```ts
+    import type { Environment } from '@inkdropapp/types'
+
+    class MyPlugin {
+      activate(env: Environment) {
+        env.ensureEditorLoaded(view => {
+          // the editor is ready
+        })
+      }
+    }
+    ```
+    </CodeGroup>
+
+  </Col>
+</Row>
 
 ---
+
+## Extending the editor
+
+Behavior is added declaratively as CodeMirror [extensions](https://codemirror.net/docs/ref/#state.Extension) through commands:
+
+- [`editor:add-extension` / `editor:remove-extension`](/guides/list-of-commands#editor-add-extension) — register a CodeMirror extension
+- [`editor:add-code-language` / `editor:remove-code-language`](/guides/list-of-commands#editor-add-code-language) — register a code-block language ([LanguageDescription](https://codemirror.net/docs/ref/#language.LanguageDescription))
+- [`editor:add-markdown-extension` / `editor:remove-markdown-extension`](/guides/list-of-commands#editor-add-markdown-extension) — extend the Markdown parser with a `MarkdownExtension` from [@lezer/markdown](https://github.com/lezer-parser/markdown)
+
+A registered extension is kept in the app state and applied to every editor, including ones created later — register once in `activate()`, remove in `deactivate()`. See [Customize the editor](/guides/customize-the-editor) for the full walkthrough.
+
+---
+
+## Styling and keymaps
+
+The editor's root element is `.cm-editor`.
+Use it for [keymap](/modules/keymap-manager) and [context menu](/modules/context-menu-manager) selectors and for CSS. Syntax highlighting emits `.tok-*` classes inside `.cm-editor` — see [Creating a theme](/guides/create-a-theme).

@@ -6,7 +6,9 @@ export const metadata = {
 # Markdown Renderer
 
 Inkdrop's markdown rendering system is built on top of [remark](https://github.com/remarkjs/remark), a markdown processor powered by [plugins](https://github.com/remarkjs/remark/tree/master/doc/plugins.md) part of [the unified collective](https://github.com/unifiedjs/unified).
-You can access a global instance of this class using the code provided below.{{ className: 'lead' }}
+Available as `env.markdownRenderer` on the [Environment](/modules/environment) passed to `activate(env)`.{{ className: 'lead' }}
+
+It is also exported from the `inkdrop` module:
 
 ```js
 const { markdownRenderer } = require('inkdrop')

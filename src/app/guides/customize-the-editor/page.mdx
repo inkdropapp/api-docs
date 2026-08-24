@@ -1,43 +1,119 @@
 export const metadata = {
   title: 'Customize the Editor',
-  description:
-    'Learn how to customize the CodeMirror-based editor',
+  description: 'Learn how to extend the CodeMirror based editor from a plugin'
 }
 
 # Customize the editor
 
-Inkdrop's text editor is built on top of [CodeMirror](https://codemirror.net/) which is specialized for editing code, and comes with a number of [language modes](https://codemirror.net/mode/index.html) and [addons](https://codemirror.net/doc/manual.html#addons) that implement more advanced editing functionality. {{ className: 'lead' }}
+Inkdrop's text editor is built on [CodeMirror](https://codemirror.net/), which is customized through composable [extensions](https://codemirror.net/docs/ref/#state.Extension) — keymaps, view plugins, facets, themes.
+A plugin builds an extension, registers it through a command, and Inkdrop applies it to every editor it creates. {{ className: 'lead' }}
 
-You can access the instance of CodeMirror via [MDE](/modules/markdown-editor) like this:
+## Use CodeMirror packages without bundling them
 
-```js
-inkdrop.getActiveEditor().cm
+Inkdrop ships the `@codemirror/*` packages and provides them to plugins at runtime, so import them as usual but keep them out of your bundle: add the ones you need as `devDependencies` and mark them external in your build config, together with the `inkdrop` module:
+
+```js filename="tsdown.config.js"
+import { defineConfig } from 'tsdown'
+
+export default defineConfig({
+  entry: ['src/index.ts'],
+  outDir: 'lib',
+  format: ['cjs'],
+  outExtensions: () => ({ js: '.js' }),
+  deps: {
+    neverBundle: ['inkdrop', /^@codemirror\//]
+  }
+})
 ```
 
-You can also get a CodeMirror class object by doing `require('codemirror')`.
+Third-party CodeMirror packages (e.g. `@replit/codemirror-vim`) are not provided by the app — let your bundler include those. (Example: [vim](https://github.com/inkdropapp/inkdrop-vim))
 
-## How to install addons to CodeMirror
+## Registering an extension
 
-CodeMirror comes with a bunch of addons available to use.
-But you can't require them like `require('codemirror/addons/fold/foldcode.js')` because it is not in the search path.
-To do so, add a path to the app's `node_modules` to your `require` statements as following:
+Build an extension and dispatch [`editor:add-extension`](/guides/list-of-commands#editor-add-extension). Registered extensions are kept in the app state and applied to **every** editor — including editors created later as the user switches notes — so you register once in `activate()` and remove in `deactivate()`:
 
-```js
-const app = require('electron').remote.app
-const modulePath = app.getAppPath() + '/node_modules/'
-require(modulePath + 'codemirror/addon/fold/foldcode.js')
-require(modulePath + 'codemirror/addon/fold/foldgutter.js')
-require(modulePath + 'codemirror/addon/fold/markdown-fold.js')
+```ts filename="src/index.ts"
+import type { Extension } from '@codemirror/state'
+import { highlightTrailingWhitespace } from '@codemirror/view'
+import type { Environment, IInkdropPlugin } from '@inkdropapp/types'
+
+import { getEnv, setEnv } from './env'
+
+class MyPlugin implements IInkdropPlugin {
+  extension: Extension | null = null
+
+  activate(env: Environment) {
+    setEnv(env)
+    this.extension = highlightTrailingWhitespace()
+    env.ensureEditorLoaded(() => {
+      env.commands.dispatch(document.body, 'editor:add-extension', {
+        extension: this.extension
+      })
+    })
+  }
+
+  deactivate() {
+    getEnv().commands.dispatch(document.body, 'editor:remove-extension', {
+      extension: this.extension
+    })
+    this.extension = null
+    setEnv(undefined)
+  }
+}
+
+export default new MyPlugin()
 ```
 
-## When to customize the editor
+`setEnv` / `getEnv` is the small helper that captures the [Environment](/modules/environment) handed to `activate()` so your plugin's other modules can reach it — the [Word Count plugin walkthrough](/guides/plugin-word-count#understanding-the-generated-code) shows the helper itself.
 
-If you are building a plugin which changes CodeMirror's behaviors, you have to subscribe events to know when the editor is ready.
-`global.inkdrop` provides two methods to subscribe events on the editor. You can use them like so:
+Two details worth knowing:
 
-```js
-global.inkdrop.onEditorLoad(editor => console.log('Editor loaded'))
-global.inkdrop.onEditorUnload(() => console.log('Editor unloaded'))
+- **Removal is by identity.** `editor:remove-extension` removes the exact object you added — keep the reference around, as the `extension` field above does. Every `highlightTrailingWhitespace()` call returns a fresh instance, so a rebuilt extension would not match.
+- **Adding the same reference twice is a no-op**, so dispatching again (e.g. when a config option toggles a feature back on) is harmless.
+
+For a real-world example, the official [vim plugin](https://github.com/inkdropapp/inkdrop-vim) wires `@replit/codemirror-vim` into the editor exactly this way — and toggles an optional relative-line-numbers extension by add/remove-dispatching it whenever its config value changes.
+
+## Adding a code-block language
+
+Code blocks are highlighted by language. To register an additional language, dispatch [`editor:add-code-language`](/guides/list-of-commands#editor-add-code-language) with a [LanguageDescription](https://codemirror.net/docs/ref/#language.LanguageDescription):
+
+```ts
+import { LanguageDescription } from '@codemirror/language'
+
+const myLang = LanguageDescription.of({
+  name: 'mylang',
+  extensions: ['mylang'],
+  load: async () => {
+    const { myLanguageSupport } = await import('./language.js')
+    return myLanguageSupport()
+  }
+})
+
+inkdrop.commands.dispatch(document.body, 'editor:add-code-language', {
+  lang: myLang
+})
 ```
 
-See also [this page](/modules/environment#editor-load-event) for more detail about the event subscription.
+Remove it in `deactivate()` with [`editor:remove-code-language`](/guides/list-of-commands#editor-remove-code-language), which takes the language `name`.
+
+## Extending the Markdown syntax
+
+The Markdown parser itself is a [Lezer](https://lezer.codemirror.net/) grammar and accepts `MarkdownExtension`s from [@lezer/markdown](https://github.com/lezer-parser/markdown). Register one with [`editor:add-markdown-extension`](/guides/list-of-commands#editor-add-markdown-extension) to support custom Markdown syntax in the editor.
+
+## Toggling editor options
+
+Line numbers, line wrapping and readable line width are user settings rather than CodeMirror options. Flip them through the [Config](/modules/config) — `inkdrop.config.set('editor.lineNumbers', true)` — or dispatch the matching commands: [`editor:toggle-line-numbers`](/guides/list-of-commands#editor-toggle-line-numbers), [`editor:toggle-line-wrapping`](/guides/list-of-commands#editor-toggle-line-wrapping).
+
+## Keymaps and styling
+
+Key bindings belong in Inkdrop's [keymap system](/modules/keymap-manager), not in a CodeMirror `keymap.of(…)` extension — bindings shipped as JSON are visible in the Keybindings preferences pane and can be overridden by the user's `keymap.json`, while a CodeMirror keymap bypasses both. Register a [command](/modules/command-registry) and bind it on the editor with the `.cm-editor` selector:
+
+```json filename="keymaps/my-plugin.json"
+{
+  ".cm-editor": {
+    "ctrl-shift-down": "editor:select-lines-downward"
+  }
+}
+```
+
+For styling, target `.cm-editor` and the `.tok-*` syntax token classes — see [Creating a theme](/guides/create-a-theme) and [Style tweaks](/guides/style-tweaks).
