@@ -78,6 +78,9 @@ The same instance is also exposed globally as `inkdrop`, but that global is depr
   <Property name="resourcePath" type="string">
     A path to the app's bundled resource directory. For example, usually `"/Applications/Inkdrop.app/Contents/Resources/app.asar"` on macOS.
   </Property>
+  <Property name="store" type="object">
+    The [Redux store](https://redux.js.org/api/store) holding the [app state](/states). Use `store.getState()` to read it and `store.dispatch()` to run an [action](/actions) — see [Getting & modifying the app state](/guides/flux-architecture).
+  </Property>
   <Property name="styles" type="object">
     A [StyleManager](/modules/style-manager) instance.
   </Property>
