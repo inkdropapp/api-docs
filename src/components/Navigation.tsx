@@ -302,6 +302,7 @@ export const navigation: Array<NavGroup> = [
       { title: 'Package', href: '/modules/package' },
       { title: 'Package Manager', href: '/modules/package-manager' },
       { title: 'Style Manager', href: '/modules/style-manager' },
+      { title: 'Telescope Manager', href: '/modules/telescope-manager' },
       { title: 'Theme Manager', href: '/modules/theme-manager' }
     ]
   },

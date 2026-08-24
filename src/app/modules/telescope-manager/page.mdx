@@ -1,0 +1,676 @@
+export const metadata = {
+  title: 'Telescope Manager',
+  description: 'The Telescope Manager holds the sources behind Inkdrop\'s fuzzy finder and lets plugins register their own.',
+}
+
+# Telescope Manager
+
+[Telescope](https://docs.inkdrop.app/manual/quick-finder) is a highly extensible fuzzy finder over a set of various sources, such as commands, notebooks and tags.
+The Telescope Manager holds those sources and lets your plugin register its own.
+Available as `env.telescope` on the [Environment](/modules/environment) passed to `activate(env)`.{{ className: 'lead' }}
+
+Open it with [`core:toggle-telescope`](/guides/list-of-commands#core-toggle-telescope), or jump straight to one source with [`core:show-telescope`](/guides/list-of-commands#core-show-telescope) and its `scopedSourceId` argument — see [Opening your source directly](#opening-your-source-directly).
+
+## Built-in sources
+
+Each source has an `id`, and most also have an alias — type it followed by a <kbd>Space</kbd> in the Telescope input to scope the search to that source.
+The space is what commits the prefix, so `b` on its own still searches everything while `b ` switches to Notebooks. The `id` works as a prefix too, so `books ` does the same thing.
+
+| Source    | `id`       | Default alias | Description             |
+| --------- | ---------- | ------------- | ----------------------- |
+| Commands  | `commands` | `>`           | Search and run commands |
+| Notebooks | `books`    | `b`           | Search notebooks        |
+| Tags      | `tags`     | `t`           | Search tags             |
+| Index     | `index`    | —             | Search sources          |
+
+The **Index** source is special: it lists the other available sources so the user can pick one, and it is reached through [`getIndexSource()`](#get-the-index-source) rather than being part of the registered set.
+
+Users can override an alias or turn a source off entirely from [`config.json`](https://docs.inkdrop.app/reference/user-data-directory), and your source gets the same treatment for free:
+
+```json
+{
+  "telescope": {
+    "sources": {
+      "my-plugin-source": { "alias": "m", "disabled": false }
+    }
+  }
+}
+```
+
+---
+
+## Creating a source
+
+A source is a class extending `TelescopeSource`, which Inkdrop provides at runtime through the `inkdrop` module — so import it from there, and keep `inkdrop` out of your bundle.
+You implement two methods: `getItems()` returns what to show for the current query, and `apply()` runs when the user picks one of your items.
+
+```ts {{ filename: 'src/my-source.ts' }}
+import { TelescopeSource } from 'inkdrop'
+import type {
+  TelescopeContext,
+  TelescopeResult,
+  TelescopeSourceItem
+} from '@inkdropapp/types'
+
+import { getEnv } from './env'
+
+export class MyPluginSource extends TelescopeSource {
+  id = 'my-plugin-source'
+  name = 'My Plugin'
+  description = 'Search my plugin'
+  defaultAlias = 'm'
+
+  getItems(context: TelescopeContext): TelescopeResult {
+    return {
+      options: [
+        {
+          id: 'say-hello',
+          type: 'Action',
+          label: 'Say hello',
+          detail: context.query,
+          source: this.id,
+          actions: [{ type: 'run', label: 'Run' }]
+        }
+      ]
+    }
+  }
+
+  apply(item: TelescopeSourceItem, action: string): boolean {
+    if (action === 'run') {
+      getEnv().notifications.addInfo(`Hello from ${item.label}!`)
+    }
+    return true
+  }
+}
+```
+
+Register it in `activate()` and remove it in `deactivate()`:
+
+```ts {{ filename: 'src/index.ts' }}
+import type { Environment, IInkdropPlugin } from '@inkdropapp/types'
+
+import { setEnv } from './env'
+import { MyPluginSource } from './my-source'
+
+class MyPlugin implements IInkdropPlugin {
+  source = new MyPluginSource()
+
+  activate(env: Environment) {
+    setEnv(env)
+    env.telescope.registerSource(this.source)
+  }
+
+  deactivate(env: Environment) {
+    env.telescope.unregisterSource(this.source.id)
+    setEnv(undefined)
+  }
+}
+
+export default new MyPlugin()
+```
+
+<Note>
+  `unregisterSource` takes the source **id**, not the instance. `getEnv()` is the
+  small helper — shown in the [Word Count plugin
+  walkthrough](/guides/plugin-word-count#understanding-the-generated-code) — that
+  captures the [Environment](/modules/environment) handed to `activate()` so your
+  source class can reach it too.
+</Note>
+
+### Opening your source directly
+
+Registering a source is enough for the user to reach it by typing its alias, but a source usually wants its own keystroke too.
+Add a command that dispatches [`core:show-telescope`](/guides/list-of-commands#core-show-telescope) scoped to your `id` — inside `activate()`, alongside the `registerSource()` call above:
+
+```ts {{ filename: 'src/index.ts' }}
+this.disposable = env.commands.add(document.body, {
+  'my-plugin:show': () => {
+    env.commands.dispatch(document.body, 'core:show-telescope', {
+      scopedSourceId: this.source.id,
+      initialSelectedItemId: 'say-hello',
+      cancelBehavior: 'close'
+    })
+  }
+})
+```
+
+`initialSelectedItemId` preselects one of your items — the `id` you gave it in `getItems()` — which is how a source can open with the row matching the current context already highlighted.
+`cancelBehavior: 'close'` makes <kbd>Esc</kbd> on an empty query dismiss Telescope outright, and hides the back button, instead of unscoping back to all sources first — the right choice when your command is the only reason Telescope is open. Leave it out (or pass `'backToIndex'`) to keep the default step-back.
+
+Dispose it in `deactivate()` next to `unregisterSource()`, then bind it from your plugin's [keymap](/guides/plugin-word-count#keymaps).
+
+### Example plugins
+
+Two small plugins that do little besides add a source, worth reading end to end:
+
+- [telescope-toc](https://github.com/inkdropapp/telescope-toc) — a table of contents for the note you are editing. Reads the editor's syntax tree in `getItems()`, shows heading depth and line number through [`prefix` and `detail`](#telescope-source-item), holds document order with [`boost`](#telescope-source-item), and gives its source a keystroke that opens Telescope with the section under the cursor already selected.
+- [telescope-themes](https://github.com/inkdropapp/telescope-themes) — switches between the installed themes. Draws a colour swatch per row from the item's [`icon`](#telescope-source-item), marks the active theme with an [`accessoryView`](#telescope-source-item), and applies the pick from `apply()`.
+
+---
+
+## Properties
+
+<Properties>
+  <Property name="availableSources" type="Map<string, TelescopeSource>">
+    Every registered source, keyed by `id`. Note that this is the raw registry — unlike [`getAvailableSources()`](#get-available-sources), it is not filtered by whether each source is enabled or currently available.
+  </Property>
+</Properties>
+
+---
+
+## Register a source {{ label: 'registerSource(source)' }}
+
+<Row>
+  <Col>
+    Adds a source to the registry. Registering a source whose `id` is already taken replaces it, while keeping its original position in the source order.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="source" type="TelescopeSource" required>
+        The source to register.
+      </Property>
+    </Properties>
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    env.telescope.registerSource(new MyPluginSource())
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Unregister a source {{ label: 'unregisterSource(sourceId)' }}
+
+<Row>
+  <Col>
+    Removes a source from the registry by its `id`.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="sourceId" type="string" required>
+        The `id` of the source to remove.
+      </Property>
+    </Properties>
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    env.telescope.unregisterSource('my-plugin-source')
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Get a source {{ label: 'getSource(sourceId)' }}
+
+<Row>
+  <Col>
+    Looks up a registered source by its `id`, regardless of whether it is enabled or available.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="sourceId" type="string" required>
+        The `id` of the source to get.
+      </Property>
+    </Properties>
+
+    ### Returns
+    The matching `TelescopeSource`, or `undefined` if nothing is registered under that `id`.
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    const source = env.telescope.getSource('books')
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Get all sources {{ label: 'getAllSources()' }}
+
+<Row>
+  <Col>
+    Returns every registered source that is **enabled**, in registration order. Sources the user has disabled in `config.json` are left out.
+
+    ### Returns
+    An Array of `TelescopeSource`.
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    const ids = env.telescope.getAllSources().map(source => source.id)
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Get available sources {{ label: 'getAvailableSources()' }}
+
+<Row>
+  <Col>
+    Same as [`getAllSources()`](#get-all-sources), narrowed further to the sources whose `isAvailable()` returns `true` for the current app state — this is the set Telescope actually offers the user right now.
+
+    ### Returns
+    An Array of `TelescopeSource`.
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    const sources = env.telescope.getAvailableSources()
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Get the source for a prefix {{ label: 'getActiveSourceForPrefix(prefix)' }}
+
+<Row>
+  <Col>
+    Finds the available source matching a typed prefix — the prefix matches either a source's `id` or its [alias](#get-the-alias).
+
+    ### Parameters
+
+    <Properties>
+      <Property name="prefix" type="string" required>
+        The prefix to match, e.g. `"b"` or `"books"`.
+      </Property>
+    </Properties>
+
+    ### Returns
+    The matching `TelescopeSource`, or `null` if no available source matches.
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    const source = env.telescope.getActiveSourceForPrefix('b')
+    // -> the Notebooks source
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Get the index source {{ label: 'getIndexSource()' }}
+
+<Row>
+  <Col>
+    Returns the built-in **Index** source, which lists the available sources themselves so the user can pick one to scope the search to.
+    It is held separately from the registry, so it never appears in `getAllSources()`.
+
+    ### Returns
+    A `TelescopeSource`.
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    const index = env.telescope.getIndexSource()
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Get items from every source {{ label: 'getSourceItems(context)' }}
+
+<Row>
+  <Col>
+    Calls `getItems()` on every source from [`getAllSources()`](#get-all-sources) in parallel and collects the results.
+
+    This is a convenience for querying every source at once; it is not what the Telescope UI runs. Typing drives each source separately from [`getAvailableSources()`](#get-available-sources) — or the [index source](#get-the-index-source) alone while the query is empty — so a source can resolve and render as soon as it is ready.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="context" type="TelescopeContext" required>
+        The context to pass to each source. See [TelescopeContext](#telescope-context).
+      </Property>
+    </Properties>
+
+    ### Returns
+    A Promise resolving to an Array of [TelescopeResult](#telescope-result) — one per source, in the same order — or `null` if any source threw.
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    const results = await env.telescope.getSourceItems(context)
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## TelescopeSource
+
+The base class for a source. Import it from the `inkdrop` module and extend it, implementing at least `id`, `name`, `description`, `getItems()` and `apply()`.
+
+```js
+import { TelescopeSource } from 'inkdrop'
+```
+
+### Source properties
+
+<Properties>
+  <Property name="id" type="string" required>
+    A unique identifier for the source, e.g. `"books"`. It doubles as a prefix the user can type, and as the key under `telescope.sources` in `config.json`.
+  </Property>
+  <Property name="name" type="string" required>
+    A human-readable name for the source, e.g. `"Notebooks"`. Nothing in the current UI renders it — `description` is what the [index source](#get-the-index-source) shows — so treat it as a label for tooling and future surfaces.
+  </Property>
+  <Property name="description" type="string" required>
+    What the source searches, e.g. `"Search notebooks"`. It is shown as the source's label in the [index source](#get-the-index-source).
+  </Property>
+  <Property name="defaultAlias" type="string">
+    A short prefix that scopes the search to this source, e.g. `"b"`. The user can override it with `telescope.sources.<id>.alias` in `config.json`.
+  </Property>
+</Properties>
+
+---
+
+### Get the items {{ label: 'getItems(context)' }}
+
+<Row>
+  <Col>
+    **Required.** Produces the items to show for the current query. It may return synchronously or as a Promise, so it is fine to hit the database or the network here — but check `context.aborted` before doing expensive work, since the user may have typed on.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="context" type="TelescopeContext" required>
+        The current query and state. See [TelescopeContext](#telescope-context).
+      </Property>
+    </Properties>
+
+    ### Returns
+    A [TelescopeResult](#telescope-result), or a Promise of one.
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    getItems(context) {
+      return {
+        options: [
+          {
+            id: 'say-hello',
+            type: 'Action',
+            label: 'Say hello',
+            source: this.id
+          }
+        ]
+      }
+    }
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+### Apply an item {{ label: 'apply(item, action)' }}
+
+<Row>
+  <Col>
+    **Required.** Runs when the user picks one of your items. `action` is the `type` of the [action](#telescope-action) they chose — with no modifier key held, that is the first action in the item's `actions` array.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="item" type="TelescopeSourceItem" required>
+        The item the user selected. See [TelescopeSourceItem](#telescope-source-item).
+      </Property>
+      <Property name="action" type="string" required>
+        The `type` of the chosen action.
+      </Property>
+    </Properties>
+
+    ### Returns
+    A Boolean: `true` closes the Telescope bar, `false` leaves it open — useful when the item drills down into another view instead of finishing the interaction.
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    apply(item, action) {
+      if (action === 'run') {
+        getEnv().notifications.addInfo(item.label)
+      }
+      return true
+    }
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+### Get the icon {{ label: 'getIcon()' }}
+
+<Row>
+  <Col>
+    Optional. Returns the icon shown for the source itself, in the row the [index source](#get-the-index-source) renders for it.
+
+    Return a React node — Inkdrop does not expose its own icon set to plugins, so ship the SVG with your plugin. The signature also permits a `String`, but the return value is rendered as a React child, so a string of markup comes out as escaped text.
+
+    <Warning>
+      The index source reads `getIcon` off your instance and calls it unbound, so `this` is `undefined` inside it. Keep the method self-contained — reach for [`getEnv()`](/guides/plugin-word-count#understanding-the-generated-code) instead of `this` if it needs anything from the app.
+    </Warning>
+
+    ### Returns
+    A React node.
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```jsx
+    const OutlineIcon = () => (
+      <svg width="16" height="16" viewBox="0 0 16 16"
+        fill="none" stroke="currentColor" strokeWidth="1.5">
+        <line x1="5.5" y1="3" x2="14" y2="3" />
+        <line x1="5.5" y1="8" x2="14" y2="8" />
+        <line x1="5.5" y1="13" x2="14" y2="13" />
+      </svg>
+    )
+
+    getIcon() {
+      return <OutlineIcon />
+    }
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+### Get the alias {{ label: 'getAlias()' }}
+
+<Row>
+  <Col>
+    Returns the prefix that scopes the search to this source, reading `telescope.sources.<id>.alias` from the [Config](/modules/config) and falling back to `defaultAlias`.
+    You inherit this — override it only if the alias has to be computed.
+
+    ### Returns
+    A String, or `undefined` if the source has neither a configured alias nor a `defaultAlias`.
+  </Col>
+</Row>
+
+---
+
+### Is the source enabled {{ label: 'isEnabled()' }}
+
+<Row>
+  <Col>
+    Returns whether the user has kept this source on, reading `telescope.sources.<id>.disabled` from the [Config](/modules/config).
+    You inherit this, and rarely need to override it.
+
+    ### Returns
+    A Boolean. Defaults to `true`.
+  </Col>
+</Row>
+
+---
+
+### Is the source available {{ label: 'isAvailable()' }}
+
+<Row>
+  <Col>
+    Returns whether the source makes sense in the current app state. Override it when your source depends on something that isn't always there — the built-in Notebooks source, for instance, hides itself while the sidebar is closed or distraction-free mode is on.
+
+    ### Returns
+    A Boolean. Defaults to `true`.
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    isAvailable() {
+      const { mainLayout } = getEnv().store.getState()
+      return mainLayout.sidebarVisible
+    }
+    ```
+    </CodeGroup>
+  </Col>
+</Row>
+
+---
+
+## Types
+
+### TelescopeContext
+
+The query and state handed to [`getItems()`](#get-the-items).
+
+<Properties>
+  <Property name="query" type="string">
+    The text the user has typed, with any source prefix already stripped.
+  </Property>
+  <Property name="activeElement" type="HTMLElement">
+    The element that was focused when Telescope opened, falling back to `document.body`.
+  </Property>
+  <Property name="workspaceId" type="string | null">
+    The workspace the search is scoped to, or `null` when it isn't scoped.
+  </Property>
+  <Property name="aborted" type="boolean">
+    Whether the query has been superseded. Check this in an async `getItems()` to bail out of work whose result would be thrown away.
+  </Property>
+  <Property name="addEventListener(type, listener)" type="function">
+    Registers an abort handler. `type` is always `"abort"`.
+  </Property>
+</Properties>
+
+---
+
+### TelescopeResult
+
+What [`getItems()`](#get-the-items) returns.
+
+<Properties>
+  <Property name="options" type="Array<TelescopeSourceItem>" required>
+    The items to display. See [TelescopeSourceItem](#telescope-source-item).
+  </Property>
+  <Property name="filter" type="boolean">
+    Whether Telescope should fuzzy-filter and score your items against the query. Set it to `false` when you have already filtered them yourself — they are then all shown, in the order given, above the filtered ones. Defaults to `true`.
+  </Property>
+  <Property name="getMatch" type="(item, matched?) => readonly number[]">
+    Computes which ranges of an item's `displayLabel` to highlight. Return a flat Array of numbers where each adjacent pair is a start and end offset. Only needed for items that set `displayLabel`.
+  </Property>
+</Properties>
+
+---
+
+### TelescopeSourceItem
+
+A single row in the Telescope list.
+
+<Properties>
+  <Property name="id" type="string" required>
+    A unique identifier for the item. Telescope merges every source's items into one list and resolves both the selection and the picked item by `id` alone, so it has to be unique across **all** sources, not just yours — namespace it, the way the built-in Commands source emits `command:core-open-note`.
+  </Property>
+  <Property name="type" type="string" required>
+    A short kind label shown on the right side of the row, e.g. `"Notebook"`.
+  </Property>
+  <Property name="label" type="string" required>
+    The text shown for the item, and what the query is matched against.
+  </Property>
+  <Property name="source" type="string" required>
+    The `id` of the source that produced the item — set it to `this.id`.
+  </Property>
+  <Property name="labelClass" type="string">
+    An extra CSS class for the label element.
+  </Property>
+  <Property name="displayLabel" type="string">
+    Renders instead of `label` without affecting matching. Pair it with the result's `getMatch` to keep characters highlighted.
+  </Property>
+  <Property name="prefix" type="string">
+    A short piece of information shown before the label, in a dimmer style.
+  </Property>
+  <Property name="detail" type="string">
+    A short piece of information shown after the label, in a dimmer style.
+  </Property>
+  <Property name="boost" type="number">
+    Nudges the item's rank against equally-matching items. A number from `-99` to `99`; positive moves it up, negative moves it down. It is added to the fuzzy-match score, so it is ignored entirely when the result sets `filter: false`.
+
+    Deriving it from the item's position is a handy way to keep your own ordering as a tiebreak while still letting the query filter — a table of contents can pass `boost: items.length - index` so headings stay in document order.
+  </Property>
+  <Property name="icon" type="string | () => React.ReactNode">
+    An icon for the left side of the row. A function returning a React node is the usual choice; a String has to be raw SVG markup starting with `<svg`, which is injected as HTML. Any other String renders nothing.
+  </Property>
+  <Property name="accessoryView" type="string | () => React.ReactNode">
+    A custom view for the right side of the row, after `type`. A function returning a React node, or a String rendered as plain text.
+  </Property>
+  <Property name="actions" type="Array<TelescopeAction>">
+    What the user can do with the item. See [TelescopeAction](#telescope-action). An item with no actions cannot be picked at all — <kbd>Enter</kbd> does nothing and `apply()` is never called — so give every selectable item at least one.
+  </Property>
+</Properties>
+
+---
+
+### TelescopeAction
+
+One of the things a user can do with an item. Telescope picks the first action whose `modifierKeys` are all held; if none matches, it falls back to `actions[0]`.
+So the **first** action in the array is the default — the one that runs on a bare <kbd>Enter</kbd> — whether or not it declares `modifierKeys`. Put the plain one first.
+Whichever is chosen, its `type` is passed to [`apply()`](#apply-an-item).
+
+<Properties>
+  <Property name="type" type="string" required>
+    The identifier passed to `apply()` as its `action` argument, e.g. `"open"`.
+  </Property>
+  <Property name="label" type="string" required>
+    The text shown for the action in the footer hint at the bottom of Telescope, e.g. `"Open Notebook"`, next to the keystroke that runs it.
+  </Property>
+  <Property name="icon" type="string">
+    Accepted but not yet rendered anywhere.
+  </Property>
+  <Property name="modifierKeys" type="Array<TelescopeModifierKey>">
+    The modifiers that select this action. All of them must be held for it to match. Leave it off the default action.
+  </Property>
+</Properties>
+
+### TelescopeModifierKey
+
+An enum of `"alt"`, `"shift"`, `"ctrl"`, `"cmd"`, and `"cmd-or-ctrl"` — the last resolving to <kbd>Cmd</kbd> on macOS and <kbd>Ctrl</kbd> elsewhere.
+
+```ts
+import { TelescopeModifierKey } from '@inkdropapp/types'
+
+actions: [
+  { type: 'open', label: 'Open Notebook' },
+  {
+    type: 'open-workspace',
+    label: 'Open as Workspace',
+    modifierKeys: [TelescopeModifierKey.CmdOrCtrl]
+  }
+]
+```
