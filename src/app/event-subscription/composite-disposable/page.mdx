@@ -15,7 +15,7 @@ import { CompositeDisposable } from 'event-kit'
 class Something {
   constructor() {
     this.disposables = new CompositeDisposable();
-    const db = inkdrop.localDB;
+    const db = env.localDB;
 
     this.disposables.add(db.onChange(() => {}));
     this.disposables.add(db.onNoteChange(() => {}));
@@ -89,7 +89,7 @@ class Something {
     ```js
     const subscriptions = new CompositeDisposable()
 
-    const db = inkdrop.localDB;
+    const db = env.localDB;
     subscriptions.add(db.onChange(() => {}));
     subscriptions.add(db.onNoteChange(() => {}));
     ```
@@ -118,7 +118,7 @@ class Something {
     ```js
     const subscriptions = new CompositeDisposable()
 
-    const db = inkdrop.localDB;
+    const db = env.localDB;
     const disposable = db.onNoteChange(() => {});
     subscriptions.add(disposable);
 

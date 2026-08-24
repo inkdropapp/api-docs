@@ -48,7 +48,7 @@ Provides convenient methods for managing documents in the local database.
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.localDB
+    const db = env.localDB
     const results = await db.utils.search('foobar', { sort: [ { updatedAt: 'asc' } ], limit: 20 })
     ```
 
@@ -129,7 +129,7 @@ Provides convenient methods for managing documents in the local database.
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.localDB
+    const db = env.localDB
     const count = await db.utils.countNotesWithTag('tag:exampleTagId')
     ```
 
@@ -169,7 +169,7 @@ Provides convenient methods for managing documents in the local database.
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.localDB
+    const db = env.localDB
     await db.utils.deleteTag('tag:tBELDUITs')
     ```
 
@@ -207,7 +207,7 @@ Provides convenient methods for managing documents in the local database.
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.localDB
+    const db = env.localDB
     await db.utils.moveNoteToBook('note:BKzzd8iGK', 'book:4eeb997c')
     ```
 
@@ -245,7 +245,7 @@ Provides convenient methods for managing documents in the local database.
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.localDB
+    const db = env.localDB
     await db.utils.moveNoteToBookBatch(["note:BKzzd8iGK", "note:8eea9f7c"], 'book:4eeb997c')
     ```
 
@@ -280,7 +280,7 @@ Provides convenient methods for managing documents in the local database.
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.localDB
+    const db = env.localDB
     await db.utils.duplicateNote("note:BKzzd8iGK")
     ```
 
@@ -315,7 +315,7 @@ Provides convenient methods for managing documents in the local database.
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.localDB
+    const db = env.localDB
     await db.utils.duplicateNoteBatch(["note:BKzzd8iGK", "note:8eea9f7c"])
     ```
 
@@ -349,7 +349,7 @@ Provides convenient methods for managing documents in the local database.
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.localDB
+    const db = env.localDB
     await db.utils.moveNotesToTrashOrDelete(["note:BKzzd8iGK", "note:8eea9f7c"])
     ```
 
@@ -373,7 +373,7 @@ Provides convenient methods for managing documents in the local database.
   <Col sticky>
     <CodeGroup title="Request">
     ```js
-    const db = inkdrop.localDB
+    const db = env.localDB
     await db.utils.emptyTrash()
     ```
     </CodeGroup>
@@ -407,7 +407,7 @@ Provides convenient methods for managing documents in the local database.
   <Col sticky>
     <CodeGroup title="Request">
     ```js
-    const db = inkdrop.localDB
+    const db = env.localDB
     await db.utils.setTagsBatch(["note:BKzzd8iGK", "note:8eea9f7c"], ["tag:tBELDUITs"])
     ```
     </CodeGroup>
@@ -437,7 +437,7 @@ Provides convenient methods for managing documents in the local database.
   <Col sticky>
     <CodeGroup title="Request">
     ```js
-    const db = inkdrop.localDB
+    const db = env.localDB
     await db.utils.setStatusBatch(["note:BKzzd8iGK", "note:8eea9f7c"], "completed")
     ```
     </CodeGroup>
@@ -471,7 +471,7 @@ Provides convenient methods for managing documents in the local database.
   <Col sticky>
     <CodeGroup title="Request">
     ```js
-    const db = inkdrop.localDB
+    const db = env.localDB
     await db.utils.moveBook("book:tjnPbJakw", "book:Bk5Ivk0T")
     ```
     </CodeGroup>
@@ -502,7 +502,7 @@ Provides convenient methods for managing documents in the local database.
   <Col sticky>
     <CodeGroup title="Request">
     ```js
-    const db = inkdrop.localDB
+    const db = env.localDB
     await db.utils.deleteBook("book:tjnPbJakw")
     ```
     </CodeGroup>
@@ -533,7 +533,7 @@ Provides convenient methods for managing documents in the local database.
   <Col sticky>
     <CodeGroup title="Request">
     ```js
-    const db = inkdrop.localDB
+    const db = env.localDB
     await db.utils.getBufferFromFile("file:5c2c2b2c")
     ```
     </CodeGroup>

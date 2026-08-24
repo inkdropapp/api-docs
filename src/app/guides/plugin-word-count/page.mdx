@@ -290,7 +290,7 @@ import { getEnv } from './env'
 
 export const WordcountMessageDialog: React.FC = () => {
   const modal = useModal()
-  const Dialog = inkdrop.components.getComponentClass('Dialog') as DialogClass
+  const Dialog = getEnv().components.getComponentClass('Dialog') as DialogClass
 
   const toggle = useCallback(() => {
     modal.show()
@@ -321,7 +321,7 @@ export const WordcountMessageDialog: React.FC = () => {
 It grabs the built-in `Dialog` component from [the component manager](/modules/component-manager):
 
 ```ts
-const Dialog = inkdrop.components.getComponentClass('Dialog') as DialogClass
+const Dialog = getEnv().components.getComponentClass('Dialog') as DialogClass
 ```
 
 `getComponentClass` replaces v5's `inkdrop.components.classes.Dialog`. The `as DialogClass` cast restores the `Dialog.Title` / `Dialog.Content` / `Dialog.Actions` sub-component types from [`@inkdropapp/types`](https://github.com/inkdropapp/types).
@@ -417,7 +417,7 @@ const [count, setCount] = useState(0)
 ```
 
 The app state is managed with [Redux](https://react-redux.js.org/).
-You can refer the state via [inkdrop.store](/modules/environment) or the Redux function.
+You can refer the state via [`env.store`](/modules/environment) or the Redux function.
 In this example, we use [useSelector](https://react-redux.js.org/api/hooks) function to get the current state of [the editing note](/states/editing-note) like so:
 
 ```js
@@ -478,7 +478,7 @@ const selectEditingNoteBody = (state: { editingNote?: { body: string } }) =>
 
 export const WordcountMessageDialog: React.FC = () => {
   const modal = useModal()
-  const Dialog = inkdrop.components.getComponentClass('Dialog') as DialogClass
+  const Dialog = getEnv().components.getComponentClass('Dialog') as DialogClass
   const [count, setCount] = useState(0)
   const noteBody = useSelector(selectEditingNoteBody)
 

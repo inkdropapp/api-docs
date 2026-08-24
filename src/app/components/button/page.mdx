@@ -16,7 +16,7 @@ To get the class of the `Button` component:
 ```tsx
 import type { ButtonProps } from '@inkdropapp/types'
 
-const Button = inkdrop.components.getComponentClass<ButtonProps>('Button')
+const Button = env.components.getComponentClass<ButtonProps>('Button')
 ```
 
 ## Props
@@ -48,11 +48,13 @@ type ButtonProps = {
 import React, { useCallback } from 'react'
 import type { ButtonProps } from '@inkdropapp/types'
 
+import { getEnv } from './env'
+
 const SaveButton: React.FC = () => {
-  const Button = inkdrop.components.getComponentClass<ButtonProps>('Button')
+  const Button = getEnv().components.getComponentClass<ButtonProps>('Button')
 
   const onClick = useCallback(() => {
-    inkdrop.commands.dispatch(document.body, 'core:save-note')
+    getEnv().commands.dispatch(document.body, 'core:save-note')
   }, [])
 
   return (
@@ -64,6 +66,8 @@ const SaveButton: React.FC = () => {
 
 export default SaveButton
 ```
+
+`getEnv()` is the small helper — shown in the [Word Count plugin walkthrough](/guides/plugin-word-count#understanding-the-generated-code) — that captures the [Environment](/modules/environment) handed to `activate()` so components can reach it too.
 
 ## See also
 

@@ -14,17 +14,17 @@ Available as `env.config` on the [Environment](/modules/environment) passed to `
 
 ```js
 // Note that with no value set, `::get` returns the setting's default value.
-inkdrop.config.get('my-plugin.myKey') // -> 'defaultValue'
+env.config.get('my-plugin.myKey') // -> 'defaultValue'
 
-inkdrop.config.set('my-plugin.myKey', 'value')
-inkdrop.config.get('my-plugin.myKey') // -> 'value'
+env.config.set('my-plugin.myKey', 'value')
+env.config.get('my-plugin.myKey') // -> 'value'
 ```
 
 You may want to watch for changes. Use `::observe` to catch changes to the setting.
 
 ```js
-inkdrop.config.set('my-plugin.myKey', 'value')
-inkdrop.config.observe('my-plugin.myKey', newValue => {
+env.config.set('my-plugin.myKey', 'value')
+env.config.observe('my-plugin.myKey', newValue => {
   // `observe` calls immediately and every time the value is changed
   console.log('My configuration changed:', newValue)
 })
@@ -33,7 +33,7 @@ inkdrop.config.observe('my-plugin.myKey', newValue => {
 If you want a notification only when the value changes, use `::onDidChange`.
 
 ```js
-inkdrop.config.onDidChange('my-plugin.myKey', ({ newValue, oldValue }) => {
+env.config.onDidChange('my-plugin.myKey', ({ newValue, oldValue }) => {
   console.log('My configuration changed:', newValue, oldValue)
 })
 ```
@@ -47,15 +47,15 @@ For example we might want an integer setting that only allows integers greater t
 
 ```js
 // When no value has been set, `::get` returns the setting's default value
-inkdrop.config.get('my-plugin.anInt') // -> 12
+env.config.get('my-plugin.anInt') // -> 12
 
 // The string will be coerced to the integer 123
-inkdrop.config.set('my-plugin.anInt', '123')
-inkdrop.config.get('my-plugin.anInt') // -> 123
+env.config.set('my-plugin.anInt', '123')
+env.config.get('my-plugin.anInt') // -> 123
 
 // The string will be coerced to an integer, but it must be greater than 0, so is set to 1
-inkdrop.config.set('my-plugin.anInt', '-20')
-inkdrop.config.get('my-plugin.anInt') // -> 1
+env.config.set('my-plugin.anInt', '-20')
+env.config.get('my-plugin.anInt') // -> 1
 ```
 
 ## Defining settings for your plugin
@@ -222,8 +222,8 @@ It is possible to manipulate (`get`, `set`, `observe` etc) values that do not ap
 You can still do the following
 
 ```js
-let otherSetting = inkdrop.config.get('some-plugin.otherSetting')
-inkdrop.config.set('some-plugin.stillAnotherSetting', otherSetting * 5)
+let otherSetting = env.config.get('some-plugin.otherSetting')
+env.config.set('some-plugin.stillAnotherSetting', otherSetting * 5)
 ```
 
 In other words, if a function asks for a `key-path`, that path doesn't have to be described in the config schema for the plugin or any plugin.

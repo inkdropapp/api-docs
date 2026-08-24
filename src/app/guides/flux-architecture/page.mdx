@@ -16,7 +16,7 @@ It enforces:
 
 For more information about the Flux pattern, check out [this diagram](https://facebook.github.io/flux/docs/overview.html#structure-and-data-flow).
 
-You can access the app state via `inkdrop.store.getState()`.
+You can access the app state via `env.store.getState()` on the [Environment](/modules/environment) passed to `activate(env)`.
 
 ## Actions
 
@@ -25,7 +25,7 @@ You can dispatch the internal actions like so:
 ```js
 import { actions } from 'inkdrop'
 
-inkdrop.store.dispatch(actions.books.update())
+env.store.dispatch(actions.books.update())
 ```
 
 See [a list of available actions](/actions) in reference.
@@ -35,7 +35,7 @@ See [a list of available actions](/actions) in reference.
 To get the current app state, for example, you can get [editingNote](/states/editing-note) like so:
 
 ```js
-const { editingNote } = inkdrop.store.getState()
+const { editingNote } = env.store.getState()
 ```
 
 Or, to connect this state with your React component:

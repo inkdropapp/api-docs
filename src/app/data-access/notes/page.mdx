@@ -208,7 +208,7 @@ The note model contains all the information about your notes, such as their titl
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.localDB
+    const db = env.localDB
     const note = await db.notes.get('note:BKzzd8iGK')
     ```
 
@@ -283,7 +283,7 @@ The note model contains all the information about your notes, such as their titl
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.localDB
+    const db = env.localDB
     const list = await db.notes.all({ limit: 20 })
     ```
 
@@ -353,7 +353,7 @@ The note model contains all the information about your notes, such as their titl
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.localDB
+    const db = env.localDB
     const noteId = await db.notes.createId()
     ```
 
@@ -390,7 +390,7 @@ The note model contains all the information about your notes, such as their titl
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.localDB
+    const db = env.localDB
     const isValid = await db.notes.validateDocId('note:8eea9f7c')
     ```
 
@@ -432,7 +432,7 @@ The note model contains all the information about your notes, such as their titl
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.localDB
+    const db = env.localDB
     const result = await db.notes.put({
       "_id": "note:BKzzd8iGK",
       "doctype": "markdown",
@@ -490,7 +490,7 @@ The note model contains all the information about your notes, such as their titl
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.localDB
+    const db = env.localDB
     const result = await db.notes.remove("note:BKzzd8iGK")
     ```
 
@@ -534,7 +534,7 @@ The note model contains all the information about your notes, such as their titl
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.localDB
+    const db = env.localDB
     const result = await db.notes.removeBatch(["note:BKzzd8iGK", "note:8eea9f7c"])
     ```
 
@@ -581,7 +581,7 @@ The note model contains all the information about your notes, such as their titl
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.localDB
+    const db = env.localDB
     const num = await db.notes.countAll()
     ```
 
@@ -624,7 +624,7 @@ The note model contains all the information about your notes, such as their titl
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.localDB
+    const db = env.localDB
     const num = await db.notes.findInBook('book:tjnPbJakw')
     ```
 
@@ -700,7 +700,7 @@ The note model contains all the information about your notes, such as their titl
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.localDB
+    const db = env.localDB
     const num = await db.notes.findWithTag('tag:4eeb997c')
     ```
 
@@ -777,7 +777,7 @@ The note model contains all the information about your notes, such as their titl
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.localDB
+    const db = env.localDB
     const num = await db.notes.findWithStatus('active')
     ```
 

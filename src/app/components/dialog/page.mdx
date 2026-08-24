@@ -18,7 +18,7 @@ To get the class of the `Dialog` component:
 ```tsx
 import type { Dialog } from '@inkdropapp/types'
 
-const Dialog = inkdrop.components.getComponentClass('Dialog') as Dialog
+const Dialog = env.components.getComponentClass('Dialog') as Dialog
 ```
 
 <Note>
@@ -88,9 +88,11 @@ import React, { useEffect, useCallback } from 'react'
 import { logger, useModal } from 'inkdrop'
 import type { Dialog as DialogType } from '@inkdropapp/types'
 
+import { getEnv } from './env'
+
 const HelloMessageDialog: React.FC = () => {
   const modal = useModal()
-  const Dialog = inkdrop.components.getComponentClass('Dialog') as DialogType
+  const Dialog = getEnv().components.getComponentClass('Dialog') as DialogType
 
   const toggle = useCallback(() => {
     modal.show()
@@ -98,7 +100,7 @@ const HelloMessageDialog: React.FC = () => {
   }, [])
 
   useEffect(() => {
-    const sub = inkdrop.commands.add(document.body, {
+    const sub = getEnv().commands.add(document.body, {
       'yourplugin:toggle': toggle
     })
     return () => sub.dispose()
@@ -120,22 +122,25 @@ const HelloMessageDialog: React.FC = () => {
 export default HelloMessageDialog
 ```
 
+`getEnv()` is the small helper — shown in the [Word Count plugin walkthrough](/guides/plugin-word-count#understanding-the-generated-code) — that captures the [Environment](/modules/environment) handed to `activate()` so components can reach it too.
+
 A dialog is a top-level overlay, so it only appears once you
 [**register**](/modules/component-manager#registering-and-unregistering-a-react-component)
 it and add it to the built-in `modal` layout — the region where Inkdrop mounts modal
 overlays. Do this in your plugin's `activate` / `deactivate`:
 
 ```ts
+import type { Environment } from '@inkdropapp/types'
 import HelloMessageDialog from './HelloMessageDialog'
 
-export function activate() {
-  inkdrop.components.registerClass(HelloMessageDialog)
-  inkdrop.layouts.addComponentToLayout('modal', 'HelloMessageDialog')
+export function activate(env: Environment) {
+  env.components.registerClass(HelloMessageDialog)
+  env.layouts.addComponentToLayout('modal', 'HelloMessageDialog')
 }
 
-export function deactivate() {
-  inkdrop.layouts.removeComponentFromLayout('modal', 'HelloMessageDialog')
-  inkdrop.components.deleteClass(HelloMessageDialog)
+export function deactivate(env: Environment) {
+  env.layouts.removeComponentFromLayout('modal', 'HelloMessageDialog')
+  env.components.deleteClass(HelloMessageDialog)
 }
 ```
 
@@ -143,7 +148,7 @@ export function deactivate() {
 The name passed to `addComponentToLayout` (and `removeComponentFromLayout`) must
 match the registered component's class name. If your bundler minifies class names,
 pass an explicit name so the lookup stays stable —
-`inkdrop.components.registerClass(HelloMessageDialog, 'HelloMessageDialog')` — and
+`env.components.registerClass(HelloMessageDialog, 'HelloMessageDialog')` — and
 use that same string in the layout calls.
 </Note>
 

@@ -17,18 +17,22 @@ You can register your React component classes to the [component registry][compon
 Then, the registered components can be added to layouts.
 Below example registers `MyDialog` class to the component registry and adds it to `modal` layout so that you can show it as a modal view.
 
-```js
-module.exports = {
-  activate() {
-    inkdrop.components.registerClass(MyDialog)
-    inkdrop.layouts.addComponentToLayout('modal', 'MyDialog')
-  },
+```ts
+import type { Environment, IInkdropPlugin } from '@inkdropapp/types'
 
-  deactivate() {
-    inkdrop.layouts.removeComponentFromLayout('modal', 'MyDialog')
-    inkdrop.components.deleteClass(MyDialog)
+class YourPlugin implements IInkdropPlugin {
+  activate(env: Environment) {
+    env.components.registerClass(MyDialog)
+    env.layouts.addComponentToLayout('modal', 'MyDialog')
+  }
+
+  deactivate(env: Environment) {
+    env.layouts.removeComponentFromLayout('modal', 'MyDialog')
+    env.components.deleteClass(MyDialog)
   }
 }
+
+export default new YourPlugin()
 ```
 
 This is described in detail in the [Word Count plugin](/guides/plugin-word-count#developing-your-plugin) walkthrough.
@@ -62,7 +66,7 @@ Available layouts can be found [here](/states/layouts).
   <Col sticky>
     <CodeGroup title="Example">
     ```js
-    inkdrop.layouts.onLayoutChange(
+    env.layouts.onLayoutChange(
       'modal',
       (components) => console.log(components)
     );
@@ -94,7 +98,7 @@ Available layouts can be found [here](/states/layouts).
   <Col sticky>
     <CodeGroup title="Example">
     ```js
-    inkdrop.layouts.addComponentToLayout('modal', 'MyDialog')
+    env.layouts.addComponentToLayout('modal', 'MyDialog')
     ```
     </CodeGroup>
   </Col>
@@ -126,7 +130,7 @@ Available layouts can be found [here](/states/layouts).
   <Col sticky>
     <CodeGroup title="Example">
     ```js
-    inkdrop.layouts.insertComponentToLayoutBefore(
+    env.layouts.insertComponentToLayoutBefore(
       'modal',
       'MySecondDialog', 'MyDialog'
     )
@@ -161,7 +165,7 @@ Available layouts can be found [here](/states/layouts).
   <Col sticky>
     <CodeGroup title="Example">
     ```js
-    inkdrop.layouts.insertComponentToLayoutAfter(
+    env.layouts.insertComponentToLayoutAfter(
       'modal',
       'MyDialog',
       'MySecondDialog'
@@ -195,7 +199,7 @@ Available layouts can be found [here](/states/layouts).
   <Col sticky>
     <CodeGroup title="Example">
     ```js
-    inkdrop.layouts.getLayout('modal')
+    env.layouts.getLayout('modal')
     ```
     </CodeGroup>
   </Col>
@@ -225,7 +229,7 @@ Available layouts can be found [here](/states/layouts).
   <Col sticky>
     <CodeGroup title="Example">
     ```js
-    inkdrop.layouts.getLayoutComponents('modal')
+    env.layouts.getLayoutComponents('modal')
     ```
     </CodeGroup>
   </Col>
@@ -258,7 +262,7 @@ Available layouts can be found [here](/states/layouts).
   <Col sticky>
     <CodeGroup title="Example">
     ```js
-    inkdrop.layouts.indexOfComponentInLayout('modal', 'MyDialog')
+    env.layouts.indexOfComponentInLayout('modal', 'MyDialog')
     ```
     </CodeGroup>
   </Col>
@@ -287,7 +291,7 @@ Available layouts can be found [here](/states/layouts).
   <Col sticky>
     <CodeGroup title="Example">
     ```js
-    inkdrop.layouts.removeComponentFromLayout('modal', 'MyDialog')
+    env.layouts.removeComponentFromLayout('modal', 'MyDialog')
     ```
     </CodeGroup>
   </Col>
@@ -316,7 +320,7 @@ Available layouts can be found [here](/states/layouts).
   <Col sticky>
     <CodeGroup title="Example">
     ```js
-    inkdrop.layouts.setLayout('modal', ['MyDialog'])
+    env.layouts.setLayout('modal', ['MyDialog'])
     ```
     </CodeGroup>
   </Col>

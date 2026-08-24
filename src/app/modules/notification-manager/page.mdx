@@ -32,7 +32,7 @@ Available as `env.notifications` on the [Environment](/modules/environment) pass
 
     <CodeGroup title="Example">
     ```js
-    inkdrop.notifications.onDidAddNotification(notification => {
+    env.notifications.onDidAddNotification(notification => {
       console.log('Notification added:', notification.getMessage())
     })
     ```
@@ -63,7 +63,7 @@ Available as `env.notifications` on the [Environment](/modules/environment) pass
   <Col sticky>
     <CodeGroup title="Example">
     ```js
-    inkdrop.notifications.onDidClearNotifications(() => {
+    env.notifications.onDidClearNotifications(() => {
       console.log('Notifications cleared')
     })
     ```
@@ -90,7 +90,7 @@ Available as `env.notifications` on the [Environment](/modules/environment) pass
   <Col sticky>
     <CodeGroup title="Example">
     ```js
-    const notifications = inkdrop.notifications.getNotifications()
+    const notifications = env.notifications.getNotifications()
     console.log('There are', notifications.length, 'notifications')
     ```
     </CodeGroup>
@@ -132,7 +132,7 @@ Available as `env.notifications` on the [Environment](/modules/environment) pass
   <Col sticky>
     <CodeGroup title="Example">
     ```js
-    const notification = inkdrop.notifications.addSuccess(
+    const notification = env.notifications.addSuccess(
       'Success!', 
       {
         dismissable: true
@@ -178,7 +178,7 @@ Available as `env.notifications` on the [Environment](/modules/environment) pass
   <Col sticky>
     <CodeGroup title="Example">
     ```js
-    const notification = inkdrop.notifications.addInfo(
+    const notification = env.notifications.addInfo(
       'Info!', 
       {
         dismissable: true
@@ -224,7 +224,7 @@ Available as `env.notifications` on the [Environment](/modules/environment) pass
   <Col sticky>
     <CodeGroup title="Example">
     ```js
-    const notification = inkdrop.notifications.addWarning(
+    const notification = env.notifications.addWarning(
       'Warning!', 
       {
         dismissable: true
@@ -270,7 +270,7 @@ Available as `env.notifications` on the [Environment](/modules/environment) pass
   <Col sticky>
     <CodeGroup title="Example">
     ```js
-    const notification = inkdrop.notifications.addError(
+    const notification = env.notifications.addError(
       'Error!', 
       {
         dismissable: true
@@ -316,7 +316,7 @@ Available as `env.notifications` on the [Environment](/modules/environment) pass
   <Col sticky>
     <CodeGroup title="Example">
     ```js
-    const notification = inkdrop.notifications.addFatalError(
+    const notification = env.notifications.addFatalError(
       'Fatal error!', 
       {
         dismissable: true

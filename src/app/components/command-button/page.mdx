@@ -15,7 +15,7 @@ To get the class of the `CommandButton` component:
 import type { CommandButtonProps } from '@inkdropapp/types'
 
 const CommandButton =
-  inkdrop.components.getComponentClass<CommandButtonProps>('CommandButton')
+  env.components.getComponentClass<CommandButtonProps>('CommandButton')
 ```
 
 ## Props
@@ -39,9 +39,11 @@ type CommandButtonProps = ButtonProps & {
 import React from 'react'
 import type { CommandButtonProps } from '@inkdropapp/types'
 
+import { getEnv } from './env'
+
 const SaveButton: React.FC = () => {
   const CommandButton =
-    inkdrop.components.getComponentClass<CommandButtonProps>('CommandButton')
+    getEnv().components.getComponentClass<CommandButtonProps>('CommandButton')
 
   return (
     <CommandButton primary command="core:save-note">
@@ -52,6 +54,8 @@ const SaveButton: React.FC = () => {
 
 export default SaveButton
 ```
+
+`getEnv()` is the small helper — shown in the [Word Count plugin walkthrough](/guides/plugin-word-count#understanding-the-generated-code) — that captures the [Environment](/modules/environment) handed to `activate()` so components can reach it too.
 
 ## See also
 

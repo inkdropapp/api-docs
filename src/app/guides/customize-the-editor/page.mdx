@@ -89,7 +89,7 @@ const myLang = LanguageDescription.of({
   }
 })
 
-inkdrop.commands.dispatch(document.body, 'editor:add-code-language', {
+env.commands.dispatch(document.body, 'editor:add-code-language', {
   lang: myLang
 })
 ```
@@ -102,7 +102,7 @@ The Markdown parser itself is a [Lezer](https://lezer.codemirror.net/) grammar a
 
 ## Toggling editor options
 
-Line numbers, line wrapping and readable line width are user settings rather than CodeMirror options. Flip them through the [Config](/modules/config) — `inkdrop.config.set('editor.lineNumbers', true)` — or dispatch the matching commands: [`editor:toggle-line-numbers`](/guides/list-of-commands#editor-toggle-line-numbers), [`editor:toggle-line-wrapping`](/guides/list-of-commands#editor-toggle-line-wrapping).
+Line numbers, line wrapping and readable line width are user settings rather than CodeMirror options. Flip them through the [Config](/modules/config) — `env.config.set('editor.lineNumbers', true)` — or dispatch the matching commands: [`editor:toggle-line-numbers`](/guides/list-of-commands#editor-toggle-line-numbers), [`editor:toggle-line-wrapping`](/guides/list-of-commands#editor-toggle-line-wrapping).
 
 ## Keymaps and styling
 

@@ -47,7 +47,7 @@ Notifications are rendered in the bottom right of the Application using the [Not
     <CodeGroup title="Example">
     ```js
     // Prepare: Create the notification
-    const notification = inkdrop.notifications.addInfo('Hello world!')
+    const notification = env.notifications.addInfo('Hello world!')
 
     // Subscribe to the event
     notification.onDidDismiss(() => {
@@ -82,7 +82,7 @@ Notifications are rendered in the bottom right of the Application using the [Not
     <CodeGroup title="Example">
     ```js
     // Prepare: Create the notification
-    const notification = inkdrop.notifications.addInfo('Hello world!')
+    const notification = env.notifications.addInfo('Hello world!')
 
     // Subscribe to the event
     notification.onDidDisplay(() => {
@@ -112,7 +112,7 @@ Notifications are rendered in the bottom right of the Application using the [Not
     <CodeGroup title="Example">
     ```js
     // Prepare: Create the notification
-    const notification = inkdrop.notifications.addInfo('Hello world!')
+    const notification = env.notifications.addInfo('Hello world!')
 
     // Get the type
     notification.getType()
@@ -140,7 +140,7 @@ Notifications are rendered in the bottom right of the Application using the [Not
     <CodeGroup title="Example">
     ```js
     // Prepare: Create the notification
-    const notification = inkdrop.notifications.addInfo('Hello world!')
+    const notification = env.notifications.addInfo('Hello world!')
 
     // Get the message
     notification.getMessage()
@@ -168,7 +168,7 @@ Notifications are rendered in the bottom right of the Application using the [Not
     <CodeGroup title="Example">
     ```js
     // Prepare: Create the notification
-    const notification = inkdrop.notifications.addInfo('Hello world!')
+    const notification = env.notifications.addInfo('Hello world!')
 
     // Dismiss the notification
     notification.dismiss()

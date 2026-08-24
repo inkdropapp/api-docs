@@ -28,7 +28,7 @@ Invoke a callback function when all packages have been deactivated.
   <Col sticky>
     <CodeGroup title="Event Subscription Example">
     ```js
-    const disposable = inkdrop.packages.onDidDeactivate(() => {
+    const disposable = env.packages.onDidDeactivate(() => {
       console.log('All packages have been deactivated');
     });
     // To unsubscribe
@@ -54,7 +54,7 @@ Incompatible packages cannot be activated.
   <Col sticky>
     <CodeGroup title="Compatibility Check Example">
     ```js
-    const isPackageCompatible = inkdrop.packages.isCompatible();
+    const isPackageCompatible = env.packages.isCompatible();
     console.log('Is compatible:', isPackageCompatible);
     ```
     </CodeGroup>

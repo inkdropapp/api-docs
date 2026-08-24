@@ -92,7 +92,7 @@ Invoke the given callback when keystrokes completely match a key binding.
   <Col sticky>
     <CodeGroup title="Subscription Example">
     ```js
-    inkdrop.keymaps.onDidMatchBinding((event) => {
+    env.keymaps.onDidMatchBinding((event) => {
       console.log('Matched binding:', event)
     })
     ```
@@ -133,7 +133,7 @@ Invoke the given callback when keystrokes partially match a binding.
   <Col sticky>
     <CodeGroup title="Subscription Example">
     ```js
-    inkdrop.keymaps.onDidPartiallyMatchBindings((event) => {
+    env.keymaps.onDidPartiallyMatchBindings((event) => {
       console.log('Partially matched binding:', event)
     })
     ```
@@ -171,7 +171,7 @@ Invoke the given callback when keystrokes fail to match any bindings.
   <Col sticky>
     <CodeGroup title="Subscription Example">
     ```js
-    inkdrop.keymaps.onDidFailToMatchBinding((event) => {
+    env.keymaps.onDidFailToMatchBinding((event) => {
       console.log('Failed to match binding:', event)
     })
     ```
@@ -203,7 +203,7 @@ Construct `KeyBinding`s from an object grouping them by CSS selector.
   <Col sticky>
     <CodeGroup title="Constructing Bindings Example">
     ```js
-    inkdrop.keymaps.build('my-plugin', {
+    env.keymaps.build('my-plugin', {
       'body': {
         'ctrl-alt-n': 'my-plugin:do-something'
       }
@@ -237,7 +237,7 @@ Add sets of key bindings grouped by CSS selector.
   <Col sticky>
     <CodeGroup title="Adding Bindings Example">
     ```js
-    inkdrop.keymaps.add('my-plugin', {
+    env.keymaps.add('my-plugin', {
       'body': {
         'ctrl-alt-n': 'my-plugin:do-something'
       }
@@ -287,7 +287,7 @@ Get key bindings for a command and optional target.
   <Col sticky>
     <CodeGroup title="Finding Bindings Example">
     ```js
-    const bindings = inkdrop.keymaps.findKeyBindings({ command: 'editor:new-line' })
+    const bindings = env.keymaps.findKeyBindings({ command: 'editor:new-line' })
     ```
     </CodeGroup>
   </Col>

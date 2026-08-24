@@ -213,7 +213,7 @@ Files capture all the essential details about the image attachments, such as con
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.localDB
+    const db = env.localDB
     const file = await db.files.get('file:bhi701rgp', { attachments: true })
     ```
 
@@ -266,7 +266,7 @@ Files capture all the essential details about the image attachments, such as con
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.localDB
+    const db = env.localDB
     const list = await db.files.all()
     ```
 
@@ -319,7 +319,7 @@ Files capture all the essential details about the image attachments, such as con
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.localDB
+    const db = env.localDB
     const fileId = await db.files.createId()
     ```
 
@@ -358,7 +358,7 @@ Files capture all the essential details about the image attachments, such as con
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.localDB
+    const db = env.localDB
     const isValid = await db.files.validateDocId('file:ak0s1ce6')
     ```
 
@@ -399,7 +399,7 @@ Files capture all the essential details about the image attachments, such as con
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.localDB
+    const db = env.localDB
     const result = await db.files.put({
       _id: 'file:9IoGtoCuv',
       "createdAt": 1561687797115,
@@ -459,7 +459,7 @@ Files capture all the essential details about the image attachments, such as con
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.localDB
+    const db = env.localDB
     const result = await db.files.remove("file:9IoGtoCuv")
     ```
 
@@ -498,7 +498,7 @@ Files capture all the essential details about the image attachments, such as con
     <CodeGroup title="Request">
 
     ```js
-    const db = inkdrop.localDB
+    const db = env.localDB
     const num = await db.files.countAll()
     ```
 

@@ -44,9 +44,10 @@ It can be accomplished by creating a custom hook as below:
 ```ts
 import { ComponentType, useEffect, useState } from 'react'
 import { CompositeDisposable } from 'event-kit'
+import { getEnv } from './env'
 
 export const useCustomComponent = <T extends ComponentType<any>>(className: string, DefaultComponent: T) => {
-  const { components } = inkdrop
+  const { components } = getEnv()
   const initialComponent = (components.getComponentClass(
     className
   ) as T) || DefaultComponent
@@ -64,6 +65,8 @@ export const useCustomComponent = <T extends ComponentType<any>>(className: stri
   return Component
 }
 ```
+
+`getEnv()` is the small helper — shown in the [Word Count plugin walkthrough](/guides/plugin-word-count#understanding-the-generated-code) — that captures the [Environment](/modules/environment) handed to `activate()` so code outside of it, like this hook, can still reach it.
 
 ---
 
@@ -88,7 +91,7 @@ export const useCustomComponent = <T extends ComponentType<any>>(className: stri
   <Col sticky>
     <CodeGroup title="Example">
     ```js
-    inkdrop.components.registerClass(MyDialog)
+    env.components.registerClass(MyDialog)
     ```
     </CodeGroup>
   </Col>
@@ -117,7 +120,7 @@ export const useCustomComponent = <T extends ComponentType<any>>(className: stri
   <Col sticky>
     <CodeGroup title="Example">
     ```js
-    inkdrop.components.deleteClass(MyDialog)
+    env.components.deleteClass(MyDialog)
     ```
     </CodeGroup>
   </Col>
@@ -146,7 +149,7 @@ Returns a React component that has a given component name.
   <Col sticky>
     <CodeGroup title="Example">
     ```js
-    inkdrop.components.getComponentClass("MyDialog")
+    env.components.getComponentClass("MyDialog")
     ```
     </CodeGroup>
   </Col>

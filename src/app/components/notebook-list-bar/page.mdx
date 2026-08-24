@@ -14,7 +14,7 @@ To get the class of the `NotebookListBar` component:
 import type { NotebookListBarProps } from '@inkdropapp/types'
 
 const NotebookListBar =
-  inkdrop.components.getComponentClass<NotebookListBarProps>('NotebookListBar')
+  env.components.getComponentClass<NotebookListBarProps>('NotebookListBar')
 ```
 
 ## Props
@@ -41,9 +41,11 @@ import React, { useCallback } from 'react'
 import { logger } from 'inkdrop'
 import type { NotebookListBarProps } from '@inkdropapp/types'
 
+import { getEnv } from './env'
+
 const NotebookPicker: React.FC = () => {
   const NotebookListBar =
-    inkdrop.components.getComponentClass<NotebookListBarProps>('NotebookListBar')
+    getEnv().components.getComponentClass<NotebookListBarProps>('NotebookListBar')
 
   const onItemSelect = useCallback((bookId: string | null) => {
     logger.debug('Selected notebook:', bookId)
@@ -60,3 +62,5 @@ const NotebookPicker: React.FC = () => {
 
 export default NotebookPicker
 ```
+
+`getEnv()` is the small helper — shown in the [Word Count plugin walkthrough](/guides/plugin-word-count#understanding-the-generated-code) — that captures the [Environment](/modules/environment) handed to `activate()` so components can reach it too.

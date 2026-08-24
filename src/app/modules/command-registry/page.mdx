@@ -48,14 +48,14 @@ As is normally the case with DOM events, `stopPropagation` and `stopImmediatePro
 
     <CodeGroup title="Example">
     ```js
-    inkdrop.commands.add(
+    env.commands.add(
       document.body,
       'custom:insert-date',
       (event) => {
-        const { editingNote } = inkdrop.store.getState()
+        const { editingNote } = env.store.getState()
         const body = editingNote.body + '\n' + new Date().toLocaleString()
-        inkdrop.store.dispatch(actions.editingNote.update({ body }))
-        inkdrop.store.dispatch(actions.editor.change(true))
+        env.store.dispatch(actions.editingNote.update({ body }))
+        env.store.dispatch(actions.editor.change(true))
       }
     )
     ```
@@ -85,12 +85,12 @@ As is normally the case with DOM events, `stopPropagation` and `stopImmediatePro
   <Col sticky>
     <CodeGroup title="Example">
     ```js
-    inkdrop.commands.add(document.body, {
+    env.commands.add(document.body, {
       'custom:insert-date': () => {
-        const { editingNote } = inkdrop.store.getState()
+        const { editingNote } = env.store.getState()
         const body = editingNote.body + '\n' + new Date().toLocaleString()
-        inkdrop.store.dispatch(actions.editingNote.update({ body }))
-        inkdrop.store.dispatch(actions.editor.change(true))
+        env.store.dispatch(actions.editingNote.update({ body }))
+        env.store.dispatch(actions.editor.change(true))
       }
     })
     ```
@@ -128,7 +128,7 @@ This is useful for testing, especially when simulating a command's invocation on
     <CodeGroup title="Example">
     
     ```js
-    inkdrop.commands.dispatch(document.body, 'core:save-note')
+    env.commands.dispatch(document.body, 'core:save-note')
     ```
 
     </CodeGroup>

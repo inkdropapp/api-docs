@@ -14,7 +14,7 @@ To get the class of the `Modal` component:
 ```tsx
 import type { ModalProps } from '@inkdropapp/types'
 
-const Modal = inkdrop.components.getComponentClass<ModalProps>('Modal')
+const Modal = env.components.getComponentClass<ModalProps>('Modal')
 ```
 
 ## Props
@@ -45,14 +45,16 @@ import React, { useCallback, useEffect } from 'react'
 import { useModal } from 'inkdrop'
 import type { ModalProps } from '@inkdropapp/types'
 
+import { getEnv } from './env'
+
 const MyOverlay: React.FC = () => {
   const modal = useModal()
-  const Modal = inkdrop.components.getComponentClass<ModalProps>('Modal')
+  const Modal = getEnv().components.getComponentClass<ModalProps>('Modal')
 
   const toggle = useCallback(() => modal.show(), [])
 
   useEffect(() => {
-    const sub = inkdrop.commands.add(document.body, {
+    const sub = getEnv().commands.add(document.body, {
       'yourplugin:toggle': toggle
     })
     return () => sub.dispose()
@@ -67,6 +69,8 @@ const MyOverlay: React.FC = () => {
 
 export default MyOverlay
 ```
+
+`getEnv()` is the small helper — shown in the [Word Count plugin walkthrough](/guides/plugin-word-count#understanding-the-generated-code) — that captures the [Environment](/modules/environment) handed to `activate()` so components can reach it too.
 
 ## See also
 

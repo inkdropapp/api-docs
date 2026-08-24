@@ -17,12 +17,12 @@ Data is written to the local database first, then synced with the remote databas
 
 ## Accessing the data from plugins
 
-`inkdrop.localDB` — or `env.localDB` inside `activate(env)` — is a proxy to the local database, which lives in the main process. It provides a bunch of useful methods that help you manage [notes](/data-access/notes), [notebooks](/data-access/books), [tags](/data-access/tags) and [files](/data-access/files), plus [utilities](/data-access/utils) and [change events](/data-access/events).
+`env.localDB` — available on the [Environment](/modules/environment) passed to `activate(env)` — is a proxy to the local database, which lives in the main process. It provides a bunch of useful methods that help you manage [notes](/data-access/notes), [notebooks](/data-access/books), [tags](/data-access/tags) and [files](/data-access/files), plus [utilities](/data-access/utils) and [change events](/data-access/events).
 
 For example, below code gets data directly from the local database:
 
 ```js
-const db = inkdrop.localDB
+const db = env.localDB
 
 // Get a note data by note ID
 const note = await db.notes.get('note:F8xUp-23G')
