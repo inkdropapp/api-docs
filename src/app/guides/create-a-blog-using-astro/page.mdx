@@ -111,41 +111,8 @@ Even if you stopped using Inkdrop, the blog posts stay in your git repository. N
 
 Let's learn how to use it.
 
-As I mentioned above, live-export access to your data via the local Inkdrop server.
-So, you first have to enable it by editing the `config.json` file stored in [the user data directory](https://docs.inkdrop.app/manual/basic-usage#user-data-directory):
-
-- on macOS: `~/Library/Application Support/inkdrop/config.json`
-- on Windows: `%APPDATA%\inkdrop\config.json`
-- on Linux(deb/rpm): `~/.config/inkdrop/config.json`
-- on Linux(Snap): `~/snap/inkdrop/current/.config/inkdrop/config.json`
-
-Quit Inkdrop, and add the following lines like so:
-
-```json
-{
-  "*": {
-    "core": {
-      "server": {
-        "enabled": true,
-        "port": 19840,
-        "bindAddress": "127.0.0.1",
-        "auth": {
-          "username": "foo",
-          "password": "bar"
-        }
-      }
-    }
-  }
-}
-```
-
-Then, relaunch the app.
-You can check if it works properly by running the following command in the terminal:
-
-```sh
-curl http://foo:bar@localhost:19840/
-# => {"version":"5.5.1","ok":true}
-```
+As I mentioned above, live-export accesses your data via [the local Inkdrop server](/guides/integrate-with-external-programs).
+So, you first have to enable it and set up the authentication credentials, as described in that guide.
 
 Now, it's ready to export notes with live-export!
 I've made a blog template so that you can quickly build blogs with live-export:
@@ -170,7 +137,7 @@ npm install
 # Or, yarn install
 ```
 
-Next, create a `.env` file in the project root directory as follows:
+Next, create a `.env` file in the project root directory, using the credentials you set up for the local server:
 
 ```ini
 DEBUG='inkdrop:export:info,inkdrop:export:error'
@@ -205,7 +172,7 @@ Okay, let's start the Astro dev server.
 npm run start
 ```
 
-You've got the blog running on `http://localhost:3000/` like so:
+You've got the blog running on `http://localhost:4321/` like so:
 
 ![dev-server](/images/integrating-with-an-astro-site_dev-server.png)
 
@@ -230,8 +197,6 @@ npm run live-import
 > inkdrop-blog-template@0.0.1 live-import
 > node --experimental-vm-modules tools/import.mjs
 
-(node:59628) ExperimentalWarning: The Fetch API is an experimental feature. This feature could change at any time
-(Use `node --trace-warnings ...` to show where the warning was created)
   inkdrop:export:info Exporting note: note:_F3VsSEhJ Convert mp4 to webm +0ms
   inkdrop:export:info Watching changes.. +6ms
 ```
@@ -285,7 +250,7 @@ Next, let's add a tag to the note.
 The blog automatically detects tags specified in the frontmatters and generates pages for them.
 
 ![add a tag](/images/integrating-with-an-astro-site_add-a-tag.png)
-After adding a tag to the note, you should see there are the tags listed at `http://localhost:3000/tags`.
+After adding a tag to the note, you should see there are the tags listed at `http://localhost:4321/tags`.
 
 ![tags page](/images/integrating-with-an-astro-site_tags-page.png)
 
