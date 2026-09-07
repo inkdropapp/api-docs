@@ -482,12 +482,18 @@ Read [this page](/guides/integrate-with-external-programs) to learn how to confi
 
 ---
 
-## Fetch a document by ID {{ tag: 'GET', label: '/:docid' }}
+## Fetch a note {{ tag: 'GET', label: '/note:{id}' }}
 
 <Row>
   <Col>
 
-    Returns document by the specified `docid` of Note, Book, Tag, or File.
+    Returns the [Note](/data-access/notes#properties) with the specified document ID.
+
+    `{id}` is the document `_id` **without** its `note:` prefix,
+    so `note:BKzzd8iGK` is at `/note:BKzzd8iGK` — or `/note/BKzzd8iGK`.
+
+    If no note has that ID, an official note template with the same ID is returned instead, when one exists.
+    Specifying `rev` skips that fallback.
 
     ### Query parameters
 
@@ -495,10 +501,10 @@ Read [this page](/guides/integrate-with-external-programs) to learn how to confi
 
     <Properties>
       <Property name="rev" type="string">
-        Fetch specific revision of a document. Defaults to the latest revision.
+        Fetch specific revision of the note. Defaults to the latest revision.
       </Property>
       <Property name="attachments" type="boolean">
-        Include attachment data. It should be `true` if you fetch a content of the file document.
+        Include attachment data.
       </Property>
     </Properties>
 
@@ -538,12 +544,76 @@ Read [this page](/guides/integrate-with-external-programs) to learn how to confi
 
 ---
 
-## Delete a document by ID {{ tag: 'DELETE', label: '/:docid' }}
+## Update a note {{ tag: 'POST', label: '/note:{id}' }}
 
 <Row>
   <Col>
 
-    Deletes document by the specified `docid` of Note, Book, Tag, or File.
+    Updates the [Note](/data-access/notes#properties) with the specified document ID.
+
+    `{id}` is the document `_id` **without** its `note:` prefix,
+    so `note:BKzzd8iGK` is at `/note:BKzzd8iGK` — or `/note/BKzzd8iGK`.
+    Unlike [`POST /notes`](#create-update-a-note), the request body only has to carry the fields you want to change.
+    They are merged into the latest revision of the note, so you don't have to specify `_rev`.
+
+    Official note templates are read-only, so updating one responds with `403`.
+
+    ### Response JSON Object
+
+    <Properties>
+      <Property name="id" type="string">
+        Document ID
+      </Property>
+      <Property name="ok" type="boolean">
+        Operation status
+      </Property>
+      <Property name="rev" type="string">
+        Revision MVCC token
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="POST" label="/note:BKzzd8iGK">
+
+    ```bash {{ title: 'cURL' }}
+    curl "https://localhost:19840/note:BKzzd8iGK" \
+      -X POST \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Basic {token}" \
+      -d '{ "title": "hello again", "pinned": false }'
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "ok": true,
+      "id": "note:BKzzd8iGK",
+      "rev": "20-e5ad1c150a30e1ad5a781755466b19a1"
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Delete a note {{ tag: 'DELETE', label: '/note:{id}' }}
+
+<Row>
+  <Col>
+
+    Deletes the [Note](/data-access/notes#properties) with the specified document ID.
+
+    `{id}` is the document `_id` **without** its `note:` prefix,
+    so `note:BKzzd8iGK` is at `/note:BKzzd8iGK` — or `/note/BKzzd8iGK`.
+
+    <Warning>
+      This removes the note from the database immediately.
+      It does not move it to the trash — set `bookId` to `"trash"` with [`POST /note:{id}`](#update-a-note) if that's what you want.
+    </Warning>
 
   </Col>
   <Col sticky>
@@ -562,7 +632,379 @@ Read [this page](/guides/integrate-with-external-programs) to learn how to confi
     {
       "ok": true,
       "id": "note:BKzzd8iGK",
-      "rev": "2-e5ad1c150a30e1ad5a781755466b19a1"
+      "rev": "20-e5ad1c150a30e1ad5a781755466b19a1"
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Fetch a notebook {{ tag: 'GET', label: '/book:{id}' }}
+
+<Row>
+  <Col>
+
+    Returns the [Book](/data-access/books#properties) with the specified document ID.
+
+    `{id}` is the document `_id` **without** its `book:` prefix,
+    so `book:0cFae6lCc` is at `/book:0cFae6lCc` — or `/book/0cFae6lCc`.
+
+    ### Query parameters
+
+    All parameters are optional.
+
+    <Properties>
+      <Property name="rev" type="string">
+        Fetch specific revision of the notebook. Defaults to the latest revision.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/book:0cFae6lCc">
+
+    ```bash {{ title: 'cURL' }}
+    curl "https://localhost:19840/book:0cFae6lCc" \
+      -H "Authorization: Basic {token}"
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "parentBookId": "book:Bk5Ivk0T",
+      "updatedAt": 1598593031080,
+      "createdAt": 1598593007103,
+      "name": "Desktop app",
+      "_id": "book:0cFae6lCc",
+      "_rev": "2-7f29bee428d16b6f5a05ece8abf7f571"
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Update a notebook {{ tag: 'POST', label: '/book:{id}' }}
+
+<Row>
+  <Col>
+
+    Updates the [Book](/data-access/books#properties) with the specified document ID.
+
+    `{id}` is the document `_id` **without** its `book:` prefix,
+    so `book:0cFae6lCc` is at `/book:0cFae6lCc` — or `/book/0cFae6lCc`.
+    Unlike [`POST /books`](#create-update-a-notebook), the request body only has to carry the fields you want to change.
+    They are merged into the latest revision of the notebook, so you don't have to specify `_rev`.
+
+    ### Response JSON Object
+
+    <Properties>
+      <Property name="id" type="string">
+        Document ID
+      </Property>
+      <Property name="ok" type="boolean">
+        Operation status
+      </Property>
+      <Property name="rev" type="string">
+        Revision MVCC token
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="POST" label="/book:0cFae6lCc">
+
+    ```bash {{ title: 'cURL' }}
+    curl "https://localhost:19840/book:0cFae6lCc" \
+      -X POST \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Basic {token}" \
+      -d '{ "name": "Desktop app (archived)" }'
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "ok": true,
+      "id": "book:0cFae6lCc",
+      "rev": "3-7f29bee428d16b6f5a05ece8abf7f571"
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Delete a notebook {{ tag: 'DELETE', label: '/book:{id}' }}
+
+<Row>
+  <Col>
+
+    Deletes the [Book](/data-access/books#properties) with the specified document ID.
+
+    `{id}` is the document `_id` **without** its `book:` prefix,
+    so `book:0cFae6lCc` is at `/book:0cFae6lCc` — or `/book/0cFae6lCc`.
+    The notes in the notebook and in its child notebooks are moved to the trash, and the child notebooks are deleted too.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="DELETE" label="/book:0cFae6lCc">
+
+    ```bash {{ title: 'cURL' }}
+    curl "https://localhost:19840/book:0cFae6lCc" \
+      -X DELETE \
+      -H "Authorization: Basic {token}"
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "ok": true
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Fetch a tag {{ tag: 'GET', label: '/tag:{id}' }}
+
+<Row>
+  <Col>
+
+    Returns the [Tag](/data-access/tags#properties) with the specified document ID.
+
+    `{id}` is the document `_id` **without** its `tag:` prefix,
+    so `tag:h11OMPbSs` is at `/tag:h11OMPbSs` — or `/tag/h11OMPbSs`.
+
+    ### Query parameters
+
+    All parameters are optional.
+
+    <Properties>
+      <Property name="rev" type="string">
+        Fetch specific revision of the tag. Defaults to the latest revision.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/tag:h11OMPbSs">
+
+    ```bash {{ title: 'cURL' }}
+    curl "https://localhost:19840/tag:h11OMPbSs" \
+      -H "Authorization: Basic {token}"
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "count": 4,
+      "color": "orange",
+      "createdAt": 1489212448648,
+      "updatedAt": 1607068381327,
+      "name": "Lifehack",
+      "_id": "tag:h11OMPbSs",
+      "_rev": "3-bceb5835af6be6ae277762a877b884d1"
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Update a tag {{ tag: 'POST', label: '/tag:{id}' }}
+
+<Row>
+  <Col>
+
+    Updates the [Tag](/data-access/tags#properties) with the specified document ID.
+
+    `{id}` is the document `_id` **without** its `tag:` prefix,
+    so `tag:h11OMPbSs` is at `/tag:h11OMPbSs` — or `/tag/h11OMPbSs`.
+    Unlike [`POST /tags`](#create-update-a-tag), the request body only has to carry the fields you want to change.
+    They are merged into the latest revision of the tag, so you don't have to specify `_rev`.
+
+    ### Response JSON Object
+
+    <Properties>
+      <Property name="id" type="string">
+        Document ID
+      </Property>
+      <Property name="ok" type="boolean">
+        Operation status
+      </Property>
+      <Property name="rev" type="string">
+        Revision MVCC token
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="POST" label="/tag:h11OMPbSs">
+
+    ```bash {{ title: 'cURL' }}
+    curl "https://localhost:19840/tag:h11OMPbSs" \
+      -X POST \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Basic {token}" \
+      -d '{ "color": "blue" }'
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "ok": true,
+      "id": "tag:h11OMPbSs",
+      "rev": "4-bceb5835af6be6ae277762a877b884d1"
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Delete a tag {{ tag: 'DELETE', label: '/tag:{id}' }}
+
+<Row>
+  <Col>
+
+    Deletes the [Tag](/data-access/tags#properties) with the specified document ID.
+
+    `{id}` is the document `_id` **without** its `tag:` prefix,
+    so `tag:h11OMPbSs` is at `/tag:h11OMPbSs` — or `/tag/h11OMPbSs`.
+    The tag is removed from every note that carries it before the tag document itself is deleted.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="DELETE" label="/tag:h11OMPbSs">
+
+    ```bash {{ title: 'cURL' }}
+    curl "https://localhost:19840/tag:h11OMPbSs" \
+      -X DELETE \
+      -H "Authorization: Basic {token}"
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "ok": true
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Fetch a file {{ tag: 'GET', label: '/file:{id}' }}
+
+<Row>
+  <Col>
+
+    Returns the [File](/data-access/files) with the specified document ID.
+
+    `{id}` is the document `_id` **without** its `file:` prefix,
+    so `file:-dKJeWShi` is at `/file:-dKJeWShi` — or `/file/-dKJeWShi`.
+
+    ### Query parameters
+
+    All parameters are optional.
+
+    <Properties>
+      <Property name="rev" type="string">
+        Fetch specific revision of the file. Defaults to the latest revision.
+      </Property>
+      <Property name="attachments" type="boolean">
+        Include attachment data. It should be `true` if you want the content of the file.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/file:-dKJeWShi">
+
+    ```bash {{ title: 'cURL' }}
+    curl "https://localhost:19840/file:-dKJeWShi?attachments=true" \
+      -H "Authorization: Basic {token}"
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "name": "dog.png",
+      "createdAt": 1613887605720,
+      "contentType": "image/png",
+      "contentLength": 10389,
+      "publicIn": [],
+      "_attachments": {
+        "index": {
+          "digest": "md5-if+yj7slT2E8u2JG7ee3yw==",
+          "content_type": "image/png",
+          "revpos": 5,
+          "data": "iVBORw0K...AElFTkSuQmCC"
+        }
+      },
+      "_id": "file:-dKJeWShi",
+      "_rev": "5-541c58ffdbec966840709683c658c7dc"
+    }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## Delete a file {{ tag: 'DELETE', label: '/file:{id}' }}
+
+<Row>
+  <Col>
+
+    Deletes the [File](/data-access/files) with the specified document ID.
+
+    `{id}` is the document `_id` **without** its `file:` prefix,
+    so `file:-dKJeWShi` is at `/file:-dKJeWShi` — or `/file/-dKJeWShi`.
+    Notes that reference the file are not updated, so they end up with a broken image link.
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="DELETE" label="/file:-dKJeWShi">
+
+    ```bash {{ title: 'cURL' }}
+    curl "https://localhost:19840/file:-dKJeWShi" \
+      -X DELETE \
+      -H "Authorization: Basic {token}"
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    {
+      "ok": true,
+      "id": "file:-dKJeWShi",
+      "rev": "6-541c58ffdbec966840709683c658c7dc"
     }
     ```
 
