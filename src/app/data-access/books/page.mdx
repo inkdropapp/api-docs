@@ -24,9 +24,6 @@ The notebook model contains information about your notebook collections, such as
       <Property name="_rev" type="string">
         This is a CouchDB specific field. The current MVCC-token/revision of this document (mandatory and immutable).
       </Property>
-      <Property name="count" type="number">
-        It indicates the number of notes in the notebook.
-      </Property>
       <Property name="createdAt" type="number">
         The date time when the notebook was created, represented with Unix timestamps in milliseconds.
       </Property>
@@ -51,7 +48,6 @@ The notebook model contains information about your notebook collections, such as
       "updatedAt": 1475373619554,
       "createdAt": 1475373619554,
       "name": "Ideas",
-      "count": 8,
       "parentBookId": "book:ak5I0k0a"
     }
     ```
@@ -167,7 +163,6 @@ The notebook model contains information about your notebook collections, such as
       "updatedAt": 1475373619554,
       "createdAt": 1475373619554,
       "name": "Ideas",
-      "count": 8,
       "parentBookId": "book:ak5I0k0a"
     }
     ```
@@ -207,7 +202,6 @@ The notebook model contains information about your notebook collections, such as
       {
         updatedAt: 1475549348850,
         createdAt: 1475549348850,
-        count: 0,
         name: 'Inbox',
         parentBookId: null,
         _id: 'book:SkTsOceR',
@@ -328,7 +322,6 @@ The notebook model contains information about your notebook collections, such as
       updatedAt: 1475549348850,
       createdAt: 1475549348850,
       name: 'New Notebook',
-      count: 0,
       parentBookId: null
     })
     ```
@@ -466,7 +459,6 @@ The notebook model contains information about your notebook collections, such as
     {
       updatedAt: 1475549348850,
       createdAt: 1475549348850,
-      count: 0,
       name: 'Inbox',
       parentBookId: null,
       _id: 'book:SkTsOceR',
