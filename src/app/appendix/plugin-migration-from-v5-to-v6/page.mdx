@@ -200,6 +200,17 @@ const note = await db.notes.get('note:F8xUp-23G')
   (`inkdrop.main.dataStore.localPouch`) is not available to plugins.
 </Note>
 
+### Changes in v6.2.0
+
+Since v6.2.0, the local database uses a new SQLite-based search index, and `inkdrop.localDB` has changed with it. The types are updated in `@inkdropapp/types` 0.1.0.
+
+- Query and search results are returned as `rows[].doc`, instead of `docs`. Search highlights are in `rows[].extra.fts`.
+- Removed `notes.searchWithQuery`. Use `notes.findAllIdsInBook` and `notes.findAllIdsWithTag` instead of `utils.findAllNoteIdsInBook` and `utils.findAllNoteIdsWithTag`.
+- `onFullTextIndexBuildStart/End/Error` are renamed to `onIndexBuildStart/Progress/End/Error`.
+- `notes.get` also accepts an array of note IDs.
+- Custom note list item views get search highlights from a new `highlights` prop, instead of `note._fts`.
+- Local HTTP server: `GET /notes` returns up to 50 notes by default when `limit` is omitted (it was 20).
+
 ## CSS selectors for keymaps and commands
 
 - `.mde-preview` → `.mde-preview-container`
