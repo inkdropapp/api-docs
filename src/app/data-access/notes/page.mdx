@@ -187,21 +187,25 @@ The note model contains all the information about your notes, such as their titl
   <Col>
 
     Retrieve a note with the given ID.
+    You can also pass an array of note IDs to retrieve several notes at once.
 
     ### Parameters
 
     <Properties>
-      <Property name="docId" type="string" required>
-      The note ID
+      <Property name="docId" type="string | string[]" required>
+      The note ID, or an array of note IDs
       </Property>
       <Property name="options" type="object">
       Options. See [PouchDB's documentation](https://pouchdb.com/api.html#fetch_document) for available options.
+      Ignored when `docId` is an array.
       </Property>
     </Properties>
 
     ### Returns
 
     Returns a note if a valid note ID was provided.
+    When given an array, returns an array of notes in the same order as the IDs.
+    IDs of notes that do not exist are omitted instead of throwing an error, but an invalid note ID still throws.
   </Col>
   <Col sticky>
 
@@ -210,6 +214,11 @@ The note model contains all the information about your notes, such as their titl
     ```js
     const db = env.localDB
     const note = await db.notes.get('note:BKzzd8iGK')
+    ```
+
+    ```js {{ title: 'Multiple notes' }}
+    const db = env.localDB
+    const notes = await db.notes.get(['note:BKzzd8iGK', 'note:8eea9f7c'])
     ```
 
     </CodeGroup>
@@ -254,20 +263,24 @@ The note model contains all the information about your notes, such as their titl
       Object with the following keys:
 
       <Properties sub>
-        <Property name="sort" type="string">
-          An array of an object indicating the field and order.
-          Inkdrop supports sorting notes with only one field.
-          Supported fields are: `'title'`, `'updatedAt'` and `'createdAt'`.
+        <Property name="sort" type="object[]">
+          An array of objects, each indicating a field and order.
+          Supported fields are: `'title'`, `'updatedAt'`, `'createdAt'` and `'tagCount'`.
+          `'tagCount'` ranks a note by how many of the listed notes share each of its tags, so notes with commonly used tags come first.
           For example: `[ { updatedAt: 'asc' } ]`, `[ { title: 'desc' } ]`.
+          Default: `[ { updatedAt: 'desc' } ]`
         </Property>
-        <Property name="limit" type="number">
-          A number to limit how many notes to fetch. Default: `20`
+        <Property name="pinnedFirst" type="boolean">
+          Whether to list pinned notes first. Default: `true`
+        </Property>
+        <Property name="limit" type="number | false">
+          A number to limit how many notes to fetch. Pass `false` to fetch all notes. Default: `50`
         </Property>
         <Property name="skip" type="number">
           A number of notes to skip at the start of a collection. Default: `0`
         </Property>
         <Property name="includeDocs" type="boolean">
-          Whether the return values include doc contents. Default: `true`
+          Whether the result rows include the note documents. When `false`, each row contains only the note's `id` and `rev`. Default: `true`
         </Property>
       </Properties>
 
@@ -276,7 +289,9 @@ The note model contains all the information about your notes, such as their titl
 
     ### Returns
 
-    Returns a list of notes.
+    Returns a query result.
+    The notes are in `rows`, each as `rows[].doc`.
+    `cursor` is the query for the next page, or `null` if there are no more notes.
   </Col>
   <Col sticky>
 
@@ -292,35 +307,31 @@ The note model contains all the information about your notes, such as their titl
     ```js {{ title: 'Response' }}
     {
       query: {
-        index: 'index_notes',
-        startkey: ['n', 'u', 0, 0],
-        endkey: ['n', 'u', {}, {}],
-        descending: false,
+        index: 'notes',
         limit: 20
       },
       totalRows: 9357,
       cursor: {
-        index: 'index_notes',
-        startkey: ['n', 'u', 0, 0],
-        endkey: ['n', 'u', {}, {}],
-        descending: false,
+        index: 'notes',
         limit: 20,
         skip: 20
       },
       includeDocs: true,
-      docs: [
+      rows: [
         {
-          doctype: 'markdown',
-          updatedAt: 1461564004766,
-          createdAt: 1461563995746,
-          bookId: 'book:32b385767dc2',
-          status: 'none',
-          numOfTasks: 0,
-          numOfCheckedTasks: 0,
-          title: 'title...',
-          body: 'body...',
-          _id: 'note:4eeb997c',
-          _rev: '8-d18201be3336c70979c6a375b497b3a7'
+          doc: {
+            doctype: 'markdown',
+            updatedAt: 1461564004766,
+            createdAt: 1461563995746,
+            bookId: 'book:32b385767dc2',
+            status: 'none',
+            numOfTasks: 0,
+            numOfCheckedTasks: 0,
+            title: 'title...',
+            body: 'body...',
+            _id: 'note:4eeb997c',
+            _rev: '8-d18201be3336c70979c6a375b497b3a7'
+          }
         },
         ...
       ]
@@ -633,35 +644,32 @@ The note model contains all the information about your notes, such as their titl
     ```js {{ title: 'Response' }}
     {
       query: {
-        index: 'index_notes',
-        startkey: [ 'b', 'u', 'book:tjnPbJakw', 1, 0, 0 ],
-        endkey: [ 'b', 'u', 'book:tjnPbJakw', 2, {}, {} ]
-        descending: false,
-        limit: 20
+        index: 'notes',
+        bookId: 'book:tjnPbJakw'
       },
       totalRows: 9357,
       cursor: {
-        index: 'index_notes',
-        startkey: [ 'b', 'u', 'book:tjnPbJakw', 1, 0, 0 ],
-        endkey: [ 'b', 'u', 'book:tjnPbJakw', 2, {}, {} ]
-        descending: false,
-        limit: 20,
-        skip: 20
+        index: 'notes',
+        bookId: 'book:tjnPbJakw',
+        limit: 50,
+        skip: 50
       },
       includeDocs: true,
-      docs: [
+      rows: [
         {
-          doctype: 'markdown',
-          updatedAt: 1461564004766,
-          createdAt: 1461563995746,
-          bookId: 'book:tjnPbJakw',
-          status: 'none',
-          numOfTasks: 0,
-          numOfCheckedTasks: 0,
-          title: 'title...',
-          body: 'body...',
-          _id: 'note:4eeb997c',
-          _rev: '8-d18201be3336c70979c6a375b497b3a7'
+          doc: {
+            doctype: 'markdown',
+            updatedAt: 1461564004766,
+            createdAt: 1461563995746,
+            bookId: 'book:tjnPbJakw',
+            status: 'none',
+            numOfTasks: 0,
+            numOfCheckedTasks: 0,
+            title: 'title...',
+            body: 'body...',
+            _id: 'note:4eeb997c',
+            _rev: '8-d18201be3336c70979c6a375b497b3a7'
+          }
         },
         ...
       ]
@@ -709,35 +717,32 @@ The note model contains all the information about your notes, such as their titl
     ```js {{ title: 'Response' }}
     {
       query: {
-        index: 'index_notes',
-        startkey: [ 't', 'u', 'tag:4eeb997c', 1, 0, 0 ],
-        endkey: [ 't', 'u', 'tag:4eeb997c', 2, {}, {} ]
-        descending: false,
-        limit: 20
+        index: 'notes',
+        tagId: 'tag:4eeb997c'
       },
       totalRows: 9357,
       cursor: {
-        index: 'index_notes',
-        startkey: [ 't', 'u', 'tag:4eeb997c', 1, 0, 0 ],
-        endkey: [ 't', 'u', 'tag:4eeb997c', 2, {}, {} ]
-        descending: false,
-        limit: 20,
-        skip: 20
+        index: 'notes',
+        tagId: 'tag:4eeb997c',
+        limit: 50,
+        skip: 50
       },
       includeDocs: true,
-      docs: [
+      rows: [
         {
-          doctype: 'markdown',
-          updatedAt: 1461564004766,
-          createdAt: 1461563995746,
-          bookId: 'book:tjnPbJakw',
-          status: 'none',
-          numOfTasks: 0,
-          numOfCheckedTasks: 0,
-          title: 'title...',
-          body: 'body...',
-          _id: 'note:4eeb997c',
-          _rev: '8-d18201be3336c70979c6a375b497b3a7'
+          doc: {
+            doctype: 'markdown',
+            updatedAt: 1461564004766,
+            createdAt: 1461563995746,
+            bookId: 'book:tjnPbJakw',
+            status: 'none',
+            numOfTasks: 0,
+            numOfCheckedTasks: 0,
+            title: 'title...',
+            body: 'body...',
+            _id: 'note:4eeb997c',
+            _rev: '8-d18201be3336c70979c6a375b497b3a7'
+          }
         },
         ...
       ]
@@ -786,35 +791,32 @@ The note model contains all the information about your notes, such as their titl
     ```js {{ title: 'Response' }}
     {
       query: {
-        index: 'index_notes',
-        startkey: [ 's', 'u', 'active', 1, 0, 0 ],
-        endkey: [ 's', 'u', 'active', 2, {}, {} ]
-        descending: false,
-        limit: 20
+        index: 'notes',
+        status: 'active'
       },
       totalRows: 9357,
       cursor: {
-        index: 'index_notes',
-        startkey: [ 's', 'u', 'active', 1, 0, 0 ],
-        endkey: [ 's', 'u', 'active', 2, {}, {} ]
-        descending: false,
-        limit: 20,
-        skip: 20
+        index: 'notes',
+        status: 'active',
+        limit: 50,
+        skip: 50
       },
       includeDocs: true,
-      docs: [
+      rows: [
         {
-          doctype: 'markdown',
-          updatedAt: 1461564004766,
-          createdAt: 1461563995746,
-          bookId: 'book:tjnPbJakw',
-          status: 'active',
-          numOfTasks: 0,
-          numOfCheckedTasks: 0,
-          title: 'title...',
-          body: 'body...',
-          _id: 'note:4eeb997c',
-          _rev: '8-d18201be3336c70979c6a375b497b3a7'
+          doc: {
+            doctype: 'markdown',
+            updatedAt: 1461564004766,
+            createdAt: 1461563995746,
+            bookId: 'book:tjnPbJakw',
+            status: 'active',
+            numOfTasks: 0,
+            numOfCheckedTasks: 0,
+            title: 'title...',
+            body: 'body...',
+            _id: 'note:4eeb997c',
+            _rev: '8-d18201be3336c70979c6a375b497b3a7'
+          }
         },
         ...
       ]
@@ -824,3 +826,149 @@ The note model contains all the information about your notes, such as their titl
   </Col>
 </Row>
 
+
+---
+
+## Count notes matching filters {{ label: 'count(query)' }}
+
+<Row>
+  <Col>
+
+    Counts the notes that a list with the same filters would contain.
+    Like the list methods, it excludes notes in the trash and notes whose status is `'completed'` or `'dropped'` unless the filters specify them.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="query" type="object">
+      Object with the following keys:
+
+      <Properties sub>
+        <Property name="bookId" type="string | string[]">
+          A notebook ID, or an array of notebook IDs.
+        </Property>
+        <Property name="tagId" type="string">
+          A tag ID.
+        </Property>
+        <Property name="status" type="string | string[]">
+          A note status, or an array of note statuses.
+        </Property>
+      </Properties>
+
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns the number of matching notes.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = env.localDB
+    const num = await db.notes.count({ tagId: 'tag:4eeb997c' })
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    12
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## List all note IDs in a notebook {{ label: 'findAllIdsInBook(bookId, options)' }}
+
+<Row>
+  <Col>
+
+    Retrieves the IDs of every note in the given notebook, including notes whose status is `'completed'` or `'dropped'`.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="bookId" type="string" required>
+        A notebook ID to find.
+      </Property>
+      <Property name="options" type="object">
+      Object with the following keys:
+
+      <Properties sub>
+        <Property name="includeChildren" type="boolean">
+          Whether to include notes in the descendant notebooks.
+        </Property>
+        <Property name="tagId" type="string">
+          A tag ID to narrow the notes down to.
+        </Property>
+      </Properties>
+
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns an array of note IDs.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = env.localDB
+    const noteIds = await db.notes.findAllIdsInBook('book:tjnPbJakw', {
+      includeChildren: true
+    })
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    ["note:4eeb997c", "note:BKzzd8iGK"]
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## List all note IDs with a tag {{ label: 'findAllIdsWithTag(tagId)' }}
+
+<Row>
+  <Col>
+
+    Retrieves the IDs of every note with the given tag, including notes in the trash, templates, and notes whose status is `'completed'` or `'dropped'`.
+
+    ### Parameters
+
+    <Properties>
+      <Property name="tagId" type="string" required>
+        A tag ID to find.
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns an array of note IDs.
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request">
+
+    ```js
+    const db = env.localDB
+    const noteIds = await db.notes.findAllIdsWithTag('tag:4eeb997c')
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    ["note:4eeb997c", "note:BKzzd8iGK"]
+    ```
+
+  </Col>
+</Row>

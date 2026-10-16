@@ -54,13 +54,14 @@ Read [this page](/guides/integrate-with-external-programs) to learn how to confi
         The search keyword to filter notes. You can use the same qualifiers for searching notes.
       </Property>
       <Property name="limit" type="number">
-        Limit the number of the returned documents to the specified number.
+        Limit the number of the returned documents to the specified number. Default is `50`.
       </Property>
       <Property name="skip" type="number">
         Skip this number of documents before starting to return the results. Default is `0`.
       </Property>
       <Property name="sort" type="string">
-        Sort the documents by the specified field. One of: `'updatedAt'`, `'createdAt'`, `'title'`.
+        Sort the documents by the specified field. One of: `'updatedAt'`, `'createdAt'`, `'title'`, `'tagCount'`.
+        With `keyword`, you can also specify `'rank'` to sort by relevance, as long as the keyword contains words to match rather than only qualifiers such as `book:` or `tag:`.
       </Property>
       <Property name="descending" type="boolean">
         Reverse the order of the output documents.
@@ -296,7 +297,6 @@ Read [this page](/guides/integrate-with-external-programs) to learn how to confi
     ```json {{ title: 'Response' }}
     [
       {
-        "count": 4,
         "color": "orange",
         "createdAt": 1489212448648,
         "updatedAt": 1607068381327,
@@ -812,7 +812,6 @@ Read [this page](/guides/integrate-with-external-programs) to learn how to confi
 
     ```json {{ title: 'Response' }}
     {
-      "count": 4,
       "color": "orange",
       "createdAt": 1489212448648,
       "updatedAt": 1607068381327,

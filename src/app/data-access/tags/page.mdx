@@ -29,9 +29,6 @@ The tag model contains all the information about your tags, such as their name, 
       <Property name="color" type="string">
         The color type of the tag. **One of:** `"default"`, `"red"`, `"orange"`, `"yellow"`, `"olive"`, `"green"`, `"teal"`, `"blue"`, `"violet"`, `"purple"`, `"pink"`, `"brown"`, `"grey"`, `"black"`
       </Property>
-      <Property name="count" type="number">
-        It indicates the number of notes with the tag.
-      </Property>
       <Property name="createdAt" type="number">
         The date time when the tag was created, represented with Unix timestamps in milliseconds.
       </Property>
@@ -51,7 +48,6 @@ The tag model contains all the information about your tags, such as their name, 
     {
       "_id": "tag:tBELDUITs",
       "_rev": "5-caf95ffd831665119f6d4f01113cdab4",
-      "count": 3,
       "color": "green",
       "createdAt": 1482130519215,
       "updatedAt": 1493014639273,
@@ -167,7 +163,6 @@ The tag model contains all the information about your tags, such as their name, 
     {
       "_id": "tag:tBELDUITs",
       "_rev": "5-caf95ffd831665119f6d4f01113cdab4",
-      "count": 3,
       "color": "green",
       "createdAt": 1482130519215,
       "updatedAt": 1493014639273,
@@ -210,7 +205,6 @@ The tag model contains all the information about your tags, such as their name, 
       {
         "_id": "tag:tBELDUITs",
         "_rev": "5-caf95ffd831665119f6d4f01113cdab4",
-        "count": 3,
         "color": "green",
         "createdAt": 1482130519215,
         "updatedAt": 1493014639273,
@@ -331,8 +325,7 @@ The tag model contains all the information about your tags, such as their name, 
       updatedAt: 1475549348850,
       createdAt: 1475549348850,
       name: 'New tag',
-      color: 'green',
-      count: 0
+      color: 'green'
     })
     ```
 
@@ -452,7 +445,7 @@ The tag model contains all the information about your tags, such as their name, 
 
     ### Returns
 
-    Returns a tag if found otherwise `undefined`.
+    Returns a tag if found, otherwise `null`.
   </Col>
   <Col sticky>
 
@@ -471,7 +464,6 @@ The tag model contains all the information about your tags, such as their name, 
       "color": "red",
       "updatedAt": 1662946230118,
       "createdAt": 1662946219086,
-      "count": 0,
       "_id": "tag:ZiQET3lID",
       "_rev": "2-23c30db926215b718dae860556277fd5"
     }

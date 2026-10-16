@@ -154,11 +154,11 @@ Provides the ability to subscribe to various events raised by the local database
 
 ---
 
-## Full-text index creation start {{ label: 'onFullTextIndexBuildStart(callback)' }}
+## Index build start {{ label: 'onIndexBuildStart(callback)' }}
 
 <Row>
   <Col>
-    Invoke the given callback when the app started building full-text search index.
+    Invoke the given callback when the app started building the search index.
 
     ### Parameters
     <Properties>
@@ -176,8 +176,8 @@ Provides the ability to subscribe to various events raised by the local database
     <CodeGroup title="Example">
     ```js
     const db = env.localDB
-    const subscription = db.onFullTextIndexBuildStart(() => {
-      console.log('Full-text search index building has been started')
+    const subscription = db.onIndexBuildStart(() => {
+      console.log('Search index building has been started')
     });
 
     // Later, dispose
@@ -190,11 +190,48 @@ Provides the ability to subscribe to various events raised by the local database
 
 ---
 
-## Full-text index creation end {{ label: 'onFullTextIndexBuildEnd(callback)' }}
+## Index build progress {{ label: 'onIndexBuildProgress(callback)' }}
 
 <Row>
   <Col>
-    Invoke the given callback when the app finished building full-text search index.
+    Invoke the given callback each time the app applied a batch of changes to the search index.
+    The callback receives an object with `prevSeq` (the sequence the run started from), `seq` (the sequence reached so far), and `latestSeq` (the database's update sequence when the run started).
+
+    ### Parameters
+    <Properties>
+      <Property name="callback" type="(progress: object) => void">
+        A function which is called with the progress.
+      </Property>
+    </Properties>
+
+    ### Returns
+
+    Returns a [Disposable][disposable] on which `.dispose()` can be called to unsubscribe.
+
+  </Col>
+  <Col sticky>
+    <CodeGroup title="Example">
+    ```js
+    const db = env.localDB
+    const subscription = db.onIndexBuildProgress(progress => {
+      console.log('Search index building:', progress.seq, '/', progress.latestSeq)
+    });
+
+    // Later, dispose
+    subscription.dispose();
+    ```
+    </CodeGroup>
+
+  </Col>
+</Row>
+
+---
+
+## Index build end {{ label: 'onIndexBuildEnd(callback)' }}
+
+<Row>
+  <Col>
+    Invoke the given callback when the app finished building the search index.
 
     ### Parameters
     <Properties>
@@ -212,8 +249,8 @@ Provides the ability to subscribe to various events raised by the local database
     <CodeGroup title="Example">
     ```js
     const db = env.localDB
-    const subscription = db.onFullTextIndexBuildEnd(() => {
-      console.log('Full-text search index building has been finished')
+    const subscription = db.onIndexBuildEnd(() => {
+      console.log('Search index building has been finished')
     });
 
     // Later, dispose
@@ -226,11 +263,11 @@ Provides the ability to subscribe to various events raised by the local database
 
 ---
 
-## Full-text index creation error {{ label: 'onFullTextIndexBuildError(callback)' }}
+## Index build error {{ label: 'onIndexBuildError(callback)' }}
 
 <Row>
   <Col>
-    Invoke the given callback when the app failed to build full-text search index.
+    Invoke the given callback when the app failed to build the search index.
 
     ### Parameters
     <Properties>
@@ -248,8 +285,8 @@ Provides the ability to subscribe to various events raised by the local database
     <CodeGroup title="Example">
     ```js
     const db = env.localDB
-    const subscription = db.onFullTextIndexBuildError(error => {
-      console.log('Full-text search index building has failed', error)
+    const subscription = db.onIndexBuildError(error => {
+      console.log('Search index building has failed', error)
     });
 
     // Later, dispose
