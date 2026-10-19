@@ -46,6 +46,7 @@ Read [this page](/guides/integrate-with-external-programs) to learn how to confi
   <Col>
 
     Returns a list of all the [Notes](/data-access/notes#properties) in the local database.
+    Note templates are not included — use [`GET /templates`](#list-of-note-templates) instead.
 
     ### Query parameters
 
@@ -114,6 +115,7 @@ Read [this page](/guides/integrate-with-external-programs) to learn how to confi
     The POST method creates a new [Note](/data-access/notes#properties), or update an existing note.
     The document ID `_id` is optional and will be automatically generated for new note. 
     If the note already exists, you must specify its revision `_rev`, otherwise a conflict will occur.
+    Official note templates are read-only, so specifying one's `_id` responds with `403`.
 
     ### Response JSON Object
 
@@ -157,6 +159,74 @@ Read [this page](/guides/integrate-with-external-programs) to learn how to confi
       "id": "note:BKzzd8iGK",
       "rev": "1-d882f96ee27f7b9f71f6183b0cab9193"
     }
+    ```
+
+  </Col>
+</Row>
+
+---
+
+## List of note templates {{ tag: 'GET', label: '/templates' }}
+
+<Row>
+  <Col>
+
+    Returns a list of the note templates: your custom templates, followed by the official ones bundled with the app.
+    Both are [Notes](/data-access/notes#properties) whose `bookId` is `template`.
+    Official templates are not stored in the local database, so they have no `_rev` and are read-only.
+
+    To get a single template, use [`GET /note:{id}`](#fetch-a-note) — it works for both custom and official templates.
+
+    ### Query parameters
+
+    <Properties>
+      <Property name="keyword" type="string">
+        Filter templates by fuzzy-matching their titles.
+        The results are ordered by relevance, with custom templates ranked above official ones.
+        Search qualifiers such as `book:` or `tag:` are not supported.
+      </Property>
+    </Properties>
+
+  </Col>
+  <Col sticky>
+
+    <CodeGroup title="Request" tag="GET" label="/templates">
+
+    ```bash {{ title: 'cURL' }}
+    curl "https://localhost:19840/templates?keyword=bug" \
+      -H "Authorization: Basic {token}"
+    ```
+
+    </CodeGroup>
+
+    ```json {{ title: 'Response' }}
+    [
+      {
+        "doctype": "markdown",
+        "bookId": "template",
+        "createdAt": 1758163200000,
+        "updatedAt": 1758163200000,
+        "status": "none",
+        "share": "private",
+        "title": "My bug report",
+        "body": "## Steps to reproduce\n\n1. ",
+        "tags": [],
+        "_id": "note:Xk2pQ9vLa",
+        "_rev": "3-6c1f2a9b0e4d4c8e9a7b5d3f1e2c4a6b"
+      },
+      {
+        "doctype": "markdown",
+        "bookId": "template",
+        "createdAt": 0,
+        "updatedAt": 0,
+        "timestamp": 0,
+        "status": "active",
+        "title": "Bug fix",
+        "body": "---\n_template:\n  title: Bug fix\n...",
+        "_id": "note:template:bug-fix"
+      },
+      ...
+    ]
     ```
 
   </Col>
