@@ -1,10 +1,10 @@
 import clsx from 'clsx'
 import Link from 'next/link'
 
-import { CopyMarkdownButton } from '@/components/CopyMarkdownButton'
 import { Feedback } from '@/components/Feedback'
 import { Heading } from '@/components/Heading'
 import { Prose } from '@/components/Prose'
+import { ViewMarkdownLink } from '@/components/ViewMarkdownLink'
 
 function ExternalIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
@@ -74,9 +74,7 @@ export const h1 = function H1({
   return (
     <div className="flex items-start justify-between gap-4">
       <h1 {...props} className="flex-1" />
-      <div className="flex items-center gap-1">
-        <CopyMarkdownButton />
-      </div>
+      <ViewMarkdownLink />
     </div>
   )
 }

@@ -23,6 +23,13 @@ const nextConfig = {
   outputFileTracingRoot: __dirname,
   outputFileTracingIncludes: {
     '/**/*': ['./src/app/**/*.mdx']
+  },
+  // Serve a plain Markdown version of every page at `<path>.md` for agents
+  async rewrites() {
+    return [
+      { source: '/index.md', destination: '/raw-md' },
+      { source: '/:path+.md', destination: '/raw-md/:path+' }
+    ]
   }
 }
 

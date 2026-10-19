@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-import { navigation } from '@/components/Navigation'
+import { navigation } from '@/lib/navigation'
 
 export function ListNavigationSection() {
   const currentPath = usePathname()

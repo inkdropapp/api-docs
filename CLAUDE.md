@@ -77,7 +77,7 @@ export const metadata = {
 }
 ```
 
-3. Add navigation entry in `/src/components/Navigation.jsx`
+3. Add navigation entry in `/src/lib/navigation.ts`
 
 ### MDX Page Structure
 
@@ -124,7 +124,7 @@ Store in `/public/images/` and reference as:
 
 ### Navigation
 
-Navigation structure is defined in `/src/components/Navigation.jsx`. Each section contains an array of pages with `title` and `href`.
+Navigation structure is defined in `/src/lib/navigation.ts` and rendered by `/src/components/Navigation.tsx`. Each section contains an array of pages with `title` and `href`.
 
 ### Search Index
 
@@ -160,7 +160,7 @@ The documentation site uses a sophisticated MDX processing pipeline:
 
 The navigation is centrally managed through several interconnected components:
 
-1. **Navigation Data**: Defined in `/src/components/Navigation.jsx` as a static structure
+1. **Navigation Data**: Defined in `/src/lib/navigation.ts` as a static structure, shared by the sidebar, search, footer and the Markdown/llms.txt routes
 2. **Dynamic Sections**: The `layout.jsx` file extracts sections from all MDX files at build time
 3. **Section Provider**: Uses Zustand to manage active section state for smooth scrolling
 4. **Mobile/Desktop Split**: Separate navigation components for responsive design
@@ -182,7 +182,7 @@ Documentation follows a hierarchical structure:
 2. Use two-column layout with `<Row>` and `<Col>`
 3. Document properties with `<Properties>` component
 4. Include practical code examples
-5. Add to navigation in `/src/components/Navigation.jsx`
+5. Add to navigation in `/src/lib/navigation.ts`
 
 ### Updating Existing Documentation
 
@@ -206,5 +206,5 @@ Documentation follows a hierarchical structure:
 - Keep code examples practical and directly runnable in Inkdrop
 - The site is deployed at https://developers.inkdrop.app/
 - All MDX files are automatically indexed for search during the build process
-- Navigation is centrally managed in `/src/components/Navigation.jsx`
+- Navigation is centrally managed in `/src/lib/navigation.ts`
 
