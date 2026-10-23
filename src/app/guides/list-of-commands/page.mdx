@@ -405,8 +405,8 @@ Shows up a dialog for creating a new notebook.
 Lists all notes on the note list bar.
 
 <Properties sub title="Arguments">
-  <Property name="selectFirstNote" type="boolean">
-    Whether to select the first note or not. Default: `true`
+  <Property name="autoOpenNote" type="boolean">
+    Whether to open a note after listing: the note last opened in the same list, or the first note if there is none. Default: `true`
   </Property>
 </Properties>
 
@@ -425,8 +425,8 @@ Lists note templates on the note list bar, and closes the currently open note.
 Lists notes in the trash on the note list bar.
 
 <Properties sub title="Arguments">
-  <Property name="selectFirstNote" type="boolean">
-    Whether to select the first note or not. Default: `true`
+  <Property name="autoOpenNote" type="boolean">
+    Whether to open a note after listing: the note last opened in the same list, or the first note if there is none. Default: `true`
   </Property>
 </Properties>
 
@@ -444,8 +444,8 @@ List notes in specified notebook on the note list bar
   <Property name="status" type="NoteStatus">
     The note status which should be **one of:**`"none"` or `"active"` or `"onHold"` or `"completed"` or `"dropped"`
   </Property>
-  <Property name="selectFirstNote" type="boolean">
-    Whether to select the first note or not. Default: `true`
+  <Property name="autoOpenNote" type="boolean">
+    Whether to open a note after listing: the note last opened in the same list, or the first note if there is none. Default: `true`
   </Property>
   <Property name="includeChildren" type="boolean">
     Whether to include the notes in the child notebooks. Default: `false`
@@ -460,8 +460,8 @@ List notes with specified tag on the note list bar
   <Property name="tagId" type="string" required>
     The tag ID.
   </Property>
-  <Property name="selectFirstNote" type="boolean">
-    Whether to select the first note or not. Default: `true`.
+  <Property name="autoOpenNote" type="boolean">
+    Whether to open a note after listing: the note last opened in the same list, or the first note if there is none. Default: `true`
   </Property>
 </Properties>
 
@@ -473,8 +473,8 @@ List notes with specified note status on the note list bar
   <Property name="status" type="NoteStatus" required>
     The note status which should be **one of:** `"none"` or `"active"` or `"onHold"` or `"completed"` or `"dropped"`.
   </Property>
-  <Property name="selectFirstNote" type="boolean">
-    Whether to select the first note or not. Default: `true`.
+  <Property name="autoOpenNote" type="boolean">
+    Whether to open a note after listing: the note last opened in the same list, or the first note if there is none. Default: `true`
   </Property>
 </Properties>
 
@@ -888,8 +888,8 @@ Open the workspace menu for a notebook.
   <Property name="bookId" type="string">
     (Optional) The notebook ID. If omitted, opens the current workspace.
   </Property>
-  <Property name="selectFirstNote" type="boolean">
-    Whether to select the first note in the workspace. Default: `true`.
+  <Property name="autoOpenNote" type="boolean">
+    Whether to open a note in the workspace: the note last opened there, or the first note if there is none. Default: `true`
   </Property>
 </Properties>
 
