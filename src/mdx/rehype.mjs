@@ -2,7 +2,12 @@ import { slugifyWithCounter } from '@sindresorhus/slugify'
 import * as acorn from 'acorn'
 import { toString } from 'mdast-util-to-string'
 import { mdxAnnotations } from 'mdx-annotations'
-import shiki from 'shiki'
+import {
+  createHighlighter,
+  getTokenStyleObject,
+  hastToHtml,
+  stringifyTokenStyle
+} from 'shiki'
 import { visit } from 'unist-util-visit'
 
 function rehypeParseCodeBlocks() {
@@ -21,36 +26,64 @@ function rehypeParseCodeBlocks() {
   }
 }
 
-let highlighter
+const SHIKI_THEME = 'solarized-dark'
+
+let highlighterPromise
+
+/**
+ * Renders Shiki token lines as one `<span>` per line, without the `<pre>`
+ * and `<code>` wrappers, since the `Code` component supplies its own.
+ */
+function tokenLinesToHtml(tokenLines) {
+  let lineElements = tokenLines.map(tokens => ({
+    type: 'element',
+    tagName: 'span',
+    properties: {},
+    children: tokens.map(token => ({
+      type: 'element',
+      tagName: 'span',
+      properties: { style: stringifyTokenStyle(getTokenStyleObject(token)) },
+      children: [{ type: 'text', value: token.content }]
+    }))
+  }))
+
+  return lineElements.map(lineElement => hastToHtml(lineElement)).join('\n')
+}
 
 function rehypeShiki() {
   return async tree => {
-    highlighter =
-      highlighter ?? (await shiki.getHighlighter({ theme: 'solarized-dark' }))
+    highlighterPromise ??= createHighlighter({
+      themes: [SHIKI_THEME],
+      langs: []
+    })
+    let highlighter = await highlighterPromise
 
+    let codeBlocks = []
     visit(tree, 'element', node => {
       if (node.tagName === 'pre' && node.children[0]?.tagName === 'code') {
-        let codeNode = node.children[0]
-        let textNode = codeNode.children[0]
-
-        node.properties.code = textNode.value
-
-        if (node.properties.language) {
-          let tokens = highlighter.codeToThemedTokens(
-            textNode.value,
-            node.properties.language
-          )
-
-          textNode.value = shiki.renderToHtml(tokens, {
-            elements: {
-              pre: ({ children }) => children,
-              code: ({ children }) => children,
-              line: ({ children }) => `<span>${children}</span>`
-            }
-          })
-        }
+        codeBlocks.push(node)
       }
     })
+
+    let languages = new Set(
+      codeBlocks.map(node => node.properties.language).filter(Boolean)
+    )
+    await highlighter.loadLanguage(...languages)
+
+    for (let node of codeBlocks) {
+      let textNode = node.children[0].children[0]
+
+      node.properties.code = textNode.value
+
+      if (node.properties.language) {
+        let tokenLines = highlighter.codeToTokensBase(textNode.value, {
+          lang: node.properties.language,
+          theme: SHIKI_THEME
+        })
+
+        textNode.value = tokenLinesToHtml(tokenLines)
+      }
+    }
   }
 }
 
