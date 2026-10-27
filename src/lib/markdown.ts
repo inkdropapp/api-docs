@@ -1,6 +1,7 @@
-import glob from 'fast-glob'
 import { readFile } from 'node:fs/promises'
 import path from 'node:path'
+
+import glob from 'fast-glob'
 
 import { markdownPath } from '@/lib/markdownPath'
 import { mdxMetadata, mdxToMarkdown } from '@/lib/mdxToMarkdown'

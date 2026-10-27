@@ -1,8 +1,8 @@
 import { type GridPattern } from '@/components/GridPattern'
 import { DatabaseIcon } from '@/components/icons/DatabaseIcon'
 import { ImageFileIcon } from '@/components/icons/FileIcon'
-import { NoteIcon } from '@/components/icons/NoteIcon'
 import { NotebookIcon } from '@/components/icons/NotebookIcon'
+import { NoteIcon } from '@/components/icons/NoteIcon'
 import { TagIcon } from '@/components/icons/TagIcon'
 import { UtilsIcon } from '@/components/icons/UtilsIcon'
 

@@ -1,15 +1,16 @@
+import * as fs from 'fs'
+import * as path from 'path'
+import * as url from 'url'
+
 import { slugifyWithCounter } from '@sindresorhus/slugify'
 import glob from 'fast-glob'
-import * as fs from 'fs'
 import { toString } from 'mdast-util-to-string'
-import * as path from 'path'
 import { remark } from 'remark'
 import remarkMdx from 'remark-mdx'
 import { createLoader } from 'simple-functional-loader'
 import { filter } from 'unist-util-filter'
 import { map } from 'unist-util-map'
 import { SKIP, visit } from 'unist-util-visit'
-import * as url from 'url'
 
 const __filename = url.fileURLToPath(import.meta.url)
 const processor = remark().use(remarkMdx).use(extractSections)

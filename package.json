@@ -6,7 +6,8 @@
     "dev": "next dev --webpack",
     "build": "next build --webpack",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "oxlint",
+    "format": "oxfmt"
   },
   "browserslist": "defaults, not ie <= 11",
   "packageManager": "pnpm@11.5.2",
@@ -29,7 +30,6 @@
     "mdx-annotations": "^0.1.4",
     "next": "16.1.6",
     "next-themes": "^0.4.6",
-    "prettier-plugin-organize-imports": "^4.2.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-highlight-words": "^0.21.0",
@@ -41,8 +41,8 @@
     "tailwindcss": "^4.2.2",
     "typescript": "^5.8.3",
     "unist-util-filter": "^5.0.1",
-    "unist-util-visit": "^5.0.0",
     "unist-util-map": "^4.0.0",
+    "unist-util-visit": "^5.0.0",
     "zustand": "^5.0.6"
   },
   "devDependencies": {
@@ -51,10 +51,8 @@
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "@types/react-highlight-words": "^0.20.0",
-    "eslint": "^9.32.0",
-    "eslint-config-next": "16.1.6",
-    "prettier": "^3.6.2",
-    "prettier-plugin-tailwindcss": "^0.7.2",
+    "oxfmt": "^0.74.0",
+    "oxlint": "^1.89.0",
     "sharp": "0.34.3"
   },
   "overrides": {

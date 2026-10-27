@@ -1,6 +1,7 @@
-import nextMDX from '@next/mdx'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+
+import nextMDX from '@next/mdx'
 
 import { recmaPlugins } from './src/mdx/recma.mjs'
 import { rehypePlugins } from './src/mdx/rehype.mjs'
