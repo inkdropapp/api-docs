@@ -6,7 +6,7 @@ import {
   DialogPanel,
   TransitionChild
 } from '@headlessui/react'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import { Suspense, createContext, useContext } from 'react'
 import { create } from 'zustand'
 

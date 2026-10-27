@@ -5,7 +5,7 @@ import {
   useMotionTemplate,
   useMotionValue,
   type MotionValue
-} from 'framer-motion'
+} from 'motion/react'
 import Link from 'next/link'
 
 import { GridPattern } from '@/components/GridPattern'

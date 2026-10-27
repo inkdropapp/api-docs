@@ -1,6 +1,6 @@
 import { CloseButton } from '@headlessui/react'
 import clsx from 'clsx'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'motion/react'
 import Link from 'next/link'
 import { forwardRef } from 'react'
 
