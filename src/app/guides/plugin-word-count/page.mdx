@@ -89,7 +89,7 @@ One of the first things you should do is ensure that this information is filled 
   This plugin targets Inkdrop 6 (`"inkdrop": "^6.0.0"`). The scaffold is written
   in TypeScript, compiled to plain CommonJS in `lib/` by
   [tsdown](https://tsdown.dev/), and typed against
-  [`@inkdropapp/types`](https://github.com/inkdropapp/types). If you're
+  [`@inkdropapp/types`](https://npmx.dev/package/@inkdropapp/types). If you're
   upgrading an existing plugin from Inkdrop 5, follow the [Plugin Migration
   Guide from v5 to v6](/appendix/plugin-migration-from-v5-to-v6).
 </Note>
@@ -324,7 +324,7 @@ It grabs the built-in `Dialog` component from [the component manager](/modules/c
 const Dialog = getEnv().components.getComponentClass('Dialog') as DialogClass
 ```
 
-`getComponentClass` replaces v5's `inkdrop.components.classes.Dialog`. The `as DialogClass` cast restores the `Dialog.Title` / `Dialog.Content` / `Dialog.Actions` sub-component types from [`@inkdropapp/types`](https://github.com/inkdropapp/types).
+`getComponentClass` replaces v5's `inkdrop.components.classes.Dialog`. The `as DialogClass` cast restores the `Dialog.Title` / `Dialog.Content` / `Dialog.Actions` sub-component types from [`@inkdropapp/types`](https://npmx.dev/package/@inkdropapp/types).
 
 It uses the `useModal` built-in React Hook to manage the dialog's visibility state. You can show the dialog by calling `modal.show()` and hide it with `modal.close()`. To toggle the dialog from a command, it defines a callback function with React's [useCallback](https://react.dev/reference/react/useCallback):
 
