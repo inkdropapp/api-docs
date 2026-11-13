@@ -26,7 +26,7 @@ export default defineConfig({
 })
 ```
 
-Third-party CodeMirror packages (e.g. `@replit/codemirror-vim`) are not provided by the app — let your bundler include those. (Example: [vim](https://github.com/inkdropapp/inkdrop-vim))
+Third-party CodeMirror packages (e.g. `@replit/codemirror-vim`) are not provided by the app — let your bundler include those. (Example: [vim](https://github.com/inkdropapp/plugins/tree/main/packages/vim))
 
 ## Registering an extension
 
@@ -71,7 +71,7 @@ Two details worth knowing:
 - **Removal is by identity.** `editor:remove-extension` removes the exact object you added — keep the reference around, as the `extension` field above does. Every `highlightTrailingWhitespace()` call returns a fresh instance, so a rebuilt extension would not match.
 - **Adding the same reference twice is a no-op**, so dispatching again (e.g. when a config option toggles a feature back on) is harmless.
 
-For a real-world example, the official [vim plugin](https://github.com/inkdropapp/inkdrop-vim) wires `@replit/codemirror-vim` into the editor exactly this way — and toggles an optional relative-line-numbers extension by add/remove-dispatching it whenever its config value changes.
+For a real-world example, the official [vim plugin](https://github.com/inkdropapp/plugins/tree/main/packages/vim) wires `@replit/codemirror-vim` into the editor exactly this way — and toggles an optional relative-line-numbers extension by add/remove-dispatching it whenever its config value changes.
 
 ## Adding a code-block language
 

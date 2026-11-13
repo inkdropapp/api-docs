@@ -335,7 +335,7 @@ If you maintained separate `-ui`, `-syntax`, and `-preview` packages, combine th
 3. If the three packages shared a color palette, keep those raw tokens in **one** shared file (e.g. `palette.css`, wrapped in `@layer theme`) listed first in `styleSheets`, and reference them from the three layer files via `var()`. Don't copy the color definitions into all three — define them once. See [Sharing a palette across the three stylesheets](/guides/create-a-theme#sharing-a-palette-across-the-three-stylesheets).
 4. List the files in `styleSheets` (tokens first, then the layered stylesheets).
 
-The official [Solarized](https://github.com/inkdropapp/solarized-light/) and [Kanagawa](https://github.com/inkdropapp/kanagawa-lotus/) themes were migrated exactly this way and make good references.
+The official [Solarized](https://github.com/inkdropapp/plugins/tree/main/packages/solarized-light) and [Kanagawa](https://github.com/inkdropapp/plugins/tree/main/packages/kanagawa-lotus) themes were migrated exactly this way and make good references.
 
 ### Update the manifest and tooling
 
@@ -408,7 +408,7 @@ See [Creating a theme](/guides/create-a-theme#creating-your-first-theme) for the
 
 This stylesheet styles the app chrome — sidebar, note list, toolbar, drop-downs, modals — by overriding **CSS variables** in `:root`. That model is unchanged in v6: you still set the same component variables (`--sidebar-background`, `--note-list-bar-background`, `--editor-background`, …). What changed is the [primitive color tokens](#use-the-v6-design-tokens) those variables build on.
 
-The stock [Solarized Light](https://github.com/inkdropapp/solarized-light/) and [Solarized Dark](https://github.com/inkdropapp/solarized-dark/) themes have been updated for v6 and make good references.
+The stock [Solarized Light](https://github.com/inkdropapp/plugins/tree/main/packages/solarized-light) and [Solarized Dark](https://github.com/inkdropapp/plugins/tree/main/packages/solarized-dark) themes have been updated for v6 and make good references.
 
 ### Override the built-in variables
 

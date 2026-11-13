@@ -56,7 +56,7 @@ A theme is a package whose `package.json` sets `"theme": true`, declares its lig
     "prepublishOnly": "generate-palette"
   },
   "devDependencies": {
-    "@inkdropapp/theme-dev-helpers": "^0.6.0"
+    "@inkdropapp/theme-dev-helpers": "^0.7.1"
   },
   "engines": { "inkdrop": "^6.0.0" }
 }
@@ -402,7 +402,7 @@ This is the right approach **only when your theme's palette is shaped like Inkdr
 
 If your theme is instead built on a small set of bespoke colors, keep your own uniquely-named tokens as shown above — don't touch the ramps.
 
-Wrap the file in `@layer theme`. Inkdrop's defaults for those ramps live in the base `tokens` layer, and the later `theme` layer is what lets your overrides win — this is the [Solarized themes'](https://github.com/inkdropapp/solarized-light/) approach:
+Wrap the file in `@layer theme`. Inkdrop's defaults for those ramps live in the base `tokens` layer, and the later `theme` layer is what lets your overrides win — this is the [Solarized themes'](https://github.com/inkdropapp/plugins/tree/main/packages/solarized-light) approach:
 
 ```css {{ filename: 'styles/tokens.css' }}
 @layer theme {
@@ -435,9 +435,9 @@ Wrap the file in `@layer theme`. Inkdrop's defaults for those ramps live in the 
 
 The official themes are good references — each one is a single unified package covering UI, editor, and preview:
 
-- [Default Light](https://github.com/inkdropapp/default-light/) · [Default Dark](https://github.com/inkdropapp/default-dark/)
-- [Solarized Light](https://github.com/inkdropapp/solarized-light/) · [Solarized Dark](https://github.com/inkdropapp/solarized-dark/)
-- [Kanagawa Wave](https://github.com/inkdropapp/kanagawa-wave/) · [Kanagawa Dragon](https://github.com/inkdropapp/kanagawa-dragon/) · [Kanagawa Lotus](https://github.com/inkdropapp/kanagawa-lotus/)
+- [Default Light](https://github.com/inkdropapp/plugins/tree/main/packages/default-light) · [Default Dark](https://github.com/inkdropapp/plugins/tree/main/packages/default-dark)
+- [Solarized Light](https://github.com/inkdropapp/plugins/tree/main/packages/solarized-light) · [Solarized Dark](https://github.com/inkdropapp/plugins/tree/main/packages/solarized-dark)
+- [Kanagawa Wave](https://github.com/inkdropapp/plugins/tree/main/packages/kanagawa-wave) · [Kanagawa Dragon](https://github.com/inkdropapp/plugins/tree/main/packages/kanagawa-dragon) · [Kanagawa Lotus](https://github.com/inkdropapp/plugins/tree/main/packages/kanagawa-lotus)
 
 ## Generating `palette.json`
 

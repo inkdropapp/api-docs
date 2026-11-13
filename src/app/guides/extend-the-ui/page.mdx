@@ -39,7 +39,7 @@ Available layouts can be found [here](/states/layouts).
 
 ## Examples
 
-Take a look at the [example plugin](https://github.com/inkdropapp/layout-example-plugin) which adds bars and buttons, replacing the default note list item view with custom one, etc.
+Take a look at the [example plugin](https://github.com/inkdropapp/plugins/tree/main/packages/layout-example) which adds bars and buttons, replacing the default note list item view with custom one, etc.
 Here is a screenshot:
 
 ![Example](/images/extending-the-ui_example.png)
@@ -48,7 +48,7 @@ We will explore along with this example to learn how to add components to each l
 
 ### Showing a custom dialog
 
-- [Example: LayoutExampleMessageDialog](https://github.com/inkdropapp/layout-example-plugin/blob/master/src/message-dialog.tsx)
+- [Example: LayoutExampleMessageDialog](https://github.com/inkdropapp/plugins/blob/main/packages/layout-example/src/message-dialog.tsx)
 
 Inkdrop provides the [Dialog](/components/dialog) component, with `Title`, `Content`, and
 `Actions` sub-components for laying one out. Its visibility is driven by the
@@ -107,34 +107,34 @@ walkthrough for the helper itself.
 
 ### Inserting a view into the main layout
 
-- [Example: LayoutExampleLeftMostBar](https://github.com/inkdropapp/layout-example-plugin/blob/master/lib/layout-example-left-most-bar.js)
+- [Example: LayoutExampleLeftMostBar](https://github.com/inkdropapp/plugins/blob/main/packages/layout-example/src/left-most-bar.tsx)
 
 It inserts a component into ['main:full'](/states/layouts#main-full) layout.
 
 ### Adding a sidebar menu item
 
-- [Example: LayoutExampleSidebarMenuItem](https://github.com/inkdropapp/layout-example-plugin/blob/master/lib/layout-example-sidebar-menu-item.js)
+- [Example: LayoutExampleSidebarMenuItem](https://github.com/inkdropapp/plugins/blob/main/packages/layout-example/src/sidebar-menu-item.tsx)
 
 ### Adding a view into the editor layout
 
-- [Example: LayoutExampleEditorLeftPane](https://github.com/inkdropapp/layout-example-plugin/blob/master/lib/layout-example-editor-left-pane.js)
-- [Example: LayoutExampleEditorRightPane](https://github.com/inkdropapp/layout-example-plugin/blob/master/lib/layout-example-editor-right-pane.js)
+- [Example: LayoutExampleEditorLeftPane](https://github.com/inkdropapp/plugins/blob/main/packages/layout-example/src/editor-left-pane.tsx)
+- [Example: LayoutExampleEditorRightPane](https://github.com/inkdropapp/plugins/blob/main/packages/layout-example/src/editor-right-pane.tsx)
 
 ### Adding an editor header button
 
-- [Example: LayoutExampleEditorHeaderItem](https://github.com/inkdropapp/layout-example-plugin/blob/master/lib/layout-example-editor-header-item.js)
+- [Example: LayoutExampleEditorHeaderItem](https://github.com/inkdropapp/plugins/blob/main/packages/layout-example/src/editor-header-button.tsx)
 
 ### Adding an editor toolbar button
 
-- [Example: LayoutExampleEditorToolbarButton](https://github.com/inkdropapp/layout-example-plugin/blob/master/lib/layout-example-editor-toolbar-button.js)
+- [Example: LayoutExampleEditorToolbarButton](https://github.com/inkdropapp/plugins/blob/main/packages/layout-example/src/editor-toolbar-button.tsx)
 
 ### Adding an editor statusbar item
 
-- [Example: LayoutExampleEditorStatusBarItem](https://github.com/inkdropapp/layout-example-plugin/blob/master/lib/layout-example-editor-status-bar-item.js)
+- [Example: LayoutExampleEditorStatusBarItem](https://github.com/inkdropapp/plugins/blob/main/packages/layout-example/src/editor-status-bar-item.tsx)
 
 ### Replacing the note list item view
 
-- [Example: LayoutExampleNoteListItemView](https://github.com/inkdropapp/layout-example-plugin/blob/master/lib/layout-example-note-list-item-view.js)
+- [Example: LayoutExampleNoteListItemView](https://github.com/inkdropapp/plugins/blob/main/packages/layout-example/src/note-list-item-view.tsx)
 
 Inkdrop uses a custom component registered as `'CustomNoteListItemView'` in the component registry.
 To register your component as custom note list item view:
